@@ -10,26 +10,32 @@
    <body>
       <div class="container">
           <div class="row">
-              <div class="col-md-12">
+              <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                 <div class="icon-block">
                     <img id="icon" src="../static/img/icon.png" class="img-circle">
                 </div>
               </div>
           </div>
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
               <div class="login-title-block">Sign to Tsuchen's blog</div>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
               <div class="login-form-block">
-                  <form>
-                      <label for="InputUserName">User Name</label>
-                      <input type="text" class="form-control login-form-input" id="InputUserName" placeholder="User Name">
-                      <label for="InputPassword">Password</label>
-                      <input type="password" class="form-control login-form-input" id="InputPassword" placeholder="Password">
-                  </form>
+                <div class="form-group">
+                    <label for="InputUserName">User Name</label>
+                    <input type="text" id="InputUserName" class="form-control" placeholder="User Name">
+                </div>
+                <div class="form-group">
+                    <label for="InputPassword">Password</label>
+                    <a href="www.baidu.com" class="forget">Forget password?</a>
+                    <input type="password" id="InputPassword" class="form-control" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="form-control btn btn-primary">登录</button>
+                </div>
               </div>
             </div>
           </div>
