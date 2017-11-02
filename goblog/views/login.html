@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Bootstrap 模板</title>
+      <title>博客后台登录</title>
+      <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <!-- 引入 Bootstrap -->
       <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -9,6 +10,7 @@
    </head>
    <body>
       <div class="container">
+          <!-- icon row -->
           <div class="row">
               <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                 <div class="icon-block">
@@ -16,27 +18,52 @@
                 </div>
               </div>
           </div>
+          <!-- title row -->
           <div class="row">
             <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
               <div class="login-title-block">Sign to Tsuchen's blog</div>
             </div>
           </div>
+          <!-- login form row -->
           <div class="row">
             <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
               <div class="login-form-block">
-                <div class="form-group">
-                    <label for="InputUserName">User Name</label>
-                    <input type="text" id="InputUserName" class="form-control" placeholder="User Name">
-                </div>
-                <div class="form-group">
-                    <label for="InputPassword">Password</label>
-                    <a href="www.baidu.com" class="forget">Forget password?</a>
-                    <input type="password" id="InputPassword" class="form-control" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="form-control btn btn-primary">登录</button>
+                <form method="post" onsubmit="return loginBlog()">
+                  <div class="form-group">
+                      <label for="InputUserName">User Name</label>
+                      <input type="text" id="InputUserName" class="form-control" placeholder="User Name">
+                  </div>
+                  <div class="form-group">
+                      <label for="InputPassword">Password</label>
+                      <a href="http://www.baidu.com" class="forget">Forget password?</a>
+                      <input type="password" id="InputPassword" class="form-control" placeholder="Password">
+                      <input type="hidden" id="md5-password" name="password">
+                  </div>
+                  <div class="form-group">
+                      <button type="submit" class="form-control btn btn-primary">Sign in</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- create account row -->
+          <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <div class="new-account-block">
+                  New to Tsuchen's blog?
+                  <a href="http://www.baidu.com">Create an account.</a>
                 </div>
               </div>
+          </div>
+
+          <!-- bottom row -->
+          <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <div style="padding:60px 0px;text-align:center;">
+                    <a href="{{.URL}}" target="_blank">返回首页</a>
+                    &copy;2017 Powered by
+                    <a href="{{.URL}}" target="_blank">{{.Name}}</a>
+                </div>
             </div>
           </div>
       </div>
@@ -44,6 +71,23 @@
       <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
       <script src="../static/js/jquery-3.2.1.js"></script>
       <!-- 包括所有已编译的插件 -->
-      <script src="../static/js/bootstrap.min.js"></script>
+      <!-- <script src="../static/js/bootstrap.min.js"></script> -->
+      <script>
+        function loginBlog(){
+          var userName = $("#InputUserName").val();
+          if (userName == "" ){
+            alert("用户名不能为空!");
+            return false;
+          }
+          var password = $("#InputPassword").val();
+          if (password == ""){
+            alert("密码不能为空!");
+            return false;
+          }
+          var md5PasswordInput = $("#md5-password").val();
+          md5PasswordInput.value = toMD5(password);
+          return true;
+        }
+      </script>
    </body>
 </html>
