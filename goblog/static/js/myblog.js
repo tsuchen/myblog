@@ -18,7 +18,6 @@
         dataType: 'json',
         async: async
       }).done(function(resp){
-        console.log(resp)
         callback(resp);
       });
   }
