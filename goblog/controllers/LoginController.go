@@ -29,9 +29,10 @@ func (c *LoginController) Post() {
 	password := c.GetString("password")
 	if username == "" && password == "" {
 		resp.RespMessage(helper.RS_params_error, helper.WARING)
-	}
-	if username == "tsuchen" && password == "123456" {
+	}else if username == "tsuchen" && password == "123456" {
 		resp.RespMessage(helper.RS_success, helper.SUCCESS)
 		resp.Data = "/"
+	}else{
+		
 	}
 }
