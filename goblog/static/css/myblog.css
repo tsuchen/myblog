@@ -3,6 +3,7 @@
     desc: myblog.css
 */
 
+/* login css */
 #icon{
     width:80px;;
     height:80px;
@@ -42,11 +43,11 @@
     text-align: center;
 }
 
+/* homepage css */
 .homepage-fixed-block{
     position:fixed;
     top:0;
     left:0;
-    width: 19%;
     height: 100%;
     border-style: solid;
     border-color: #302a2a;
@@ -54,14 +55,13 @@
 }
 
 .homepage-right-block{
-    float:right;
-    width: 81%;
-    height: 1000px;
     border-style: solid;
     border-color: #c20b0b;
+    height: 1000px;
 }
 
-.homepage-bg{
-    width: 100%;
-    height: 100%;
+.homepage-right-title{
+    height: 300px;
+    border-style: solid;
+    border-color: #070303;
 }
