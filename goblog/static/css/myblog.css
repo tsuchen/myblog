@@ -51,6 +51,10 @@
     height: 100%;
     border-style: solid;
     border-color: #302a2a;
+    padding: 0px;
+}
+
+.homepage-fixed-block>div{
     overflow: hidden;
 }
 
