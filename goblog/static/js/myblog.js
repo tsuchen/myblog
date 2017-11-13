@@ -2,8 +2,12 @@
  * myblog.js
  */
 
+ var MenuJsonUrl = "../static/home_menu.json"
+
  $(function(){
     //dom init finish
+    //加载menu
+    addMenuList()
  });
 
  /**
@@ -20,4 +24,21 @@
       }).done(function(resp){
         callback(resp);
       });
+  }
+
+  /**
+   *  加载主页menu
+   */
+  function addMenuList(){
+    $.getJSON(MenuJsonUrl, function(data){
+      var menuCtrl = $("#menu");
+      var menuList = data.menu_list;
+      for (var index in menuList){
+        var ps = document.createElement('li');
+        var link = document.createElement('a');
+        link.innerHTML = menuList[index].title;
+        ps.append(link);
+        menuCtrl.append(ps);
+      }
+    });
   }

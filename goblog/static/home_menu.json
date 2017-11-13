@@ -1,0 +1,34 @@
+{
+    "menu_list":
+    [
+        {
+            "title": "主页",
+            "url": "",
+            "subtitle": ""
+        },
+
+        {
+            "title": "专题",
+            "url": "",
+            "subtitle": ""
+        },
+
+        {
+            "title": "归档",
+            "url": "",
+            "subtitle": ""
+        },
+
+        {
+            "title": "友链",
+            "url": "",
+            "subtitle": ""
+        },
+
+        {
+            "title": "关于",
+            "url": "",
+            "subtitle": ""
+        }
+    ]
+}

@@ -3,6 +3,17 @@
     desc: myblog.css
 */
 
+a{
+    color: #efefef;
+    text-shadow: 0 1px #666;
+    transition: color .3s;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #bbb8b8
+}
+
 /* login css */
 #icon{
     width:80px;;
@@ -49,13 +60,17 @@
     top:0;
     left:0;
     height: 100%;
-    border-style: solid;
-    border-color: #302a2a;
     padding: 0px;
 }
 
 .homepage-fixed-block>div{
     overflow: hidden;
+    /* background: url("../img/bg.jpg");
+    background-repeat: repeat-y; */
+    background-color: #858282;
+    width: 100%;
+    height: 100%;
+    text-align: center;
 }
 
 .homepage-right-block{
@@ -64,8 +79,43 @@
     height: 1000px;
 }
 
+.name-block{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.subtitle{
+    color:#ccc
+}
+
+.name-block>a{
+    font-size: 25px;
+}
+
+.menu-block{
+    margin-top: 60px;
+}
+
+.homepage-icon{
+    width: 100px;
+    height: 100px;
+    margin-top: 20%;
+}
+
+@media only screen and (min-width: 970px){
+    .homepage-icon{
+        width: 140px;
+        height: 140px;
+        margin-top: 20%;
+    }
+}
+
 .homepage-right-title{
-    height: 300px;
-    border-style: solid;
-    border-color: #070303;
+    background-color: #858282;
+}
+
+#SmallIcon{
+    height: 80px;
+    width: 80px;
+    float: left;
 }
