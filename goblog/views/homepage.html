@@ -7,19 +7,6 @@
         <!-- 引入 Bootstrap -->
         <link href="../static/css/bootstrap.min.css" rel="stylesheet">
         <link href="../static/css/myblog.css" rel="stylesheet">
-        <!-- style -->
-        <style>
-        ul{
-            list-style-type:none;
-            padding-left: 0px;
-        }
-
-        li{
-            font-size: 16px;
-            margin-top: 1em;
-            padding-right: 60px;
-        }
-        </style>
     </head>
    <body>    
         <div class="container-fluid">
@@ -29,23 +16,21 @@
                     <div>
                         <img src="../static/img/icon.png" class="homepage-icon">
                         <div class="name-block">
-                            <h1><a>tsuchen</a></h1>
-                            <p class="subtitle">这是我的博客</p>
+                            <h1><a>{{.UserName}}</a></h1>
+                            <p class="subtitle">{{.SubTitle}}</p>
                         </div>
                         <div class="menu-block">
-                            <ul id="menu"></ul>
+                            <ul id="menu-ul"></ul>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-12 homepage-right-block">
                     <div class="row">
                         <div class="col-xs-12 hidden-md hidden-lg hidden-sm homepage-right-title">
-                            <div class="small-title-block">
-                                <h1><a>tsuchen</a></h1>
-                                <p class="subtitle">这是我的博客</p>
-                            </div>
-                            <!-- <img id="SmallIcon" src="../static/img/icon.png" class="SmallIcon"> -->
-                            
+                            <img src="../static/img/icon.png" class="small_icon">
+                            <h1><a>{{.UserName}}</a></h1>
+                            <p class="subtitle">{{.Subtitle}}</p>
+                            <ul id="small-menu-ul"></ul>
                         </div>
                     </div>
                 </div>

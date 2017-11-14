@@ -31,7 +31,7 @@ func (c *LoginController) Post() {
 		resp.RespMessage(helper.RS_params_error, helper.WARING)
 	}else if username == "tsuchen" && password == "123456" {
 		resp.RespMessage(helper.RS_success, helper.SUCCESS)
-		resp.Data = "/"
+		resp.Data = "/homepage"
 	}else{
 		
 	}
