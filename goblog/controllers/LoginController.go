@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"myblog/goblog/helper"
+	"myblog/goblog/models"
 
 	"github.com/astaxie/beego"
 )
@@ -29,10 +30,19 @@ func (c *LoginController) Post() {
 	password := c.GetString("password")
 	if username == "" && password == "" {
 		resp.RespMessage(helper.RS_params_error, helper.WARING)
-	}else if username == "tsuchen" && password == "123456" {
+		return
+	}
+
+	isFind := FindUser(username, password)
+	if isFind {
 		resp.RespMessage(helper.RS_success, helper.SUCCESS)
 		resp.Data = "/homepage"
-	}else{
-		
+	} else {
+		resp.RespMessage(helper.RS_password_error, helper.WARING)
 	}
+}
+
+func FindUser(userName string, password string) (isFind bool) {
+	isFind = models.SelectUser(userName, password)
+	return
 }
