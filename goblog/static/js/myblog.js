@@ -15,22 +15,24 @@ $(function(){
  */
 function addMenuList(){
   $.getJSON(MenuJsonUrl, function(data){
+    console.log(data)
     var menuCtrl = $("#menu-ul");
     var smallMenuCtrl = $("#small-menu-ul");
     var menuList = data.menu_list;
     for (var index in menuList){
       //add menu
       var ps = document.createElement('li');
-      var link = document.createElement('a');
-      link.innerHTML = menuList[index].title;
-      ps.append(link);
-      menuCtrl.append(ps);
+      menuCtrl.append(ps); 
+      var alink = document.createElement('a');
+      alink.innerHTML = menuList[index].title;
+      ps.append(alink);
+     
       //add smallmenu
       var smallps = document.createElement('li');
+      smallMenuCtrl.append(smallps);
       var smallLink = document.createElement('a');
       smallLink.innerHTML = menuList[index].title;
       smallps.append(smallLink);
-      smallMenuCtrl.append(smallps);
     }
   });
 }

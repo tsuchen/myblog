@@ -55,6 +55,17 @@ a:hover{
 }
 
 /* homepage css */
+ul{
+    list-style-type:none;
+    padding-left: 0px;
+}
+
+li{
+    font-size: 16px;
+    margin-top: 1em;
+    padding-right: 60px;
+}
+
 .homepage-fixed-block{
     position:fixed;
     top:0;
@@ -93,14 +104,14 @@ a:hover{
     margin-top: 60px;
 }
 
-.homepage-icon{
+#homepage-icon{
     width: 100px;
     height: 100px;
     margin-top: 20%;
 }
 
 @media only screen and (min-width: 970px){
-    .homepage-icon{
+    #homepage-icon{
         width: 140px;
         height: 140px;
         margin-top: 20%;
@@ -112,12 +123,26 @@ a:hover{
     text-align: center;
 }
 
-#SmallIcon{
+#small-icon{
     height: 80px;
     width: 80px;
-    float: left;
+    position: absolute;
+    margin-left: -10px;
+    margin-top: 5px;
+    display: block;
+    z-index: 1;
 }
 
-.small-title-block{
-    margin-top: 5px;
+#small-menu-ul{
+    display: block;
+    white-space: nowrap;
+    padding-left: 0px; 
+}
+
+#small-menu-ul>li{
+    display: inline-block;
+    list-style: none;
+    padding: 0px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 }
