@@ -37,3 +37,9 @@
     padding: 10px 0px;
     text-align: center;
 }
+
+.login-error-tips{
+    color: red;
+    font-size: 18;
+    margin-bottom: 0px;
+}

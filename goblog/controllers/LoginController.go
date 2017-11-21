@@ -42,7 +42,9 @@ func (c *LoginController) Post() {
 	}
 }
 
+// 查找用户
 func FindUser(userName string, password string) (isFind bool) {
 	isFind = models.SelectUser(userName, password)
+
 	return
 }

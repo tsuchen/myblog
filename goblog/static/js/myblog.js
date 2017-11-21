@@ -1,5 +1,6 @@
 /**
- * myblog.js
+ * desc: myblog.js
+ * author: xuchen
  */
 
 var MenuJsonUrl = "../static/home_menu.json"

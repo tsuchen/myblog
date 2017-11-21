@@ -42,6 +42,7 @@
                   <div class="form-group">
                       <button type="button" class="form-control btn btn-primary" id="login">Sign in</button>
                   </div>
+                  <p class="login-error-tips"></p>
                 </form>
               </div>
             </div>
@@ -71,32 +72,6 @@
       <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
       <script src="../static/js/tools/jquery-3.2.1.js"></script>
       <script src="../static/js/helper/helper.js"></script>
-      <!-- 包括所有已编译的插件 -->
-      <!-- <script src="../static/js/bootstrap.min.js"></script> -->
-      <script>
-        //登录处理
-        function loginBlog(){
-          var userName = $("#InputUserName").val();
-          if (userName == "" ){
-            alert("用户名不能为空!");
-            return;
-          }
-          var password = $("#InputPassword").val();
-          if (password == ""){
-            alert("密码不能为空!");
-            return;
-          }
-          var md5PasswordInput = $("#md5-password").val();
-         // md5PasswordInput.value = toMD5(password);
-          md5PasswordInput.value = password;
-          request("/login", "post", {username: userName, password: password}, true, function(resp){
-            location.assign(resp.Data);
-          });
-        }
-
-        $("#login").on("click", function(){
-          loginBlog();
-        });
-      </script>
+      <script src="../static/js/login.js"></script>
    </body>
 </html>
