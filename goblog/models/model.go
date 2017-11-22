@@ -21,7 +21,7 @@ func init() {
 func NewUser() {
 	o := orm.NewOrm()
 	profile := &Profile{}
-	user := User{ID: 1, Name: "xuchen", Password: "smx10221102", Profile: profile}
+	user := User{ID: 1, Name: "cuit_xuchen", Password: "smx10221102", Profile: profile}
 	_, err := o.Insert(&user)
 	if err != nil {
 		fmt.Println("创建用户失败：", err)
@@ -32,7 +32,7 @@ func NewUser() {
 	profile.Introduce = "这是我的博客，欢迎来访！"
 	_, err = o.Insert(profile)
 	if err != nil {
-		fmt.Println("创建用户详情：", err)
+		fmt.Println("创建用户详情失败：", err)
 	}
 }
 

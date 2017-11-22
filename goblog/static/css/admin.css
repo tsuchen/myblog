@@ -1,0 +1,44 @@
+/**
+    author: xuchen
+    desc: admin.css
+*/
+
+.title-row{
+    background-color: #4b5068;
+}
+
+#title-icon{
+    width: 70px;
+    height: 50px;
+    float: left;
+    margin-top: 5px;
+}
+
+.title-left-block{
+    float: left;
+    height: 60px;
+    line-height: 80px;
+    padding: 0px 1em 0px 1em;
+}
+
+.title-left-block spawn{
+    color: white;
+    margin-left: 5px;
+}
+
+.title-right-block{
+    float: right;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    padding: 0px 1em 0px 1em;
+}
+
+.title-right-block:hover{
+    background-color: #3b3737;
+}
+
+.drop-text-block{
+    color: white;
+    font-size: 16px;
+}

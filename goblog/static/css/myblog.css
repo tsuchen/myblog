@@ -3,6 +3,7 @@
     desc: myblog.css
 */
 
+/* homepage css */
 a{
     color: #efefef;
     text-shadow: 0 1px #666;
@@ -15,47 +16,6 @@ a:hover{
     text-decoration: none;
 }
 
-/* login css */
-#icon{
-    width:80px;;
-    height:80px;
-}
-
-.icon-block{
-    height: 140px;
-    line-height: 140px;
-    text-align: center;
-}
-
-.login-title-block{
-    font-size: 20px;
-    text-align: center;
-}
-
-.login-form-block{
-    margin-top: 20px;
-    border-style: solid;
-    border-width: 0.5px;
-    border-color: rgb(140, 184, 174);
-    padding: 10px 20px;
-}
-
-.forget{
-    display: block;
-    float: right;
-    font-size: 14px;
-}
-
-.new-account-block{
-    margin-top: 20px;
-    border-style: solid;
-    border-width: 0.5px;
-    border-color: rgb(140, 184, 174);
-    padding: 10px 0px;
-    text-align: center;
-}
-
-/* homepage css */
 ul{
     list-style-type:none;
     padding-left: 0px;

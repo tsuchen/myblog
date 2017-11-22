@@ -3,6 +3,8 @@
  *  author: xuchen
  */
 
+var success = 1
+
 //dom init finish
 $(function(){
 
@@ -20,11 +22,17 @@ function loginBlog(){
     // md5PasswordInput.value = toMD5(password);
     // md5PasswordInput.value = password;
 
-    var errorMessage = checkInputInfo(userName, password)
+    var errorMessage = checkInputInfo(userName, password);
+    errorMessage = "";
     if (errorMessage === ""){
+        $("p.login-error-tips").text("")
         request("/login", "post", {username: userName, password: password}, true, function(resp){
-            location.assign(resp.Data);
-        });
+            if (resp.Status === success){
+                location.assign(resp.Data);
+            }else{
+                $("p.login-error-tips").text("用户名或密码错误。")
+            }    
+        });     
     }else{
         $("p.login-error-tips").text(errorMessage)
     }
@@ -34,15 +42,14 @@ function loginBlog(){
 function checkInputInfo(userName, password){
     var errorMessage = ""
 
-    var nameReg = new RegExp('^[\w][\w|\_]{5, 12}');
+    var nameReg = /^[a-zA-z]\w{7,15}$/
     var isLegal = nameReg.test(userName)
-    console.log(isLegal)
     if (!isLegal) {
         errorMessage = "用户名输入格式不正确，请重新输入。"
         return errorMessage;
     }
 
-    var passwordReg = new RegExp('[^\w][\w]{5, 14}');
+    var passwordReg = /^\w\w{7,15}$/
     isLegal = passwordReg.test(password)
     if (!isLegal) {
         errorMessage = "密码输入格式不正确，请重新输入。"
