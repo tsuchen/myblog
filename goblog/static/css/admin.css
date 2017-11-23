@@ -69,3 +69,16 @@
     height: 60px;
     line-height: 60px;
 }
+
+.menu_button{
+    width: 100%;
+    padding: 10px 15px;
+    border: 0px;
+    background-color: #286090;
+    color: white;
+    text-align: left;
+}
+
+.menu_button>span{
+   float: right;
+}
