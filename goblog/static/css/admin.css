@@ -8,7 +8,7 @@
 }
 
 #title-icon{
-    width: 70px;
+    width: 75px;
     height: 50px;
     float: left;
     margin-top: 5px;
@@ -21,7 +21,7 @@
     padding: 0px 1em 0px 1em;
 }
 
-.title-left-block spawn{
+.title-left-block span{
     color: white;
     margin-left: 5px;
 }
@@ -34,11 +34,38 @@
     padding: 0px 1em 0px 1em;
 }
 
-.title-right-block:hover{
-    background-color: #3b3737;
-}
-
 .drop-text-block{
     color: white;
     font-size: 16px;
+}
+
+.dropdown-button{
+    width: 100%;
+    height: 100%;
+    background-color: #4b5068;
+    padding: 0px 0.5em 0px 0.5em;
+    background-image: none;
+    border: 0px;
+    color: white;
+    font-size: 18px;
+}
+
+.dropdown-button:hover{
+    background-color: #6e6e7e;
+}
+
+.dropdown-button:focus {
+    background-color: #6e6e7e;
+}
+
+.left-menu-block{
+    border:1px solid #4e5988;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    height: 1000px;
+}
+
+.small-title-block{
+    height: 60px;
+    line-height: 60px;
 }

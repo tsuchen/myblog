@@ -11,25 +11,52 @@
    <body>
       <div class="container-fluid">
         <div class="row title-row">
-            <div class="col-md-12">
+            <div class="visible-xs-block small-title-block">
+                <div class="dropdown">
+                    <button class="dropdown-button" type="button" id="userDropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">                           
+                        <span class="glyphicon glyphicon-th-list"></span> xuchen
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdownMenu2">
+                        <li><a href="#">User Profile</a></li>
+                        <li><a href="#">Reset Password</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="hidden-xs">
                 <div class="title-left-block">
                     <img id="title-icon" src="../static/img/log.png" class="img-circle">
-                    <spawn>博客后台</spawn>
+                    <span class="drop-text-block">博客后台</span>
                 </div>
-                <div class="title-right-block dropdown">
-                    <div class="drop-text-block">
-                        <img id="user-img" src="../static/img/user.png">
-                        xuchen<span class="caret"></span>
+                <div class="title-right-block">
+                    <div class="dropdown">
+                        <button class="dropdown-button" type="button" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <img id="user-img" src="../static/img/user.png">
+                             xuchen
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdownMenu">
+                        <li><a href="#">User Profile</a></li>
+                        <li><a href="#">Reset Password</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Logout</a></li>
+                        </ul>
                     </div>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="#">jmeter</a></li>
-                        <li><a href="#">EJB</a></li>
-                        <li><a href="#">Jasper Report</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">分离的链接</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">另一个分离的链接</a></li>
-                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-4 col-xs-4 left-menu-block">
+                <div class="row">
+                    <button class="btn" type="button">Artical</button>
+                    <div class="list-group">
+                        <button type="button" class="list-group-item">Cras justo odio</button>
+                        <button type="button" class="list-group-item">Dapibus ac facilisis in</button>
+                        <button type="button" class="list-group-item">Morbi leo risus</button>
+                        <button type="button" class="list-grou`p-item">Porta ac consectetur ac</button>
+                        <button type="button" class="list-group-item">Vestibulum at eros</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -12,8 +12,3 @@ $(function(){
 /**
  *  drop menu
  */
-
-$("div.title-right-block").click(function(){
-    alert("drop down")
-    $(".dropdown-menu").dropdown('toggle');
-});
