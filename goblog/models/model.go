@@ -9,7 +9,7 @@ import (
 
 func init() {
 	//设置默认数据库
-	orm.RegisterDataBase("default", "mysql", "root:123456@/myblog?charset=utf8", 30)
+	orm.RegisterDataBase("default", "mysql", "root:smx10221102@/myblog?charset=utf8", 30)
 	//注册自定义model
 	orm.RegisterModel(new(User), new(Profile), new(Blog), new(Tag))
 	// 自动建表
