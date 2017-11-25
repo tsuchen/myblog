@@ -59,10 +59,10 @@
 }
 
 .left-menu-block{
-    border:1px solid #4e5988;
+    border:1px solid rgb(180, 179, 179);
     border-top-width: 0px;
     border-bottom-width: 0px;
-    height: 1000px;
+    height: 1280px;
 }
 
 .small-title-block{
@@ -70,15 +70,18 @@
     line-height: 60px;
 }
 
-.menu_button{
+.menu-button{
     width: 100%;
     padding: 10px 15px;
-    border: 0px;
-    background-color: #286090;
-    color: white;
+    background-color: #e9e9e9;
     text-align: left;
+    border-bottom: 0.8px solid rgb(180, 179, 179);
 }
 
-.menu_button>span{
+.menu-button>span{
    float: right;
+}
+
+.list-group{
+    margin-bottom: 0px;
 }
