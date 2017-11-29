@@ -37,7 +37,7 @@ func (c *LoginController) Post() {
 	isFind := FindUser(username, password)
 	if isFind {
 		resp.RespMessage(helper.RS_success, helper.SUCCESS)
-		resp.Data = "/homepage"
+		resp.Data = "/admin"
 	} else {
 		resp.RespMessage(helper.RS_password_error, helper.WARING)
 	}
