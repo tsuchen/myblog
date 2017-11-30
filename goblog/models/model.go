@@ -1,15 +1,24 @@
 package models
 
 import (
+	"github.com/astaxie/beego"
 	"fmt"
 
 	"github.com/astaxie/beego/orm"
-	_ "github.com/go-sql-driver/mysql"
+	_"github.com/go-sql-driver/mysql"
 )
 
 func init() {
+	//读取配置
+	sqlDB := beego.AppConfig.String("mysqldb")
+	sqlUser := beego.AppConfig.String("mysqluser")
+	sqlPassword := beego.AppConfig.String("mysqlpass")
+	sqlURL := beego.AppConfig.String("mysqlurl")
+	sqlInfo := sqlUser + ":" + sqlPassword + "@" + sqlURL +  "/" + sqlDB + "?charset=utf8"
+	fmt.Println(sqlInfo)
+
 	//设置默认数据库
-	orm.RegisterDataBase("default", "mysql", "root:123456@/myblog?charset=utf8", 30)
+	orm.RegisterDataBase("default", "mysql", sqlInfo, 30)
 	//注册自定义model
 	orm.RegisterModel(new(User), new(Profile), new(Blog), new(Tag))
 	// 自动建表

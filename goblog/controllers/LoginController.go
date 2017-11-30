@@ -7,6 +7,8 @@ import (
 	"github.com/astaxie/beego"
 )
 
+var sessionName = beego.AppConfig.String("SessionName")
+
 type Resp struct {
 	Data interface{}
 }
@@ -17,7 +19,7 @@ type LoginController struct {
 
 func (c *LoginController) Get() {
 	c.Data["URL"] = "http://localhost:8080"
-	c.Data["Name"] = "tsuchen"
+	c.Data["Name"] = "xuchen"
 	c.TplName = "login.html"
 }
 
@@ -36,6 +38,12 @@ func (c *LoginController) Post() {
 
 	isFind := FindUser(username, password)
 	if isFind {
+		se := c.GetSession(sessionName)
+		if se == nil {
+			c.SetSession(sessionName, username)
+		} else {
+			c.SetSession(sessionName, username)
+		}
 		resp.RespMessage(helper.RS_success, helper.SUCCESS)
 		resp.Data = "/admin"
 	} else {

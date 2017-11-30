@@ -19,7 +19,7 @@ function hideMenuList(){
 /**
  * 添加菜单事件
  */
-var menuButtons = $($(".menu-button"));
+var menuButtons = $(".menu-button");
 for(let index = 0; index < menuButtons.length; index++){
   var menuButton = $(menuButtons[index])
   menuButton.click(function(){
@@ -31,3 +31,17 @@ for(let index = 0; index < menuButtons.length; index++){
     }
   });
 };
+
+/**
+ * 注销登录
+ */
+var logoutLinks = $(".logout");
+logoutLinks.click(function(){
+  request("/logout", "get", {}, true, function(resp){
+    if (resp.Status === success){
+      location.assign(resp.Data);
+    }else{
+      console.log("登出失败")
+    }    
+  }); 
+});

@@ -14,13 +14,14 @@
             <div class="visible-xs-block small-title-block">
                 <div class="dropdown">
                     <button class="dropdown-button" type="button" id="userDropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">                           
-                        <span class="glyphicon glyphicon-th-list"></span> xuchen
+                        <span class="glyphicon glyphicon-th-list"></span>
+                        {{.UserName}}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdownMenu2">
                         <li><a href="#">User Profile</a></li>
                         <li><a href="#">Reset Password</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Logout</a></li>
+                        <li><a class="logout" href="#">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -33,14 +34,14 @@
                     <div class="dropdown">
                         <button class="dropdown-button" type="button" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <img id="user-img" src="../static/img/user.png">
-                             xuchen
+                            {{.UserName}}
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdownMenu">
                             <li><a href="#">User Profile</a></li>
                             <li><a href="#">Reset Password</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">Logout</a></li>
+                            <li><a class="logout" href="#">Logout</a></li>
                         </ul>
                     </div>
                 </div>
