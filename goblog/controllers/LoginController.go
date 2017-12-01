@@ -38,8 +38,17 @@ func (c *LoginController) Post() {
 		return
 	}
 
-	isFind := FindUser(username, password)
+	isFind, user := FindUser(username, password)
 	if isFind {
+		userInfo := helper.GlobalUserManager.GetUserInfo()
+		if userInfo.UserId != 0 {
+			return 
+		}
+		userInfo.UserId = user.ID
+		userInfo.UserName = user.Name
+		userInfo.Age = user.Profile.Age
+
+		// 初始化session 
 		se := c.GetSession(sessionName)
 		if se == nil {
 			c.SetSession(sessionName, username)
@@ -54,8 +63,8 @@ func (c *LoginController) Post() {
 }
 
 // 查找用户
-func FindUser(userName string, password string) (isFind bool) {
-	isFind = models.SelectUser(userName, password)
+func FindUser(userName string, password string) (isFind bool, user models.User) {
+	isFind, user = models.SelectUser(userName, password)
 
 	return
 }

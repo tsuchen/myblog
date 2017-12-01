@@ -45,18 +45,18 @@ func NewUser() {
 	}
 }
 
-func SelectUser(userName string, password string) (isFind bool) {
+func SelectUser(userName string, password string) (isFind bool, u User) {
 	o := orm.NewOrm()
 	var user User
 	qs := o.QueryTable("user")
 	qs = qs.Filter("name", userName).Filter("password", password)
 	err := qs.One(&user)
-	fmt.Printf("Returned Rows Num: %s\n", err)
 	if err == nil {
 		isFind = true
 	} else {
 		isFind = false
 	}
+	u = user
 
 	return
 }

@@ -2,6 +2,8 @@
 package controllers
 
 import (
+	"fmt"
+	"myblog/goblog/helper"
 	"github.com/astaxie/beego"
 )
 
@@ -17,8 +19,16 @@ func (c *AdminController) Get() {
 		c.Data["UserName"] = "xuchen"
 		c.Data["URL"] = "http://localhost:8080"
 	}else{
-		c.TplName = "admin.html"
-		c.Data["UserName"] = "xuchen"
+		userInfo := helper.GlobalUserManager.GetUserInfo()
+		fmt.Println(userInfo)
+		if userInfo.UserId != 0 {
+			c.TplName = "admin.html"
+			c.Data["UserName"] = "xuchen"
+		}else{
+			c.TplName = "login.html"
+			c.Data["UserName"] = "xuchen"
+			c.Data["URL"] = "http://localhost:8080"
+		}
 	}
 	c.Render()
 }
