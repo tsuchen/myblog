@@ -21,7 +21,7 @@
                         <li><a href="#">User Profile</a></li>
                         <li><a href="#">Reset Password</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a class="logout" href="#">Logout</a></li>
+                        <li><a class="logout" href="#" onclick="logout();return false;">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -41,14 +41,14 @@
                             <li><a href="#">User Profile</a></li>
                             <li><a href="#">Reset Password</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a class="logout" href="#">Logout</a></li>
+                            <li><a class="logout" href="#" onclick="logout();return false;">Logout</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2 col-sm-3 hidden-xs left-menu-block">
+            <div class="col-md-2 col-sm-4 col-xs-6 left-menu-block">
                 <div class="row">
                     <div id="menu_1">
                         <div class="menu-button">
@@ -96,6 +96,17 @@
                         <div class="menu-list-group">
                             <button type="button" class="list-group-item">最新评论</button>
                             <button type="button" class="list-group-item">所有评论</button>
+                        </div>
+                    </div>
+
+                    <div id="menu_5">
+                        <div class="menu-button">
+                            <strong>友情链接管理</strong> 
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </div>
+                        <div class="menu-list-group">
+                            <button type="button" class="list-group-item">所有链接</button>
+                            <button type="button" class="list-group-item">添加链接</button>
                         </div>
                     </div>
                 </div>

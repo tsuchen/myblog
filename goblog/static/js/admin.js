@@ -3,6 +3,8 @@
  * author: xuchen
  */
 
+var success = 1
+
 //dom init finish
 $(function(){
   //加载menu
@@ -35,13 +37,13 @@ for(let index = 0; index < menuButtons.length; index++){
 /**
  * 注销登录
  */
-var logoutLinks = $(".logout");
-logoutLinks.click(function(){
+function logout(){
   request("/logout", "get", {}, true, function(resp){
+    console.log(resp)
     if (resp.Status === success){
       location.assign(resp.Data);
     }else{
-      console.log("登出失败")
+      console.log("登出失败");
     }    
   }); 
-});
+}

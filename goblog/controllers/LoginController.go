@@ -21,6 +21,8 @@ func (c *LoginController) Get() {
 	c.Data["URL"] = "http://localhost:8080"
 	c.Data["Name"] = "xuchen"
 	c.TplName = "login.html"
+
+	c.Render()
 }
 
 func (c *LoginController) Post() {
