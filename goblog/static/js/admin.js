@@ -15,24 +15,33 @@ $(function(){
  *  隐藏menu子菜单
  */
 function hideMenuList(){
-  $(".menu-list-group").hide(0);
+  $(".menu-list-group").hide();
+  addMenuCallFunc()
 };
 
 /**
  * 添加菜单事件
  */
-var menuButtons = $(".menu-button");
-for(let index = 0; index < menuButtons.length; index++){
-  var menuButton = $(menuButtons[index])
-  menuButton.click(function(){
-    var listGrounp = $($(".menu-list-group")[index]);
-    if (listGrounp.is(":visible")){
-      listGrounp.hide(300)
-    }else{
-      listGrounp.show(300);
-    }
-  });
-};
+function addMenuCallFunc(){
+  var menuButtons = document.getElementsByClassName("menu-button");
+  var listGroups = document.getElementsByClassName("menu-list-group");
+  for(let index = 0; index < menuButtons.length; index ++){
+   var click = function(index){
+      var menuButton = $(menuButtons[index]);
+      menuButton.click(function(){
+        var listGroup = listGroups[index];
+        if ($(listGroup).is(":visible")){
+          $(listGroup).hide(300);
+          console.log("hide: ", index)
+        }else{
+          $(listGroup).show(300);
+          console.log("show: ", index)
+        }
+      });
+   }
+   click(index);
+  };
+}
 
 /**
  * 注销登录

@@ -41,12 +41,11 @@ func (c *LoginController) Post() {
 	isFind, user := FindUser(username, password)
 	if isFind {
 		userInfo := helper.GlobalUserManager.GetUserInfo()
-		if userInfo.UserId != 0 {
-			return 
+		if userInfo.UserId == 0 {
+			userInfo.UserId = user.ID
+			userInfo.UserName = user.Name
+			userInfo.Age = user.Profile.Age 
 		}
-		userInfo.UserId = user.ID
-		userInfo.UserName = user.Name
-		userInfo.Age = user.Profile.Age
 
 		// 初始化session 
 		se := c.GetSession(sessionName)

@@ -18,4 +18,7 @@ func (c *LogoutController) Get(){
 
 	cookie, _:= c.Ctx.Request.Cookie(sessionName)
 	c.DelSession(cookie.Name)
+
+	userInfo := &helper.UserInfo{UserId: 0}
+	helper.GlobalUserManager.SetUserInfo(userInfo)
 }

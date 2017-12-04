@@ -6,6 +6,7 @@ package helper
 
 import(
 	"time"
+	"sync"
 )
 
 type UserInfo struct {
@@ -28,6 +29,7 @@ type UserInfo struct {
 var GlobalUserManager *UserManager
 
 type UserManager struct {
+	lock     sync.Mutex
 	userInfo *UserInfo
 }
 
@@ -38,4 +40,10 @@ func NewUserManager(){
 func (uManager *UserManager) GetUserInfo() (info *UserInfo) {
 	info = uManager.userInfo
 	return 
+}
+
+func (uManager *UserManager) SetUserInfo(info *UserInfo) {
+	uManager.lock.Lock()
+	defer uManager.lock.Unlock()
+	uManager.userInfo = info
 }
