@@ -1,11 +1,12 @@
 package models
 
 import (
-	"github.com/astaxie/beego"
 	"fmt"
 
+	"github.com/astaxie/beego"
+
 	"github.com/astaxie/beego/orm"
-	_"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
@@ -14,7 +15,7 @@ func init() {
 	sqlUser := beego.AppConfig.String("mysqluser")
 	sqlPassword := beego.AppConfig.String("mysqlpass")
 	sqlURL := beego.AppConfig.String("mysqlurl")
-	sqlInfo := sqlUser + ":" + sqlPassword + "@" + sqlURL +  "/" + sqlDB + "?charset=utf8"
+	sqlInfo := sqlUser + ":" + sqlPassword + "@" + sqlURL + "/" + sqlDB + "?charset=utf8"
 	fmt.Println(sqlInfo)
 
 	//设置默认数据库
@@ -57,6 +58,14 @@ func SelectUser(userName string, password string) (isFind bool, u User) {
 		isFind = false
 	}
 	u = user
+
+	return
+}
+
+func GetAllUser() (userList []*User) {
+	o := orm.NewOrm()
+	num, err := o.QueryTable("user").All(&userList)
+	fmt.Printf("Returned Rows Num: %d, %s", num, err)
 
 	return
 }

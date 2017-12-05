@@ -42,7 +42,7 @@ func (c *LoginController) Post() {
 	if isFind {
 		//更新用户信息
 		updateUserInfo(user)
-		// 初始化session 
+		// 初始化session
 		se := c.GetSession(sessionName)
 		if se == nil {
 			c.SetSession(sessionName, username)
@@ -64,7 +64,7 @@ func findUser(userName string, password string) (isFind bool, user models.User) 
 }
 
 // 更新用户信息
-func updateUserInfo(user models.User){
+func updateUserInfo(user models.User) {
 	newUserInfo := &helper.UserInfo{UserId: user.ID, UserName: user.Name, Password: user.Password}
 	helper.GlobalUserManager.UpdateUserInfo(newUserInfo)
 }

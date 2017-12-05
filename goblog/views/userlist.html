@@ -12,12 +12,15 @@
                 <th>Age</th>
                 <th>Desc</th>
             </tr>
-            {{with .Users}}
-                <tr class="active">
-                    {{range .}}
-                        <tr>{{.}}</tr>
-                    {{end}}
-                </tr>
+            {{range $key, $val := .Users}}
+            <tr class="info">
+                <td>{{$key | getRowIndex}}</td>
+                <td>{{$val.Name}}</td>
+                <td>{{$val.Password}}</td>
+                <td>男</td>
+                <td>{{$val.Profile.Age}}</td>
+                <td>{{$val.Profile.Introduce}}</td>
+            </tr>
             {{end}}
         </table>
     </div>
