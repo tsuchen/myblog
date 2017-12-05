@@ -15,19 +15,22 @@ func (c *AdminController) Get() {
 	cookie, _:= c.Ctx.Request.Cookie(sessionName)
 	se := c.GetSession(cookie.Name)
 	if se == nil {
+		fmt.Println("session不存在, 请先登录。")
 		c.TplName = "login.html"
 		c.Data["UserName"] = "xuchen"
 		c.Data["URL"] = "http://localhost:8080"
 	}else{
-		userInfo := helper.GlobalUserManager.GetUserInfo()
-		fmt.Println(userInfo)
-		if userInfo.UserId != 0 {
-			c.TplName = "admin.html"
-			c.Data["UserName"] = "xuchen"
-		}else{
+		userInfo := helper.GlobalUserManager.GetUserInfo(cookie.Name)
+		//没有找到用户信息
+		if userInfo == nil {
+			fmt.Println("用户不存在, 请重新登录。")
 			c.TplName = "login.html"
 			c.Data["UserName"] = "xuchen"
 			c.Data["URL"] = "http://localhost:8080"
+		}else{
+			c.Data["UserName"] = userInfo.UserName
+			c.Layout = "admin.html"
+			c.TplName = "userlist.html"
 		}
 	}
 	c.Render()

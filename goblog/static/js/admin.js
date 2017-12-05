@@ -26,21 +26,21 @@ function addMenuCallFunc(){
   var menuButtons = document.getElementsByClassName("menu-button");
   var listGroups = document.getElementsByClassName("menu-list-group");
   for(let index = 0; index < menuButtons.length; index ++){
-   var click = function(index){
-      var menuButton = $(menuButtons[index]);
+    var menuButton = $(menuButtons[index]);
+
+    var clickFunc = function(n){
       menuButton.click(function(){
-        var listGroup = listGroups[index];
+        var listGroup = listGroups[n];
         if ($(listGroup).is(":visible")){
-          $(listGroup).hide(300);
-          console.log("hide: ", index)
+          $(listGroup).slideUp(300);
         }else{
-          $(listGroup).show(300);
-          console.log("show: ", index)
+          $(listGroup).slideDown(300);
         }
       });
-   }
-   click(index);
-  };
+    };
+
+    clickFunc(index);
+  }
 }
 
 /**

@@ -1,0 +1,24 @@
+<div class="top-content-block">
+    <h2>用户列表</h2>
+    <hr></hr>
+    <button type="button" class="btn btn-primary">添加新用户</button>
+    <div class="table-responsive user-list-block">
+        <table class="table table-striped table-hover">
+            <tr class="success">
+                <th>#</th>
+                <th>UserName</th>
+                <th>Password</th>
+                <th>Sex</th>
+                <th>Age</th>
+                <th>Desc</th>
+            </tr>
+            {{with .Users}}
+                <tr class="active">
+                    {{range .}}
+                        <tr>{{.}}</tr>
+                    {{end}}
+                </tr>
+            {{end}}
+        </table>
+    </div>
+</div>
