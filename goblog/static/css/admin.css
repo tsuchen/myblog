@@ -99,3 +99,16 @@
 .user-list-block{
     margin: 20px 0px;
 }
+
+.rotate-icon{
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+td{
+    text-align: center;
+}
+
+th{
+    text-align: center;
+}

@@ -10,17 +10,19 @@
                 <th>Password</th>
                 <th>Sex</th>
                 <th>Age</th>
+                <th>Phone</th>
                 <th>Desc</th>
             </tr>
             {{range $key, $val := .Users}}
-            <tr class="info">
-                <td>{{$key | getRowIndex}}</td>
-                <td>{{$val.Name}}</td>
-                <td>{{$val.Password}}</td>
-                <td>男</td>
-                <td>{{$val.Profile.Age}}</td>
-                <td>{{$val.Profile.Introduce}}</td>
-            </tr>
+                <tr class="active">
+                    <td>{{$val.ID}}</td>
+                    <td>{{$val.Name}}</td>
+                    <td>{{$val.Password}}</td>
+                    <td>{{$val.Profile.Sex}}</td>
+                    <td>{{$val.Profile.Age}}</td>
+                    <td>{{$val.Profile.PNumber}}</td>
+                    <td>{{$val.Profile.Introduce}}</td>
+                </tr>
             {{end}}
         </table>
     </div>

@@ -21,7 +21,7 @@ func init() {
 	//设置默认数据库
 	orm.RegisterDataBase("default", "mysql", sqlInfo, 30)
 	//注册自定义model
-	orm.RegisterModel(new(User), new(Profile), new(Blog), new(Tag))
+	orm.RegisterModel(new(User), new(Profile), new(Blog), new(Tag), new(Category))
 	// 自动建表
 	orm.RunSyncdb("default", false, true)
 	// 开启 orm 调试模式：开发过程中建议打开，release时需要关闭
@@ -30,19 +30,21 @@ func init() {
 
 func NewUser() {
 	o := orm.NewOrm()
+	//创建用户基本信息
 	profile := &Profile{}
-	user := User{ID: 1, Name: "cuit_xuchen", Password: "smx10221102", Profile: profile}
-	_, err := o.Insert(&user)
-	if err != nil {
-		fmt.Println("创建用户失败：", err)
-	}
-
-	profile.ID = 1
 	profile.Age = 25
+	profile.PNumber = "13618076042"
+	profile.Sex = "男"
 	profile.Introduce = "这是我的博客，欢迎来访！"
-	_, err = o.Insert(profile)
+	_, err := o.Insert(profile)
 	if err != nil {
 		fmt.Println("创建用户详情失败：", err)
+	}
+
+	user := User{Name: "admin", Password: "123456", Profile: profile}
+	_, err = o.Insert(&user)
+	if err != nil {
+		fmt.Println("创建用户失败：", err)
 	}
 }
 
@@ -66,6 +68,19 @@ func GetAllUser() (userList []*User) {
 	o := orm.NewOrm()
 	num, err := o.QueryTable("user").All(&userList)
 	fmt.Printf("Returned Rows Num: %d, %s", num, err)
+	for _, user := range userList{
+		if user.Profile != nil {
+			o.Read(user.Profile)
+		}
+	}
 
 	return
+}
+
+//获取用户所有的分类
+func GetAllCategory(userName interface{}) (categoryList []*Category) {
+	o := orm.NewOrm()
+	o.QueryTable("category").Filter("Users_User_Name", userName).All(&categoryList)
+
+	return 
 }

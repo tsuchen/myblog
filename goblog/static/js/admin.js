@@ -30,6 +30,12 @@ function addMenuCallFunc(){
 
     var clickFunc = function(n){
       menuButton.click(function(){
+        var span = $($(this).find(".glyphicon"));
+        if(span.hasClass("rotate-icon")){
+          span.removeClass("rotate-icon")
+        }else{
+          span.addClass("rotate-icon")
+        }
         var listGroup = listGroups[n];
         if ($(listGroup).is(":visible")){
           $(listGroup).slideUp(300);
