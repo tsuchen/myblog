@@ -68,7 +68,7 @@ func GetAllUser() (userList []*User) {
 	o := orm.NewOrm()
 	num, err := o.QueryTable("user").All(&userList)
 	fmt.Printf("Returned Rows Num: %d, %s", num, err)
-	for _, user := range userList{
+	for _, user := range userList {
 		if user.Profile != nil {
 			o.Read(user.Profile)
 		}
@@ -80,7 +80,7 @@ func GetAllUser() (userList []*User) {
 //获取用户所有的分类
 func GetAllCategory(userName interface{}) (categoryList []*Category) {
 	o := orm.NewOrm()
-	o.QueryTable("category").Filter("Users_User_Name", userName).All(&categoryList)
+	o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
 
-	return 
+	return
 }
