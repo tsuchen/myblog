@@ -3,7 +3,7 @@
  * author: xuchen
  */
 
-var success = 1
+var success = 1;
 
 //dom init finish
 $(function(){
@@ -15,14 +15,16 @@ $(function(){
  *  隐藏menu子菜单
  */
 function hideMenuList(){
-  $(".menu-list-group").hide();
-  addMenuCallFunc()
+  addMenuCallFunc();
+  addMenuCallLink();
 };
 
 /**
  * 添加菜单事件
  */
 function addMenuCallFunc(){
+  $(".menu-list-group").hide();
+
   var menuButtons = document.getElementsByClassName("menu-button");
   var listGroups = document.getElementsByClassName("menu-list-group");
   for(let index = 0; index < menuButtons.length; index ++){

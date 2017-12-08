@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
-
+	"strconv"
 	"github.com/astaxie/beego"
 )
 
@@ -29,6 +29,14 @@ func (c *AdminCategoryController) Get() {
 			c.Data["URL"] = "http://localhost:8080"
 		} else {
 			categoryList := models.GetAllCategory(se)
+			//添加url
+			var categoryInfoList []*CategoryInfo
+			for _, obj := range categoryList {
+				url := "/admin/category/" + strconv.Itoa(obj.ID)
+				info := &CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
+				categoryInfoList = append(categoryInfoList, info)
+			}
+			c.Data["CategoryInfos"] = categoryInfoList
 			c.Data["Categorys"] = categoryList
 			c.Data["UserName"] = userInfo.UserName
 			c.Layout = "admin.html"
