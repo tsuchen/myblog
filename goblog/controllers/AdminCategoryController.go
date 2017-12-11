@@ -39,6 +39,7 @@ func (c *AdminCategoryController) Get() {
 			c.Data["CategoryInfos"] = categoryInfoList
 			c.Data["Categorys"] = categoryList
 			c.Data["UserName"] = userInfo.UserName
+			c.Data["GroupListId"] = "CategoryList"
 			c.Layout = "admin.html"
 			c.TplName = "categorylist.html"
 		}

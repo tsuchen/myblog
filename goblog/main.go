@@ -8,14 +8,8 @@ import (
 	_ "github.com/astaxie/beego/session/mysql"
 )
 
-func getRowIndex(i int) (out int) {
-	out = i + 1
-	return
-}
-
 func init() {
 	helper.NewUserManager()
-	beego.AddFuncMap("getRowIndex", getRowIndex)
 }
 
 func main() {

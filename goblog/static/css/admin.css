@@ -83,8 +83,12 @@
    float: right;
 }
 
-.list-group{
-    margin-bottom: 0px;
+.menu-list-group{
+   display: none;
+}
+
+.show-list-group{
+    display: block;
 }
 
 .top-content-block{

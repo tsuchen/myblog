@@ -56,7 +56,7 @@
                             <strong>用户管理</strong> 
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </div>
-                        <div id="UserList" class="menu-list-group">
+                        <div id="UserList" class="menu-list-group {{if eq .GroupListId "UserList"}} show-list-group {{end}}">
                             <a class="list-group-item" href="/admin">用户列表</a>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                             <strong>分类管理</strong> 
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </div>
-                        <div id="CategoryList" class="menu-list-group">
+                        <div id="CategoryList" class="menu-list-group {{if eq .GroupListId "CategoryList"}} show-list-group {{end}}">
                             <a class="list-group-item" href="/admin/category">所有分类</a>
                         </div>
                     </div>

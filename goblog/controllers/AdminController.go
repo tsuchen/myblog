@@ -46,6 +46,7 @@ func (c *AdminController) Get() {
 			c.Data["Users"] = users
 			c.Data["UserName"] = userInfo.UserName
 			c.Data["CategoryInfos"] = categoryInfoList
+			c.Data["GroupListId"] = "UserList"
 			c.Layout = "admin.html"
 			c.TplName = "userlist.html"
 		}
