@@ -2,12 +2,10 @@ package controllers
 
 import (
 	"myblog/goblog/helper"
-
-	"github.com/astaxie/beego"
 )
 
 type LogoutController struct {
-	beego.Controller
+	CommonController
 }
 
 func (c *LogoutController) Get() {

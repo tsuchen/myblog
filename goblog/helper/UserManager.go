@@ -61,8 +61,9 @@ func (uManager *UserManager) UpdateUserInfo(info *UserInfo) (success bool) {
 			success = true
 		}
 	}
+	
 	//没有找到,则插入新用户信息
-	if success == false {
+	if !success {
 		uManager.insertUserInfo(info)
 	}
 

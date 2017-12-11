@@ -3,18 +3,14 @@ package controllers
 import (
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
-
-	"github.com/astaxie/beego"
 )
-
-var sessionName = beego.AppConfig.String("SessionName")
 
 type Resp struct {
 	Data interface{}
 }
 
 type LoginController struct {
-	beego.Controller
+	CommonController
 }
 
 func (c *LoginController) Get() {
@@ -45,8 +41,6 @@ func (c *LoginController) Post() {
 		// 初始化session
 		se := c.GetSession(sessionName)
 		if se == nil {
-			c.SetSession(sessionName, username)
-		} else {
 			c.SetSession(sessionName, username)
 		}
 		resp.RespMessage(helper.RS_success, helper.SUCCESS)
