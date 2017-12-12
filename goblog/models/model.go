@@ -84,3 +84,92 @@ func GetAllCategory(userName interface{}) (categoryList []*Category) {
 
 	return
 }
+
+
+//添加博客分类
+func AddBlogCategory(userName interface{}, categoryName string) (success bool, message string) {
+	o := orm.NewOrm()
+	var categoryList []*Category
+	num, err := o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
+	if err != nil || num == 0 {
+		success = false
+		message = "查询分类失败。"
+		return 
+	}
+
+	//查询分类名称
+	isFind := false
+	for _, obj := range categoryList {
+		if obj.Name == categoryName {
+			isFind = true
+			break
+		}
+	}
+
+	if isFind {
+		success = false
+		message = "添加分类失败，重复添加。"
+		return
+	}
+
+	var user User
+	o.QueryTable("user").Filter("Name", userName).One(&user)
+	m2m := o.QueryM2M(&user, "Categorys")
+	category := &Category{Name: categoryName}
+	o.Insert(category)
+	num, err = m2m.Add(category)
+	if err != nil {
+		success = false
+		message = "添加分类失败。"
+		return
+	}
+
+	success = true
+	message = "添加分成功。"
+
+	return 
+}
+
+//删除博客分类
+func DeleteCategory(userName interface{}, categoryName string) (success bool, message string) {
+	o := orm.NewOrm()
+	var categoryList []*Category
+	num, err := o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
+	if err != nil || num == 0 {
+		success = false
+		message = "查询分类失败。"
+		return 
+	}
+
+	//查询分类名称
+	isFind := false
+	for _, obj := range categoryList {
+		if obj.Name == categoryName {
+			isFind = true
+			break
+		}
+	}
+
+	if !isFind {
+		success = false
+		message = "删除分类失败，不存在此分类。"
+		return
+	}
+
+	var user User
+	o.QueryTable("user").Filter("Name", userName).One(&user)
+	m2m := o.QueryM2M(&user, "Categorys")
+	var category Category
+	o.QueryTable("category").Filter("Name", categoryName).One(&category)
+	num, err = m2m.Remove(category)
+	if err != nil {
+		success = false
+		message = "删除分类失败。"
+		return
+	}
+
+	success = true
+	message = "删除分类成功。"
+
+	return 
+}

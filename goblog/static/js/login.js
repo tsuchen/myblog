@@ -22,9 +22,9 @@ function loginBlog(){
     // md5PasswordInput.value = toMD5(password);
     // md5PasswordInput.value = password;
 
-    var isLegal, errorMessage = checkInputInfo(userName, password);
-    isLegal = true;
-    if (isLegal){
+    var info = checkInputInfo(userName, password);
+    info.Legal = true;
+    if (info.Legal){
         $("p.login-error-tips").text("")
         request("/login", "post", {username: userName, password: password}, true, function(resp){
             if (resp.Status === success){
@@ -34,28 +34,30 @@ function loginBlog(){
             }    
         });     
     }else{
-        $("p.login-error-tips").text(errorMessage)
+        $("p.login-error-tips").text(info.Message)
     }
 }
 
 //检查输入是否正确
 function checkInputInfo(userName, password){
-    var errorMessage = "";
-    var isLegal = false;
+    var checkInfo = {
+        Legal: false,
+        Message: "",
+    };
 
-    var nameReg = /^[a-zA-z]\w{7,15}$/
-    isLegal = nameReg.test(userName)
-    if (!isLegal) {
-        errorMessage = "用户名输入格式不正确，请重新输入。"
-        return isLegal, errorMessage;
+    var nameReg = /^[a-zA-z]\w{7,15}$/;
+    checkInfo.Legal = nameReg.test(userName);
+    if (!checkInfo.Legal) {
+        checkInfo.Message = "用户名输入格式不正确，请重新输入。";
+        return checkInfo;
     }
 
-    var passwordReg = /^\w\w{7,15}$/
-    isLegal = passwordReg.test(password)
-    if (!isLegal) {
-        errorMessage = "密码输入格式不正确，请重新输入。"
-        return isLegal, errorMessage;
+    var passwordReg = /^\w\w{7,15}$/;
+    checkInfo.Legal = passwordReg.test(password);
+    if (!checkInfo.Legal) {
+        checkInfo.Message = "密码输入格式不正确，请重新输入。";
+        return checkInfo;
     }
 
-    return true, errorMessage;
+    return checkInfo;
 }

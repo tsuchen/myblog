@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+	"myblog/goblog/helper"
 	"myblog/goblog/models"
 	"strconv"
 )
@@ -28,4 +30,55 @@ func (c *AdminCategoryController) Get() {
 	}
 
 	c.Render()
+}
+
+func (c *AdminCategoryController) Post() {
+	resp := helper.NewResponse()
+	defer resp.WriteRespByJson(c.Ctx.ResponseWriter)
+
+	isLogin, se := c.checkUserStatus()
+	if isLogin && se != nil {
+		oper := c.GetString("Type")
+		categoryName := c.GetString("CatgoryName")
+		if oper == "add" {
+			//添加分类
+			success, message := addCategory(se, categoryName)
+			fmt.Println(message)
+			if success {
+				resp.RespMessage(helper.RS_success, helper.SUCCESS)
+				// categoryList := models.GetAllCategory(se)
+				resp.Data = "/admin/category"
+			}else{
+				fmt.Println(message)
+				resp.RespMessage(helper.RS_failed, helper.WARING)
+			}
+		}else if oper == "delete" {
+			//删除分类
+			success, message := deleteCategory(se, categoryName)
+			fmt.Println(message)
+			if success {
+				resp.RespMessage(helper.RS_success, helper.SUCCESS)
+				resp.Data = "/admin/category"
+			}else{
+				resp.RespMessage(helper.RS_failed, helper.WARING)
+			}
+		}else {
+			//修改分类
+			fmt.Println(categoryName)
+		}
+		
+	}else{
+		resp.RespMessage(helper.RS_failed, helper.WARING)
+		c.Render()
+	}
+}
+
+func addCategory(userName interface{}, categoryName string) (success bool, message string) {
+	success, message = models.AddBlogCategory(userName, categoryName)
+	return 
+}
+
+func deleteCategory(userName interface{}, categoryName string) (success bool, message string) {
+	success, message = models.DeleteCategory(userName, categoryName)
+	return 
 }

@@ -5,7 +5,7 @@
     <form method="post" class="form-inline" id="addCategoryName">
         <div class="form-group">
             <input type="text" id="InputCategoryName" class="form-control" placeholder="输入分类名称">
-            <button type="button" class="btn btn-primary">添加分类</button>
+            <button id="AddCategory" type="button" class="btn btn-primary">添加分类</button>
         </div>
     </form>
     <!-- 所有分类 -->
@@ -21,8 +21,12 @@
                     <td>{{$val.ID}}</td>
                     <td>{{$val.Name}}</td>
                     <td>
-                        <span class="glyphicon glyphicon-pencil"></span>
-                        <span class="glyphicon glyphicon-trash"></span>
+                        <button data-name="{{$val.Name}}" type="button" class="btn" onclick="alterCategory(this)">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button data-name="{{$val.Name}}" type="button" class="btn" onclick="deleteCategory(this)">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
                     </td>
                 </tr>
             {{end}}

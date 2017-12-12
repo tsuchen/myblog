@@ -9,7 +9,6 @@ var success = 1;
 $(function(){
   //加载menu
   addMenuCallFunc();
-  addMenuCallLink();
 });
 
 /**
@@ -20,20 +19,22 @@ function addMenuCallFunc(){
   var listGroups = document.getElementsByClassName("menu-list-group");
   for(let index = 0; index < menuButtons.length; index ++){
     var menuButton = $(menuButtons[index]);
+    var icon = $(menuButton.find(".glyphicon"));
+    var group = $(listGroups[index]);
+    if (group.is(":visible")){
+      icon.addClass("rotate-icon");
+    }
 
     var clickFunc = function(n){
       menuButton.click(function(){
         var span = $($(this).find(".glyphicon"));
-        if(span.hasClass("rotate-icon")){
-          span.removeClass("rotate-icon")
-        }else{
-          span.addClass("rotate-icon")
-        }
         var listGroup = listGroups[n];
         if ($(listGroup).is(":visible")){
-          $(listGroup).slideUp(300);
+          $(listGroup).slideUp();
+          span.removeClass("rotate-icon");
         }else{
-          $(listGroup).slideDown(300);
+          $(listGroup).slideDown();
+          span.addClass("rotate-icon");
         }
       });
     };
@@ -56,24 +57,29 @@ function logout(){
   }); 
 }
 
+$("#AddCategory").click(function(){
+  addCategory()
+});
+
 /**
  * 添加博客分类
  */
 function addCategory(){
-  var nameInput = $("#InputCategoryName")
-  var inputStr = nameInput.val()
+  var nameInput = $("#InputCategoryName");
+  var inputStr = nameInput.val();
 
-  var isLegal, errorStr = checkCategoryName(inputStr)
-  if(isLegal){
+  var info = checkCategoryName(inputStr);
+  if(info.Legal){
     request("/admin/category", "post", {Type: "add", CatgoryName: inputStr}, true, function(resp){
       if (resp.Status === success){
-          location.assign(resp.Data);
+        console.log(resp.Data);
+        location.assign(resp.Data);
       }else{
-          $("p.login-error-tips").text("用户名或密码错误。")
+        console.log("添加分类失败");
       }    
     });     
   }else{
-    console.log(errorStr)
+    console.log(info.Message);
   }
 }
 
@@ -81,14 +87,42 @@ function addCategory(){
  * 检查分类名称输入
  */
 function checkCategoryName(str){
-  var isLegal = false
-  var errorStr = ""
+  var checkInfo = {
+    Legal: false,
+    Message: "",
+  };
 
-  var nameReg = /^[a-zA-z]\w{1,15}$/
-  isLegal = nameReg.test(str)
-  if(!isLegal){
-    errorStr = "输入的名称不合法";
+  var nameReg = /^[\u4e00-\u9fa5|\w|\s]{1,30}$/;
+  checkInfo.Legal = nameReg.test(str);
+  if(!checkInfo.Legal){
+    checkInfo.Message = "输入的名称不合法";
   }
 
-  return isLegal, errorStr
+  return checkInfo;
+}
+
+//删除博客分类
+function deleteCategory(e){
+  var categoryName = e.getAttribute("data-name");
+  request("/admin/category", "post", {Type: "delete", CatgoryName: categoryName}, true, function(resp){
+    if (resp.Status === success){
+      console.log(resp.Data);
+      location.assign(resp.Data);
+    }else{
+      console.log("删除分类失败");
+    }    
+  }); 
+}
+
+//修改博客分类
+function deleteCategory(e){
+  var categoryName = e.getAttribute("data-name");
+  request("/admin/category", "post", {Type: "alter", CatgoryName: categoryName}, true, function(resp){
+    if (resp.Status === success){
+      console.log(resp.Data);
+      location.assign(resp.Data);
+    }else{
+      console.log("修改分类失败");
+    }    
+  }); 
 }
