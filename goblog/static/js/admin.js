@@ -114,10 +114,21 @@ function deleteCategory(e){
   }); 
 }
 
+$("#AlterCategoryModal").on("show.bs.modal", function(event){
+  var button = $(event.relatedTarget); // Button that triggered the modal
+  var categoryName = button.data("name"); // Extract info from data-* attributes
+
+  var modal = $(this);
+  modal.find(".modal-title").text("修改分类名称");
+  var comfirmBtn = modal.find("#ComfirmAlterCategory");
+  $(comfirmBtn).click(function(){
+    alterCategory(categoryName)
+  });
+})
+
 //修改博客分类
-function deleteCategory(e){
-  var categoryName = e.getAttribute("data-name");
-  request("/admin/category", "post", {Type: "alter", CatgoryName: categoryName}, true, function(resp){
+function alterCategory(name){
+  request("/admin/category", "post", {Type: "alter", CatgoryName: name}, true, function(resp){
     if (resp.Status === success){
       console.log(resp.Data);
       location.assign(resp.Data);

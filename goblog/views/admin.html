@@ -122,7 +122,56 @@
                 </div>
             </div>
         </div>
-      </div>
+
+        <!-- 提示模态框 -->
+        <div class="modal fade" id="TipsModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title">提示消息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="tips-body">这是一条提示消息。</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">放弃修改</button>
+                        <button id="ComfirmAlterCategory" type="button" class="btn btn-primary">确认修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 修改分类名称模态框 -->
+        <div class="modal fade" id="AlterCategoryModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">修改分类名称</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="AlterCategoryName" class="control-label">分类名称:</label>
+                                <input type="text" class="form-control" id="AlterCategoryName">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">放弃修改</button>
+                        <button id="ComfirmAlterCategory" type="button" class="btn btn-primary">确认修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+
       <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
       <script src="../static/js/tools/jquery-3.2.1.js"></script>
       <script src="../static/js/tools/bootstrap.js"></script>
