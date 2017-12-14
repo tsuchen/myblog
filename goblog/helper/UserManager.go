@@ -51,19 +51,21 @@ func (uManager *UserManager) insertUserInfo(info *UserInfo) {
 	uManager.userList = append(uManager.userList, info)
 }
 
-func (uManager *UserManager) UpdateUserInfo(info *UserInfo) (success bool) {
+func (uManager *UserManager) UpdateUserInfo(info *UserInfo) {
 	uManager.lock.Lock()
 	defer uManager.lock.Unlock()
 
+	isFind := false
 	for _, user := range uManager.userList {
 		if user.UserId == info.UserId {
 			user = info
-			success = true
+			isFind = true
+			break
 		}
 	}
 	
 	//没有找到,则插入新用户信息
-	if !success {
+	if !isFind {
 		uManager.insertUserInfo(info)
 	}
 

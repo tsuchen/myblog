@@ -70,7 +70,7 @@ function addCategory(){
 
   var info = checkCategoryName(inputStr);
   if(info.Legal){
-    request("/admin/category", "post", {Type: "add", CatgoryName: inputStr}, true, function(resp){
+    request("/admin/category", "post", {Type: "add", Category: inputStr}, true, function(resp){
       if (resp.Status === success){
         console.log(resp.Data);
         location.assign(resp.Data);
@@ -92,7 +92,7 @@ function checkCategoryName(str){
     Message: "",
   };
 
-  var nameReg = /^[\u4e00-\u9fa5|\w|\s]{1,30}$/;
+  var nameReg = /.{1,20}/;
   checkInfo.Legal = nameReg.test(str);
   if(!checkInfo.Legal){
     checkInfo.Message = "输入的名称不合法";
@@ -104,7 +104,7 @@ function checkCategoryName(str){
 //删除博客分类
 function deleteCategory(e){
   var categoryName = e.getAttribute("data-name");
-  request("/admin/category", "post", {Type: "delete", CatgoryName: categoryName}, true, function(resp){
+  request("/admin/category", "post", {Type: "delete", Category: categoryName}, true, function(resp){
     if (resp.Status === success){
       console.log(resp.Data);
       location.assign(resp.Data);
@@ -116,19 +116,19 @@ function deleteCategory(e){
 
 $("#AlterCategoryModal").on("show.bs.modal", function(event){
   var button = $(event.relatedTarget); // Button that triggered the modal
-  var categoryName = button.data("name"); // Extract info from data-* attributes
+  var categoryId = button.data("id"); // Extract info from data-* attributes
 
   var modal = $(this);
   modal.find(".modal-title").text("修改分类名称");
   var comfirmBtn = modal.find("#ComfirmAlterCategory");
   $(comfirmBtn).click(function(){
-    alterCategory(categoryName)
+    alterCategory(categoryId)
   });
 })
 
 //修改博客分类
-function alterCategory(name){
-  request("/admin/category", "post", {Type: "alter", CatgoryName: name}, true, function(resp){
+function alterCategory(categoryId){
+  request("/admin/category", "post", {Type: "alter", Category: categoryId}, true, function(resp){
     if (resp.Status === success){
       console.log(resp.Data);
       location.assign(resp.Data);

@@ -7,6 +7,8 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+
+	"strconv"
 )
 
 func init() {
@@ -90,8 +92,8 @@ func GetAllCategory(userName interface{}) (categoryList []*Category) {
 func AddBlogCategory(userName interface{}, categoryName string) (success bool, message string) {
 	o := orm.NewOrm()
 	var categoryList []*Category
-	num, err := o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
-	if err != nil || num == 0 {
+	_, err := o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
+	if err != nil {
 		success = false
 		message = "查询分类失败。"
 		return 
@@ -117,7 +119,7 @@ func AddBlogCategory(userName interface{}, categoryName string) (success bool, m
 	m2m := o.QueryM2M(&user, "Categorys")
 	category := &Category{Name: categoryName}
 	o.Insert(category)
-	num, err = m2m.Add(category)
+	_, err = m2m.Add(category)
 	if err != nil {
 		success = false
 		message = "添加分类失败。"
@@ -125,7 +127,7 @@ func AddBlogCategory(userName interface{}, categoryName string) (success bool, m
 	}
 
 	success = true
-	message = "添加分成功。"
+	message = "添加分类成功。"
 
 	return 
 }
@@ -134,8 +136,8 @@ func AddBlogCategory(userName interface{}, categoryName string) (success bool, m
 func DeleteCategory(userName interface{}, categoryName string) (success bool, message string) {
 	o := orm.NewOrm()
 	var categoryList []*Category
-	num, err := o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
-	if err != nil || num == 0 {
+	_, err := o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
+	if err != nil {
 		success = false
 		message = "查询分类失败。"
 		return 
@@ -161,15 +163,61 @@ func DeleteCategory(userName interface{}, categoryName string) (success bool, me
 	m2m := o.QueryM2M(&user, "Categorys")
 	var category Category
 	o.QueryTable("category").Filter("Name", categoryName).One(&category)
-	num, err = m2m.Remove(category)
+	_, err = m2m.Remove(category)
 	if err != nil {
 		success = false
 		message = "删除分类失败。"
 		return
 	}
 
+	if !m2m.Exist(&category) {
+		o.Delete(&category)
+	}
+
 	success = true
 	message = "删除分类成功。"
+
+	return 
+}
+
+//修改博客分类
+func AlterCategory(userName interface{}, categoryId string) (success bool, message string) {
+	id, _ := strconv.Atoi(categoryId)
+
+	o := orm.NewOrm()
+	var categoryList []*Category
+	_, err := o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
+	if err != nil {
+		success = false
+		message = "查询分类失败。"
+		return 
+	}
+
+	//查询分类名称
+	isFind := false
+	for _, obj := range categoryList {
+		if obj.ID == id {
+			isFind = true
+			break
+		}
+	}
+
+	if !isFind {
+		success = false
+		message = "修改分类失败，不存在此分类。"
+		return
+	}
+
+	var category Category
+	err = o.QueryTable("category").Filter("ID", id).One(&category)
+	category.Name = "xuchen"
+	if _, err := o.Update(&category); err != nil {
+		success = true
+		message = "修改分类成功。"
+	}else{
+		success = false
+		message = "修改分类失败。"
+	}
 
 	return 
 }

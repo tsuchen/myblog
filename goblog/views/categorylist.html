@@ -21,7 +21,7 @@
                     <td>{{$val.ID}}</td>
                     <td>{{$val.Name}}</td>
                     <td>
-                        <button data-name="{{$val.Name}}" type="button" class="btn" data-toggle="modal" data-target="#AlterCategoryModal">
+                        <button data-id="{{$val.ID}}" type="button" class="btn" data-toggle="modal" data-target="#AlterCategoryModal">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </button>
                         <button data-name="{{$val.Name}}" type="button" class="btn" onclick="deleteCategory(this)">
