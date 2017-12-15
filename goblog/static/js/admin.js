@@ -4,6 +4,7 @@
  */
 
 var success = 1;
+var tipsMessage = "";
 
 //dom init finish
 $(function(){
@@ -52,7 +53,7 @@ function logout(){
     if (resp.Status === success){
       location.assign(resp.Data);
     }else{
-      console.log("登出失败");
+      showTipsModal("登出失败");
     }    
   }); 
 }
@@ -60,28 +61,6 @@ function logout(){
 $("#AddCategory").click(function(){
   addCategory()
 });
-
-/**
- * 添加博客分类
- */
-function addCategory(){
-  var nameInput = $("#InputCategoryName");
-  var inputStr = nameInput.val();
-
-  var info = checkCategoryName(inputStr);
-  if(info.Legal){
-    request("/admin/category", "post", {Type: "add", Category: inputStr}, true, function(resp){
-      if (resp.Status === success){
-        console.log(resp.Data);
-        location.assign(resp.Data);
-      }else{
-        console.log("添加分类失败");
-      }    
-    });     
-  }else{
-    console.log(info.Message);
-  }
-}
 
 /**
  * 检查分类名称输入
@@ -101,39 +80,74 @@ function checkCategoryName(str){
   return checkInfo;
 }
 
+/**
+ * 添加博客分类
+ */
+function addCategory(){
+  var nameInput = $("#InputCategoryName");
+  var inputStr = nameInput.val();
+
+  var info = checkCategoryName(inputStr);
+  if(info.Legal){
+    request("/admin/category", "post", {Type: "add", CategoryName: inputStr}, true, function(resp){
+      if (resp.Status === success){
+        location.assign(resp.Data);
+      }else{
+        showTipsModal("添加分类失败");
+      }    
+    });     
+  }else{
+    showTipsModal(info.Message);
+  }
+}
+
 //删除博客分类
 function deleteCategory(e){
   var categoryName = e.getAttribute("data-name");
-  request("/admin/category", "post", {Type: "delete", Category: categoryName}, true, function(resp){
+  request("/admin/category", "post", {Type: "delete", CategoryName: categoryName}, true, function(resp){
     if (resp.Status === success){
-      console.log(resp.Data);
       location.assign(resp.Data);
     }else{
-      console.log("删除分类失败");
+      showTipsModal("删除分类失败");
     }    
   }); 
 }
 
 $("#AlterCategoryModal").on("show.bs.modal", function(event){
-  var button = $(event.relatedTarget); // Button that triggered the modal
-  var categoryId = button.data("id"); // Extract info from data-* attributes
+  var button = $(event.relatedTarget); 
+  var categoryId = button.data("id");
 
   var modal = $(this);
   modal.find(".modal-title").text("修改分类名称");
+  var input = modal.find("#AlterCategoryName")
   var comfirmBtn = modal.find("#ComfirmAlterCategory");
   $(comfirmBtn).click(function(){
-    alterCategory(categoryId)
+    var categoryName = input.val()
+    var info = checkCategoryName(categoryName);
+    if(info.Legal){
+      alterCategory(categoryId, categoryName)
+    }
   });
 })
 
 //修改博客分类
-function alterCategory(categoryId){
-  request("/admin/category", "post", {Type: "alter", Category: categoryId}, true, function(resp){
+function alterCategory(categoryId, categoryName){
+  request("/admin/category", "post", {Type: "alter", CategoryId: categoryId, CategoryName: categoryName}, true, function(resp){
     if (resp.Status === success){
-      console.log(resp.Data);
-      location.assign(resp.Data);
+      location.assign(resp.Data)
     }else{
-      console.log("修改分类失败");
+      showTipsModal("修改分类失败");
     }    
   }); 
+}
+
+$("#TipsModal").on("show.bs.modal", function(event){
+  var modal = $(this);
+  modal.find(".tips-modal-body").text(tipsMessage);
+})
+
+//提示框
+function showTipsModal(message){
+  tipsMessage = message;
+  $("#TipsModal").modal();
 }

@@ -24,6 +24,7 @@ type Blog struct {
 	Content string
 	User    *User  `orm:"rel(fk)"` //设置一对多关系
 	Tags    []*Tag `orm:"rel(m2m)"`
+	Category *Category `orm:"rel(fk)"` 
 }
 
 type Tag struct {
@@ -36,4 +37,5 @@ type Category struct {
 	ID    int `orm:"auto"`
 	Name  string
 	Users []*User `orm:"reverse(many)"`
+	Blogs []*Blog `orm:"reverse(many)"`
 }

@@ -39,10 +39,11 @@ func (c *AdminCategoryController) Post() {
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
 		oper := c.GetString("Type")
-		category := c.GetString("Catgory")
+		categoryName := c.GetString("CategoryName")
+		categoryId := c.GetString("CategoryId")
 		if oper == "add" {
 			//添加分类
-			success, message := addCategory(se, category)
+			success, message := addCategory(se, categoryName)
 			fmt.Println(message)
 			if success {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
@@ -54,7 +55,7 @@ func (c *AdminCategoryController) Post() {
 			}
 		}else if oper == "delete" {
 			//删除分类
-			success, message := deleteCategory(se, category)
+			success, message := deleteCategory(se, categoryName)
 			fmt.Println(message)
 			if success {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
@@ -64,7 +65,14 @@ func (c *AdminCategoryController) Post() {
 			}
 		}else {
 			//修改分类
-			fmt.Println(category)
+			success, message := alterCategory(se, categoryId, categoryName)
+			fmt.Println(message)
+			if success {
+				resp.RespMessage(helper.RS_success, helper.SUCCESS)
+				resp.Data = "/admin/category"
+			}else{
+				resp.RespMessage(helper.RS_failed, helper.WARING)
+			}
 		}
 		
 	}else{
@@ -83,7 +91,7 @@ func deleteCategory(userName interface{}, categoryName string) (success bool, me
 	return 
 }
 
-func alterCategory(userName interface{}, categoryId string) (success bool, message string) {
-	success, message = models.AlterCategory(userName, categoryId)
+func alterCategory(userName interface{}, categoryId string, categoryName string) (success bool, message string) {
+	success, message = models.AlterCategory(userName, categoryId, categoryName)
 	return 
 }

@@ -90,6 +90,7 @@ func GetAllCategory(userName interface{}) (categoryList []*Category) {
 
 //添加博客分类
 func AddBlogCategory(userName interface{}, categoryName string) (success bool, message string) {
+	fmt.Println("CategoryName: ",categoryName)
 	o := orm.NewOrm()
 	var categoryList []*Category
 	_, err := o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
@@ -181,7 +182,7 @@ func DeleteCategory(userName interface{}, categoryName string) (success bool, me
 }
 
 //修改博客分类
-func AlterCategory(userName interface{}, categoryId string) (success bool, message string) {
+func AlterCategory(userName interface{}, categoryId string, categoryName string) (success bool, message string) {
 	id, _ := strconv.Atoi(categoryId)
 
 	o := orm.NewOrm()
@@ -193,12 +194,17 @@ func AlterCategory(userName interface{}, categoryId string) (success bool, messa
 		return 
 	}
 
-	//查询分类名称
+	//查询分类
 	isFind := false
 	for _, obj := range categoryList {
 		if obj.ID == id {
 			isFind = true
-			break
+		}else{
+			if obj.Name == categoryName {
+				success = false
+				message = "修改分类失败, 已存在此分类名称。"
+				return 
+			}
 		}
 	}
 
@@ -210,13 +216,13 @@ func AlterCategory(userName interface{}, categoryId string) (success bool, messa
 
 	var category Category
 	err = o.QueryTable("category").Filter("ID", id).One(&category)
-	category.Name = "xuchen"
+	category.Name = categoryName
 	if _, err := o.Update(&category); err != nil {
-		success = true
-		message = "修改分类成功。"
-	}else{
 		success = false
 		message = "修改分类失败。"
+	}else{
+		success = true
+		message = "修改分类成功"
 	}
 
 	return 
