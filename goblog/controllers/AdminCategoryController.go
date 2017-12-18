@@ -50,7 +50,6 @@ func (c *AdminCategoryController) Post() {
 				// categoryList := models.GetAllCategory(se)
 				resp.Data = "/admin/category"
 			}else{
-				fmt.Println(message)
 				resp.RespMessage(helper.RS_failed, helper.WARING)
 			}
 		}else if oper == "delete" {

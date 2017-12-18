@@ -16,7 +16,7 @@
                 <th>标签名称</th>
                 <th></th>
             </tr>
-            {{range $key, $val := .Categorys}}
+            {{range $key, $val := .TagList}}
                 <tr class="active">
                     <td>{{$val.ID}}</td>
                     <td>{{$val.Name}}</td>

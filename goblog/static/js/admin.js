@@ -151,3 +151,22 @@ function showTipsModal(message){
   tipsMessage = message;
   $("#TipsModal").modal();
 }
+
+//添加标签
+$("#AddTag").click(function(){
+  var nameInput = $("#InputTagName");
+  var inputStr = nameInput.val();
+
+  var info = checkCategoryName(inputStr);
+  if(info.Legal){
+    request("/admin/tag", "post", {Type: "add", TagName: inputStr}, true, function(resp){
+      if (resp.Status === success){
+        location.assign(resp.Data);
+      }else{
+        showTipsModal("添加标签失败");
+      }    
+    });     
+  }else{
+    showTipsModal(info.Message);
+  }
+});

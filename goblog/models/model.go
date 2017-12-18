@@ -227,3 +227,44 @@ func AlterCategory(userName interface{}, categoryId string, categoryName string)
 
 	return 
 }
+
+//获取所有标签
+func GetAllTags() (tagList []*Tag) {
+	o := orm.NewOrm()
+	o.QueryTable("tag").All(&tagList)
+
+	return 
+}
+
+//添加标签
+func AddTag(tagName string) (success bool, message string){
+	var tagList []*Tag
+	o := orm.NewOrm()
+	o.QueryTable("tag").All(&tagList)
+	if tagList == nil {
+		success = false
+		message = "查询失败"
+		return
+	}
+
+	for _, tag := range tagList {
+		if tag.Name == tagName {
+			success = false
+			message = "标签已存在"
+			return 
+		}
+	}
+
+	tag := Tag{Name: tagName}
+	if _, err := o.Insert(&tag); err == nil {
+		success = true
+		message = "添加标签成功"
+	}else{
+		success = false
+		message = "添加标签失败"
+	}
+
+
+
+	return
+}
