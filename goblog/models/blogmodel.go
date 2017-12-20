@@ -7,6 +7,7 @@ type User struct {
 	Profile   *Profile    `orm:"rel(one)"`      //设置一对一关系
 	Blogs     []*Blog     `orm:"reverse(many)"` // 设置一对多的反向关系
 	Categorys []*Category `orm:"rel(m2m)"`
+	Tags      []*Tag      `orm:"rel(m2m)"`
 }
 
 type Profile struct {
@@ -19,18 +20,19 @@ type Profile struct {
 }
 
 type Blog struct {
-	ID      int `orm:"auto"`
-	Title   string
-	Content string
-	User    *User  `orm:"rel(fk)"` //设置一对多关系
-	Tags    []*Tag `orm:"rel(m2m)"`
-	Category *Category `orm:"rel(fk)"` 
+	ID       int `orm:"auto"`
+	Title    string
+	Content  string
+	User     *User     `orm:"rel(fk)"` //设置一对多关系
+	Tags     []*Tag    `orm:"rel(m2m)"`
+	Category *Category `orm:"rel(fk)"`
 }
 
 type Tag struct {
 	ID    int `orm:"auto"`
 	Name  string
 	Blogs []*Blog `orm:"reverse(many)"`
+	Users []*User `orm:"reverse(many)"`
 }
 
 type Category struct {

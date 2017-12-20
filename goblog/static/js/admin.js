@@ -170,3 +170,15 @@ $("#AddTag").click(function(){
     showTipsModal(info.Message);
   }
 });
+
+//删除标签
+function deleteTag(e) {
+  var tagName = e.getAttribute("data-name");
+  request("/admin/tag", "post", {Type: "delete", TagName: tagName}, true, function(resp){
+    if (resp.Status === success){
+      location.assign(resp.Data);
+    }else{
+      showTipsModal("删除分类失败");
+    }    
+  }); 
+}
