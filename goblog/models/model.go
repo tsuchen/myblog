@@ -199,3 +199,21 @@ func DeleteTag(userName interface{}, tagName string) (success bool, message stri
 
 	return
 }
+
+func AlterTag(userName interface{}, tagId string, tagName string) (success bool, message string) {
+	id, _ := strconv.Atoi(tagId)
+
+	o := orm.NewOrm()
+	var tag Tag
+	o.QueryTable("tag").Filter("ID", id).One(&tag)
+	tag.Name = tagName
+	if _, err := o.Update(&tag); err != nil {
+		success = false
+		message = "修改标签失败。"
+	} else {
+		success = true
+		message = "修改标签成功"
+	}
+
+	return
+}

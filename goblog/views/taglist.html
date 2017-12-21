@@ -21,7 +21,7 @@
                     <td>{{$val.ID}}</td>
                     <td>{{$val.Name}}</td>
                     <td>
-                        <button data-id="{{$val.ID}}" type="button" class="btn" data-toggle="modal" data-target="#AlterTagModal">
+                        <button data-id="{{$val.ID}}" data-name="{{$val.Name}}" data-type="AlterTag" type="button" class="btn" data-toggle="modal" data-target="#AlterModal">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </button>
                         <button data-name="{{$val.Name}}" type="button" class="btn" onclick="deleteTag(this)">

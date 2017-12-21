@@ -113,19 +113,26 @@ function deleteCategory(e){
   }); 
 }
 
-$("#AlterCategoryModal").on("show.bs.modal", function(event){
+$("#AlterModal").on("show.bs.modal", function(event){
   var button = $(event.relatedTarget); 
-  var categoryId = button.data("id");
+  var id = button.data("id");
+  var name = button.data("name")
+  var type = button.data("type")
 
   var modal = $(this);
-  modal.find(".modal-title").text("修改分类名称");
-  var input = modal.find("#AlterCategoryName")
-  var comfirmBtn = modal.find("#ComfirmAlterCategory");
+  modal.find(".modal-title").text("修改名称");
+  var input = modal.find("#AlterName")
+  input.val(name)
+  var comfirmBtn = modal.find("#ComfirmAlter");
   $(comfirmBtn).click(function(){
-    var categoryName = input.val()
-    var info = checkCategoryName(categoryName);
+    var alterName = input.val()
+    var info = checkCategoryName(alterName);
     if(info.Legal){
-      alterCategory(categoryId, categoryName)
+      if (type == "AlterCategory") {
+        alterCategory(id, alterName)
+      } else if (type == "AlterTag") {
+        alterCategory(id, alterName)
+      }
     }
   });
 })
@@ -179,6 +186,17 @@ function deleteTag(e) {
       location.assign(resp.Data);
     }else{
       showTipsModal("删除分类失败");
+    }    
+  }); 
+}
+
+//修改博客标签
+function alterTag(tagId, tagName){
+  request("/admin/tag", "post", {Type: "alter", TagId: tagId, TagName: tagName}, true, function(resp){
+    if (resp.Status === success){
+      location.assign(resp.Data)
+    }else{
+      showTipsModal("修改标签失败");
     }    
   }); 
 }

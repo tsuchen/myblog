@@ -30,6 +30,7 @@ func (c *AdminTagController) Post() {
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
 		oper := c.GetString("Type")
+		tagID := c.GetString("TagId")
 		tagName := c.GetString("TagName")
 		if oper == "add" {
 			if success, tips := addTag(se, tagName); success {
@@ -41,6 +42,14 @@ func (c *AdminTagController) Post() {
 			}
 		} else if oper == "delete" {
 			if success, tips := deleteTag(se, tagName); success {
+				resp.RespMessage(helper.RS_success, helper.SUCCESS)
+				resp.Data = "/admin/tag"
+			} else {
+				fmt.Println(tips)
+				resp.RespMessage(helper.RS_failed, helper.WARING)
+			}
+		} else if oper == "alter" {
+			if success, tips := alterTag(se, tagID, tagName); success {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
 				resp.Data = "/admin/tag"
 			} else {
@@ -62,5 +71,10 @@ func addTag(userName interface{}, tagName string) (success bool, message string)
 
 func deleteTag(userName interface{}, tagName string) (success bool, message string) {
 	success, message = models.DeleteTag(userName, tagName)
+	return
+}
+
+func alterTag(userName interface{}, tagId string, tagName string) (success bool, message string) {
+	success, message = models.AlterTag(userName, tagId, tagName)
 	return
 }
