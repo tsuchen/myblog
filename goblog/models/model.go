@@ -79,25 +79,39 @@ func GetAllCategory(userName interface{}) (categoryList []*Category) {
 	return
 }
 
+func existCategory(userName interface{}, categoryName string) (exist bool) {
+	list := GetAllCategory(userName)
+	for _, obj := range list {
+		if obj.Name == categoryName {
+			exist = true
+			break
+		}
+	}
+	exist = false
+
+	return
+}
+
 //添加博客分类
 func AddBlogCategory(userName interface{}, categoryName string) (success bool, message string) {
+	if exist := existCategory(userName, categoryName); exist {
+		success = false
+		message = "已存在此分类，添加失败"
+		return
+	}
+
 	var user User
 	o := orm.NewOrm()
 	o.QueryTable("user").Filter("Name", userName).One(&user)
 	m2m := o.QueryM2M(&user, "Categorys")
 	category := Category{Name: categoryName}
-	if m2m.Exist(&category) {
-		success = false
-		message = "已存在此分类，添加失败。"
+	o.Insert(&category)
+	if _, err := m2m.Add(&category); err == nil {
+		success = true
+		message = "添加分类成功。"
 	} else {
-		o.Insert(&category)
-		if _, err := m2m.Add(&category); err == nil {
-			success = true
-			message = "添加分类成功。"
-		} else {
-			success = false
-			message = "添加分类失败。"
-		}
+		success = false
+		message = "添加分类失败。"
 	}
 
 	return
@@ -111,17 +125,13 @@ func DeleteCategory(userName interface{}, categoryName string) (success bool, me
 	m2m := o.QueryM2M(&user, "Categorys")
 	var category Category
 	o.QueryTable("category").Filter("Name", categoryName).One(&category)
-	if m2m.Exist(&category) {
-		if _, err := m2m.Remove(category); err == nil {
-			success = true
-			message = "删除分类成功。"
-		} else {
-			success = false
-			message = "删除分类失败。"
-		}
+
+	if _, err := m2m.Remove(category); err == nil {
+		success = true
+		message = "删除分类成功。"
 	} else {
 		success = false
-		message = "不存在此分类，删除分类失败。"
+		message = "删除分类失败。"
 	}
 
 	return
@@ -153,25 +163,39 @@ func GetAllTags(userName interface{}) (tagList []*Tag) {
 	return
 }
 
+func existTag(userName interface{}, tagName string) (exist bool) {
+	list := GetAllTags(userName)
+	for _, obj := range list {
+		if obj.Name == tagName {
+			exist = true
+			break
+		}
+	}
+	exist = false
+
+	return
+}
+
 //添加标签
 func AddTag(userName interface{}, tagName string) (success bool, message string) {
+	if exist := existTag(userName, tagName); exist {
+		success = false
+		message = "已存在此标签，添加失败"
+		return
+	}
+
 	var user User
 	o := orm.NewOrm()
 	o.QueryTable("user").Filter("Name", userName).One(&user)
 	m2m := o.QueryM2M(&user, "Tags")
 	tag := Tag{Name: tagName}
-	if m2m.Exist(&tag) {
-		success = false
-		message = "已存在此标签，添加失败。"
+	o.Insert(&tag)
+	if _, err := m2m.Add(&tag); err == nil {
+		success = true
+		message = "添加标签成功。"
 	} else {
-		o.Insert(&tag)
-		if _, err := m2m.Add(&tag); err == nil {
-			success = true
-			message = "添加标签成功。"
-		} else {
-			success = false
-			message = "添加分类失败。"
-		}
+		success = false
+		message = "添加分类失败。"
 	}
 
 	return
@@ -184,17 +208,13 @@ func DeleteTag(userName interface{}, tagName string) (success bool, message stri
 	m2m := o.QueryM2M(&user, "Tags")
 	var tag Tag
 	o.QueryTable("tag").Filter("Name", tagName).One(&tag)
-	if m2m.Exist(&tag) {
-		if _, err := m2m.Remove(tag); err == nil {
-			success = true
-			message = "删除标签成功。"
-		} else {
-			success = false
-			message = "删除标签失败。"
-		}
+
+	if _, err := m2m.Remove(tag); err == nil {
+		success = true
+		message = "删除标签成功。"
 	} else {
 		success = false
-		message = "不存在此标签，删除标签失败。"
+		message = "删除标签失败。"
 	}
 
 	return

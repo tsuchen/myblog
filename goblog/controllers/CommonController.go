@@ -1,14 +1,15 @@
 package controllers
 
-import(
-	"github.com/astaxie/beego"
-	"myblog/goblog/helper"
+import (
 	"fmt"
+	"myblog/goblog/helper"
+
+	"github.com/astaxie/beego"
 )
 
 var sessionName string = beego.AppConfig.String("SessionName")
 
-type CommonController struct{
+type CommonController struct {
 	beego.Controller
 }
 
@@ -36,5 +37,5 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 		}
 	}
 
-	return 
+	return
 }

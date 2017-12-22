@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
-	"strconv"
 )
 
 type AdminCategoryController struct {
@@ -18,7 +17,7 @@ func (c *AdminCategoryController) Get() {
 		//添加url
 		var categoryInfoList []*CategoryInfo
 		for _, obj := range categoryList {
-			url := "/admin/category/" + strconv.Itoa(obj.ID)
+			url := "/admin/category/" + obj.Name
 			info := &CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
 			categoryInfoList = append(categoryInfoList, info)
 		}
@@ -49,32 +48,32 @@ func (c *AdminCategoryController) Post() {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
 				// categoryList := models.GetAllCategory(se)
 				resp.Data = "/admin/category"
-			}else{
+			} else {
 				resp.RespMessage(helper.RS_failed, helper.WARING)
 			}
-		}else if oper == "delete" {
+		} else if oper == "delete" {
 			//删除分类
 			success, message := deleteCategory(se, categoryName)
 			fmt.Println(message)
 			if success {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
 				resp.Data = "/admin/category"
-			}else{
+			} else {
 				resp.RespMessage(helper.RS_failed, helper.WARING)
 			}
-		}else {
+		} else {
 			//修改分类
 			success, message := alterCategory(se, categoryId, categoryName)
 			fmt.Println(message)
 			if success {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
 				resp.Data = "/admin/category"
-			}else{
+			} else {
 				resp.RespMessage(helper.RS_failed, helper.WARING)
 			}
 		}
-		
-	}else{
+
+	} else {
 		resp.RespMessage(helper.RS_failed, helper.WARING)
 		c.Render()
 	}
@@ -82,15 +81,15 @@ func (c *AdminCategoryController) Post() {
 
 func addCategory(userName interface{}, categoryName string) (success bool, message string) {
 	success, message = models.AddBlogCategory(userName, categoryName)
-	return 
+	return
 }
 
 func deleteCategory(userName interface{}, categoryName string) (success bool, message string) {
 	success, message = models.DeleteCategory(userName, categoryName)
-	return 
+	return
 }
 
 func alterCategory(userName interface{}, categoryId string, categoryName string) (success bool, message string) {
 	success, message = models.AlterCategory(userName, categoryId, categoryName)
-	return 
+	return
 }

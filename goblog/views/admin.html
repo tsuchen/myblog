@@ -75,7 +75,6 @@
                                 <span class="glyphicon glyphicon-chevron-down"></span>
                             </div>
                             <div class="menu-list-group">
-                                <a class="list-group-item" href="#">所有文章</a>
                                 {{range $key, $val := .CategoryInfos}}  
                                     <a class="list-group-item" href="{{$val.URL}}">{{$val.Name}}</a>
                                 {{end}}
