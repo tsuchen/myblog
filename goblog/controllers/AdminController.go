@@ -5,10 +5,10 @@ import (
 	"strconv"
 )
 
-type CategoryInfo struct{
-	ID int
+type CategoryInfo struct {
+	ID   int
 	Name string
-	URL string
+	URL  string
 }
 
 type AdminController struct {
@@ -17,7 +17,7 @@ type AdminController struct {
 
 func (c *AdminController) Get() {
 	isLogin, se := c.checkUserStatus()
-	if isLogin && se!= nil {
+	if isLogin && se != nil {
 		categoryList := models.GetAllCategory(se)
 		//添加url
 		var categoryInfoList []*CategoryInfo
@@ -33,6 +33,6 @@ func (c *AdminController) Get() {
 		c.Layout = "admin.html"
 		c.TplName = "userlist.html"
 	}
-		
+
 	c.Render()
 }

@@ -5,8 +5,8 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <!-- 引入 Bootstrap -->
-      <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-      <link href="../static/css/admin.css" rel="stylesheet">
+      <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+      <link href="/static/css/admin.css" rel="stylesheet">
    </head>
    <body>
       <div class="container-fluid">
@@ -27,13 +27,13 @@
                 </div>
                 <div class="hidden-xs">
                     <div class="title-left-block">
-                        <img id="title-icon" src="../static/img/log.png" class="img-circle">
+                        <img id="title-icon" src="/static/img/log.png" class="img-circle">
                         <span class="drop-text-block">博客后台</span>
                     </div>
                     <div class="title-right-block">
                         <div class="dropdown">
                             <button class="dropdown-button" type="button" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <img id="user-img" src="../static/img/user.png">
+                                <img id="user-img" src="/static/img/user.png">
                                 {{.UserName}}
                                 <span class="caret"></span>
                             </button>
@@ -74,7 +74,8 @@
                                 <strong>文章管理</strong> 
                                 <span class="glyphicon glyphicon-chevron-down"></span>
                             </div>
-                            <div class="menu-list-group">
+                            <div id="BlogList" class="menu-list-group {{if eq .GroupListId "BlogList"}} show-list-group {{end}}">
+                                <a class="list-group-item" href="/admin/blogs/0">所有博客</a>
                                 {{range $key, $val := .CategoryInfos}}  
                                     <a class="list-group-item" href="{{$val.URL}}">{{$val.Name}}</a>
                                 {{end}}
@@ -167,9 +168,9 @@
     
 
         <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
-        <script src="../static/js/tools/jquery-3.2.1.js"></script>
-        <script src="../static/js/tools/bootstrap.js"></script>
-        <script src="../static/js/helper/helper.js"></script>
-        <script src="../static/js/admin.js"></script>
+        <script src="/static/js/tools/jquery-3.2.1.js"></script>
+        <script src="/static/js/tools/bootstrap.js"></script>
+        <script src="/static/js/helper/helper.js"></script>
+        <script src="/static/js/admin.js"></script>
    </body>
 </html>

@@ -237,3 +237,30 @@ func AlterTag(userName interface{}, tagId string, tagName string) (success bool,
 
 	return
 }
+
+func getAllBlogs(userName interface{}) (blogs []*Blog) {
+	o := orm.NewOrm()
+
+	var user User
+	err := o.QueryTable("user").Filter("Name", userName).One(&user)
+	if err == nil {
+
+	}
+
+	return
+}
+
+func GetBlogsByCategoryId(userName interface{}, categoryId int) (blogs []*Blog) {
+	o := orm.NewOrm()
+	var user User
+	err := o.QueryTable("user").Filter("Name", userName).One(&user)
+	if err == nil {
+		if categoryId == 0 {
+			o.QueryTable("blog").Filter("User", user.ID).RelatedSel().All(&blogs)
+		} else {
+			o.QueryTable("blog").Filter("User", user.ID).Filter("Category", categoryId).All(&blogs)
+		}
+	}
+
+	return
+}

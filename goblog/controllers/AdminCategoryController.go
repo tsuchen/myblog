@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
+	"strconv"
 )
 
 type AdminCategoryController struct {
@@ -17,7 +18,8 @@ func (c *AdminCategoryController) Get() {
 		//添加url
 		var categoryInfoList []*CategoryInfo
 		for _, obj := range categoryList {
-			url := "/admin/category/" + obj.Name
+			id := strconv.Itoa(obj.ID)
+			url := "/admin/blogs/" + id
 			info := &CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
 			categoryInfoList = append(categoryInfoList, info)
 		}

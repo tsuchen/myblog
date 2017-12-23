@@ -13,5 +13,5 @@ func init() {
 	beego.Router("/logout", &controllers.LogoutController{})
 	beego.Router("/admin/category", &controllers.AdminCategoryController{})
 	beego.Router("/admin/tag", &controllers.AdminTagController{})
-	beego.Router("/admin/blog/:categoryid([0-9]+)", &controllers.AdminBlogController{})
+	beego.Router("/admin/blogs/:cateid([0-9]+)", &controllers.AdminBlogController{})
 }

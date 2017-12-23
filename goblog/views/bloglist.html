@@ -1,0 +1,26 @@
+<div class="top-content-block">
+    <h2>博客列表</h2>
+    <hr></hr>
+    <button type="button" class="btn btn-primary">写博客</button>
+    <div class="table-responsive user-list-block">
+        <table class="table table-striped table-hover">
+            <tr class="success">
+                <th>#</th>
+                <th>博客名称</th>
+                <th></th>
+            </tr>
+            {{range $key, $val := .Blogs}}
+                <tr class="active">
+                    <td>{{$val.ID}}</td>
+                    <td>{{$val.Title}}</td>
+                    <button data-id="{{$val.ID}}" type="button" class="btn" data-toggle="modal">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button data-id="{{$val.ID}}" data-name="{{$val.Name}}" type="button" class="btn" onclick="deleteBlog(this)">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </tr>
+            {{end}}
+        </table>
+    </div>
+</div>
