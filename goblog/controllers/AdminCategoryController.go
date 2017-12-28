@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
-	"strconv"
 )
 
 type AdminCategoryController struct {
@@ -15,15 +14,6 @@ func (c *AdminCategoryController) Get() {
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
 		categoryList := models.GetAllCategory(se)
-		//添加url
-		var categoryInfoList []*CategoryInfo
-		for _, obj := range categoryList {
-			id := strconv.Itoa(obj.ID)
-			url := "/admin/blogs/" + id
-			info := &CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
-			categoryInfoList = append(categoryInfoList, info)
-		}
-		c.Data["CategoryInfos"] = categoryInfoList
 		c.Data["Categorys"] = categoryList
 		c.Data["GroupListId"] = "CategoryList"
 		c.Layout = "admin.html"

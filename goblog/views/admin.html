@@ -75,6 +75,7 @@
                                 <span class="glyphicon glyphicon-chevron-down"></span>
                             </div>
                             <div id="BlogList" class="menu-list-group {{if eq .GroupListId "BlogList"}} show-list-group {{end}}">
+                                <a class="list-group-item" href="/admin/editblog">新建博客</a>
                                 <a class="list-group-item" href="/admin/blogs/0">所有博客</a>
                                 {{range $key, $val := .CategoryInfos}}  
                                     <a class="list-group-item" href="{{$val.URL}}">{{$val.Name}}</a>

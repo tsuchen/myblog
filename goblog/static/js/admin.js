@@ -200,3 +200,29 @@ function alterTag(tagId, tagName){
     }    
   }); 
 }
+
+////////////////////////编辑博客文//////////////////////////////////
+function addCategoryForBlog(e){
+  var categoryId = e.getAttribute("data-id");
+  var categoryName = e.getAttribute("data-name");
+  var parent = $("#SelectCategory");
+  parent.append("<button class='btn btn-warning'>" + categoryName + "</button>")
+}
+
+function addTagForBlog(e){
+  var tagId = e.getAttribute("data-id");
+  var tagyName = e.getAttribute("data-name");
+  var div = $("#SelectTag")
+  var button = div.find(".btn")
+  if (button.length <= 0) {
+    button = $(document.createElement("button"));
+    button.addClass("btn btn-warning tag-btn");
+    div.append(button);
+    
+    var deleteDiv = $(document.createElement("div"));
+    deleteDiv.addClass("btn btn-primary");
+    deleteDiv.text("删除");
+    button.append(deleteDiv);
+  }
+  button.text(tagyName)
+}

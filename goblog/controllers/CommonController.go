@@ -3,6 +3,8 @@ package controllers
 import (
 	"fmt"
 	"myblog/goblog/helper"
+	"myblog/goblog/models"
+	"strconv"
 
 	"github.com/astaxie/beego"
 )
@@ -32,6 +34,16 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 			hasLogin = false
 		} else {
 			c.Data["UserName"] = userInfo.UserName
+			//添加url
+			var categoryInfoList []*CategoryInfo
+			list := models.GetAllCategory(se)
+			for _, obj := range list {
+				id := strconv.Itoa(obj.ID)
+				url := "/admin/blogs/" + id
+				info := &CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
+				categoryInfoList = append(categoryInfoList, info)
+			}
+			c.Data["CategoryInfos"] = categoryInfoList
 			session = se
 			hasLogin = true
 		}

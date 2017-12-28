@@ -11,6 +11,8 @@ type AdminBlogController struct {
 func (c *AdminBlogController) Get() {
 	if isLogin, se := c.checkUserStatus(); isLogin {
 		categoryID, _ := c.GetInt(":cateid")
+		categoryName := models.GetCategoryNameById(categoryID)
+		c.Data["CategoryName"] = categoryName
 		blogs := models.GetBlogsByCategoryId(se, categoryID)
 		c.Data["Blogs"] = blogs
 		c.Data["GroupListId"] = "BlogList"
@@ -19,4 +21,8 @@ func (c *AdminBlogController) Get() {
 	}
 
 	c.Render()
+}
+
+func (c *AdminBlogController) Post() {
+
 }

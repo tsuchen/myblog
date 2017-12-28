@@ -1,0 +1,42 @@
+<div class="top-content-block">
+    <h2>编辑博客</h2>
+    <hr></hr>
+    <form>
+        <div class="form-group">
+            <label for="InputArticleTitle">文章标题:</label>
+            <input type="input" class="form-control" id="InputArticleTitle" placeholder="输入标题">
+        </div>
+        <div class="form-group">
+            <div class="dropdown">
+                <Button data-toggle="dropdown" type="button" class="btn btn-large btn-success">
+                    选择分类
+                    <span class="caret"></span>
+                </Button> 
+                <ul class="dropdown-menu" aria-labelledby="dLabel">
+                    {{range $key, $val := .CategoryInfos}}
+                        <li><a data-id="{{$val.ID}}" data-name="{{$val.Name}}" onclick="addCategoryForBlog(this)">{{$val.Name}}</a></li> 
+                    {{end}}
+                </ul>
+            </div>
+        </div>
+    </form>
+    <div id="SelectCategory">
+    </div>
+    <form>
+        <div class="form-group">
+            <div class="dropdown">
+                <Button data-toggle="dropdown" type="button" class="btn btn-large btn-info">
+                    添加标签
+                    <span class="caret"></span>
+                </Button>   
+                <ul class="dropdown-menu" aria-labelledby="dLabel">
+                    {{range $key, $val := .Tags}}
+                        <li><a data-id="{{$val.ID}}" data-name="{{$val.Name}}" onclick="addTagForBlog(this)">{{$val.Name}}</a></li> 
+                    {{end}}
+                </ul>
+            </div>
+        </div>
+    </form>
+    <div id="SelectTag">
+    </div>
+</div>

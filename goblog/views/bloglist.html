@@ -1,7 +1,19 @@
 <div class="top-content-block">
-    <h2>博客列表</h2>
+    <h2>{{.CategoryName}}列表</h2>
     <hr></hr>
-    <button type="button" class="btn btn-primary">写博客</button>
+    <div class="dropdown">
+        <label for="SelectCategory">选择分类：</label>
+        <Button id="SelectCategory" data-toggle="dropdown" type="button" class="btn btn-info">
+            {{.CategoryName}}
+            <span class="caret"></span>
+        </Button>   
+        <ul class="dropdown-menu" aria-labelledby="dLabel">
+            <li><a href="/admin/blogs/0">所有博客</a></li> 
+            {{range $key, $val := .CategoryInfos}}
+                <li><a href="{{$val.URL}}">{{$val.Name}}</a></li> 
+            {{end}}
+        </ul>
+    </div>
     <div class="table-responsive user-list-block">
         <table class="table table-striped table-hover">
             <tr class="success">
@@ -17,7 +29,7 @@
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                     <button data-id="{{$val.ID}}" data-name="{{$val.Name}}" type="button" class="btn" onclick="deleteBlog(this)">
-                        <span class="glyphicon glyphicon-trash"></span>
+                        <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </tr>
             {{end}}

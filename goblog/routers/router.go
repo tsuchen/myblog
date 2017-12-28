@@ -14,4 +14,5 @@ func init() {
 	beego.Router("/admin/category", &controllers.AdminCategoryController{})
 	beego.Router("/admin/tag", &controllers.AdminTagController{})
 	beego.Router("/admin/blogs/:cateid([0-9]+)", &controllers.AdminBlogController{})
+	beego.Router("/admin/editblog", &controllers.AdminEditBlogController{})
 }

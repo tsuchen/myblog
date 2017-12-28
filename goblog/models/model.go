@@ -2,13 +2,11 @@ package models
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/astaxie/beego"
-
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-
-	"strconv"
 )
 
 func init() {
@@ -75,6 +73,19 @@ func GetAllUser() (userList []*User) {
 func GetAllCategory(userName interface{}) (categoryList []*Category) {
 	o := orm.NewOrm()
 	o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
+
+	return
+}
+
+func GetCategoryNameById(id int) (name string) {
+	o := orm.NewOrm()
+	var category Category
+	err := o.QueryTable("category").Filter("ID", id).One(&category)
+	if err == nil {
+		name = category.Name
+	} else {
+		name = "所有博客"
+	}
 
 	return
 }
