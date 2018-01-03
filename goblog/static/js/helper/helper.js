@@ -13,3 +13,17 @@ function request(url, method, data, async, callback){
       callback(resp);
     });
 }
+
+/**
+ * 注销登录
+ */
+function logout(){
+  request("/logout", "get", {}, true, function(resp){
+    console.log(resp)
+    if (resp.Status === 1){
+      location.assign(resp.Data);
+    }else{
+      showTipsModal("登出失败");
+    }    
+  }); 
+}
