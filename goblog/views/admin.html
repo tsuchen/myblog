@@ -47,10 +47,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row equal">
                 <!-- left menu col -->
-                <div class="col-md-2 col-sm-4 col-xs-4">
-                    <div id="left-menu-block" class="row">
+                <div id="left-menu-block" class="col-md-2 col-sm-4 col-xs-4">
+                    <div class="row">
                         <div>
                             <div class="menu-button">
                                 <strong>用户管理</strong> 
@@ -112,16 +112,16 @@
                     </div>
                 </div>
                 <!-- right content -->
-                <div class="col-md-10 col-sm-8 col-xs-8">
+                <div id="right-content-block" class="col-md-10 col-sm-8 col-xs-8">
                     <!-- top content -->
                     <div class="row">
                         {{.LayoutContent}}    
                     </div>
-                    <!-- bottom -->
-                    <div class="row">
-                        template "footer"
-                    </div>
                 </div>
+            </div>
+            <!-- footer -->
+            <div class="row">
+                {{template "footer.html" .}}
             </div>
 
             <!-- 提示模态框 -->

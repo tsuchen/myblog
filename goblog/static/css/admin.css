@@ -59,16 +59,9 @@
 }
 
 #left-menu-block{
-    border:1px solid rgb(180, 179, 179);
-    border-top-width: 0px;
-    border-bottom-width: 0px;
-    min-height: 1280px;
+    height: 100%;
     background-color: #ebebeb;
-}
-
-.small-title-block{
-    height: 60px;
-    line-height: 60px;
+    border: 1px solid #ccc;
 }
 
 .menu-button{
@@ -91,13 +84,23 @@
     display: block;
 }
 
-.top-content-block{
-    min-height: 1180px;
-    padding: 0px 10px 0px 10px;
+.footer-block{
+    text-align: center;
+    padding: 5px;
+    margin-top: -25px;
 }
 
-.right-bottom-block{
-    min-height: 100px;
+.small-title-block{
+    height: 60px;
+    line-height: 60px;
+}
+
+#right-content-block{
+    height: 100%;
+}
+
+.top-content-block{
+    padding: 0px 10px 0px 10px;
 }
 
 .user-list-block{
@@ -169,4 +172,22 @@ th{
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
          -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.pageindex-input{
+    width: 65px;
+}
+
+.equal{
+    overflow: hidden; 
+}
+
+.equal>[class*="col-"]{
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+
+.pageindex-block{
+    text-align: center;
+    padding-top: 20px;
 }
