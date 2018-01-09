@@ -191,3 +191,49 @@ th{
     text-align: center;
     padding-top: 20px;
 }
+
+
+
+/* 我是分界线，以下的css代码为正在测试的代码 */
+body{
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    color: #555555;
+    font-size: 8px;
+}
+
+body, button, input, select, textarea {
+    font: 400 1.5em/1.8 Avenir,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;
+}
+
+.theme-blue .navbar{
+    padding: 0px 15px;
+    background: #4d5b76;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #4d5b76), color-stop(1, #6f80a1));
+}
+
+.navbar-header-text{
+    font-size: 15px;
+    color: white;
+}
+
+.navbar-header-img{
+    height: 50px;
+    width: 50px;
+}
+
+.navbar-header-title{
+    position: relative;
+    top: 12px;
+    left: -5px;
+}
+
+.open>.btn{
+    background-color:rgb(50, 50, 50) !important;
+}
+
+#main-menu>.dropdown:hover,
+#main-menu>.dropdown:active{
+    background-color:rgb(50, 50, 50);
+}

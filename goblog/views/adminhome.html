@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <title>博客后台管理</title>
+
+      <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+      <link href="/static/css/admin.css" rel="stylesheet">
+   </head>
+
+   <body class="theme-blue">
+       <!-- top navbar -->
+       <div class="navbar navbar-default">
+            <div class="navbar-header">
+                <a href="/admin">
+                    <img class="navbar-header-img" src="/static/img/panda.png"></img>
+                    <span class="navbar-header-title">
+                        <span class="navbar-header-text">博客后台</span>
+                    </span>
+                </a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul id="main-menu" class="nav navbar-nav navbar-right" style="height: auto;">
+                    <li class="dropdown hidden-xs">
+                        <a type="button" class="btn btn-link" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-user navbar-header-text" class="" style="position:relative;top:5px;"></span>
+                            <span class="navbar-header-text" style="position:relative;top:4px;">{{.UserName}}</span>
+                            <span class="caret navbar-header-text" style="position:relative;top:4px;"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/admin">用户信息</a></li>
+                            <li class="divider"></li>
+                            <li><a class="navbar-header-text" type="button" onclick="Logout">注销登录</a></li>
+                        </ul>
+                    </li>
+                    <li class="visible-xs">
+                        <a href="/admin">
+                            <span class="navbar-header-text">用户信息</span>
+                        </a> 
+                    </li>
+                    <li class="visible-xs">
+                        <a href="/category">
+                            <span class="navbar-header-text">分类管理</span>
+                            <span class="glyphicon glyphicon-chevron-down navbar-header-text"></span>
+                        </a>  
+                    </li>
+                </ul>
+            </div>
+       </div>
+
+       <!-- 引入相关js -->
+       <script src="/static/js/tools/jquery-3.2.1.js"></script>
+       <script src="/static/js/tools/bootstrap.js"></script>
+       <script src="/static/js/helper/helper.js"></script>
+   </body>
+</html>

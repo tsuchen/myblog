@@ -2,12 +2,15 @@ package models
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
+
+var CountOfOnePage int = 10
 
 func init() {
 	//读取配置
@@ -67,6 +70,35 @@ func GetAllUser() (userList []*User) {
 	}
 
 	return
+}
+
+func GetUserByPageIndex(pageIndex int) (int, int, []*User) {
+	var curIndex int
+	var totalCount int
+	var userList []*User
+
+	o := orm.NewOrm()
+	qs := o.QueryTable("user")
+	num, err := qs.All(&userList)
+	if err == nil {
+		if num == 0 {
+			totalCount = 1
+		} else {
+			temp := float64(num / int64(CountOfOnePage))
+			totalCount = int(math.Ceil(temp))
+		}
+
+		if totalCount < pageIndex {
+			curIndex = 1
+		} else {
+			curIndex = pageIndex
+		}
+
+		startIndex := (curIndex - 1) * CountOfOnePage
+		qs.Limit(startIndex, CountOfOnePage).All(&userList)
+	}
+
+	return curIndex, totalCount, userList
 }
 
 //获取用户所有的分类
