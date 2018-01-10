@@ -11,6 +11,12 @@ import (
 
 var sessionName string = beego.AppConfig.String("SessionName")
 
+type CategoryInfo struct {
+	ID   int
+	Name string
+	URL  string
+}
+
 type CommonController struct {
 	beego.Controller
 }

@@ -17,7 +17,7 @@
                 <a href="/admin">
                     <img class="navbar-header-img" src="/static/img/panda.png"></img>
                     <span class="navbar-header-title">
-                        <span class="navbar-header-text">博客后台</span>
+                        <span class="navbar-header-text" style="font-size:18px">博客后台</span>
                     </span>
                 </a>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -29,7 +29,8 @@
             </div>
 
             <div class="navbar-collapse collapse">
-                <ul id="main-menu" class="nav navbar-nav navbar-right" style="height: auto;">
+                <ul id="main-menu" class="nav navbar-nav navbar-right">
+                    <!-- 顶部用户按钮 -->
                     <li class="dropdown hidden-xs">
                         <a type="button" class="btn btn-link" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-user navbar-header-text" class="" style="position:relative;top:5px;"></span>
@@ -42,21 +43,188 @@
                             <li><a class="navbar-header-text" type="button" onclick="Logout">注销登录</a></li>
                         </ul>
                     </li>
+                    <!-- 用户管理xs -->
                     <li class="visible-xs">
-                        <a href="/admin">
-                            <span class="navbar-header-text">用户信息</span>
-                        </a> 
+                        <a href="#" data-target="#small-user-menu" data-toggle="collapse">
+                            <span class="navbar-header-text">用户管理</span>
+                            <span class="glyphicon glyphicon-chevron-down navbar-header-text"></span>
+                        </a>
                     </li>
                     <li class="visible-xs">
-                        <a href="/category">
+                        <ul id="small-user-menu" class="nav nav-list collapse navbar-small-menu">
+                            <li>
+                                <a href="/admin">
+                                    <span class="glyphicon glyphicon-triangle-right navbar-header-text">用户信息</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userlist">
+                                    <span class="glyphicon glyphicon-triangle-right navbar-header-text">用户列表</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 分类管理xs -->
+                    <li class="visible-xs">
+                        <a href="#" data-target="#small-category-menu" data-toggle="collapse">
                             <span class="navbar-header-text">分类管理</span>
                             <span class="glyphicon glyphicon-chevron-down navbar-header-text"></span>
-                        </a>  
+                        </a>
+                    </li>
+                    <li class="visible-xs">
+                        <ul id="small-category-menu" class="nav nav-list collapse navbar-small-menu">
+                            <li>
+                                <a href="/categorylist">
+                                    <span class="glyphicon glyphicon-triangle-right navbar-header-text">分类列表</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 标签管理xs -->
+                    <li class="visible-xs">
+                        <a href="#" data-target="#small-tag-menu" data-toggle="collapse">
+                            <span class="navbar-header-text">标签管理</span>
+                            <span class="glyphicon glyphicon-chevron-down navbar-header-text"></span>
+                        </a>
+                    </li>
+                    <li class="visible-xs">
+                        <ul id="small-tag-menu" class="nav nav-list collapse navbar-small-menu">
+                            <li>
+                                <a href="/categorylist">
+                                    <span class="glyphicon glyphicon-triangle-right navbar-header-text">标签列表</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 文章管理xs -->
+                    <li class="visible-xs">
+                        <a href="#" data-target="#small-article-menu" data-toggle="collapse">
+                            <span class="navbar-header-text">文章管理</span>
+                            <span class="glyphicon glyphicon-chevron-down navbar-header-text"></span>
+                        </a>
+                    </li>
+                    <li class="visible-xs">
+                        <ul id="small-article-menu" class="nav nav-list collapse navbar-small-menu">
+                            <li>
+                                <a href="/editblog/0">
+                                    <span class="glyphicon glyphicon-triangle-right navbar-header-text">写新文章</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bloglist/0">
+                                    <span class="glyphicon glyphicon-triangle-right navbar-header-text">文章列表</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
        </div>
 
+       <!-- slider nav -->
+       <div class="sidebar-nav hidden-xs">
+           <ul>
+               <!-- 用户管理 -->
+                <li>
+                    <a class="nav-header" data-target="#user-menu" data-toggle="collapse">
+                        用户管理
+                        <span class="glyphicon glyphicon-chevron-down down-icon"></span>
+                    </a>
+                </li>
+                <li>
+                    <ul id="user-menu" class="nav nav-list collapse navbar-menu">
+                        <li>
+                            <a href="/admin">
+                                <span class="glyphicon glyphicon-triangle-right">用户信息</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/userlist">
+                                <span class="glyphicon glyphicon-triangle-right">用户列表</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- 分类管理 -->
+                <li>
+                    <a class="nav-header" data-target="#category-menu" data-toggle="collapse">
+                        分类管理
+                        <span class="glyphicon glyphicon-chevron-down down-icon"></span>
+                    </a>
+                </li>
+                <li>
+                    <ul id="category-menu" class="nav nav-list collapse navbar-menu">
+                        <li>
+                            <a href="/categorylist">
+                                <span class="glyphicon glyphicon-triangle-right">分类列表</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- 标签管理 -->
+                <li>
+                    <a class="nav-header" data-target="#tag-menu" data-toggle="collapse">
+                        标签管理
+                        <span class="glyphicon glyphicon-chevron-down down-icon"></span>
+                    </a>
+                </li>
+                <li>
+                    <ul id="tag-menu" class="nav nav-list collapse navbar-menu">
+                        <li>
+                            <a href="/taglist">
+                                <span class="glyphicon glyphicon-triangle-right">标签列表</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- 文章管理 -->
+                <li>
+                    <a class="nav-header" data-target="#article-menu" data-toggle="collapse">
+                        文章管理
+                        <span class="glyphicon glyphicon-chevron-down down-icon"></span>
+                    </a>
+                </li>
+                <li>
+                    <ul id="article-menu" class="nav nav-list collapse navbar-menu">
+                        <li>
+                            <a href="/editblog/0">
+                                <span class="glyphicon glyphicon-triangle-right">写新文章</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/bloglist/0">
+                                <span class="glyphicon glyphicon-triangle-right">所有文章</span>
+                            </a>
+                        </li>
+                        {{range $key, $val := .CategoryInfos}} 
+                            <li>
+                                <a href="{{$val.URL}}">
+                                    <span class="glyphicon glyphicon-triangle-right">{{$val.Name}}</span>
+                                </a>
+                            </li>
+                        {{end}}
+                    </ul>
+                </li>
+           </ul>
+       </div>
+
+       <!-- content -->
+       <div class="content">
+            <!-- header -->
+            <div class="content-header">
+                <p style="color:#555555;font-size:1.8em;padding-left:15px;">{{.TitleName}}</p>
+                <ol class="breadcrumb">
+                    {{range $key, $val := .PathList}}
+                        <li><a href="#">{{$val}}</a></li>
+                    {{end}}
+                </ol>
+                <hr>
+            </div>
+            <!-- maincontent -->
+            {{.LayoutContent}}  
+            <!-- footer -->
+            {{template "footer.html" .}}
+       </div>
        <!-- 引入相关js -->
        <script src="/static/js/tools/jquery-3.2.1.js"></script>
        <script src="/static/js/tools/bootstrap.js"></script>

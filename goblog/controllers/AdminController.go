@@ -1,10 +1,6 @@
 package controllers
 
-type CategoryInfo struct {
-	ID   int
-	Name string
-	URL  string
-}
+import "myblog/goblog/models"
 
 type AdminController struct {
 	CommonController
@@ -13,7 +9,7 @@ type AdminController struct {
 func (c *AdminController) Get() {
 	isLogin, _ := c.checkUserStatus()
 	if isLogin {
-		c.TplName = "adminhome.html"
+		// c.TplName = "adminhome.html"
 		// categoryList := models.GetAllCategory(se)
 		// //添加url
 		// var categoryInfoList []*CategoryInfo
@@ -22,12 +18,15 @@ func (c *AdminController) Get() {
 		// 	info := &CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
 		// 	categoryInfoList = append(categoryInfoList, info)
 		// }
-		// users := models.GetAllUser()
-		// c.Data["Users"] = users
+		pathList := []string{"主页", "用户列表"}
+		users := models.GetAllUser()
+		c.Data["PathList"] = pathList
+		c.Data["Users"] = users
+		c.Data["TitleName"] = "用户列表"
 		// c.Data["CategoryInfos"] = categoryInfoList
 		// c.Data["GroupListId"] = "UserList"
-		// c.Layout = "admin.html"
-		// c.TplName = "userlist.html"
+		c.Layout = "adminhome.html"
+		c.TplName = "userprofile.html"
 	}
 
 	c.Render()

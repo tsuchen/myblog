@@ -237,3 +237,93 @@ body, button, input, select, textarea {
 #main-menu>.dropdown:active{
     background-color:rgb(50, 50, 50);
 }
+
+.navbar-small-menu{
+    padding-left: 10px;
+}
+
+.nav.nav-list.navbar-small-menu a:hover{
+    display: block;
+    background: rgb(50, 50, 50);
+    padding: 10px;
+}
+
+.sidebar-nav{
+    width: 240px;
+    position: absolute;
+    float: left;
+    border-top: none;
+    border-left: none;
+    margin-top: -20px;
+}
+
+.sidebar-nav ul{
+    list-style: none;
+    padding-left: 0px;
+}
+
+.sidebar-nav .nav-header{
+    border-top: 1px solid #fcfcfc;
+    border-bottom: 1px solid #c8c8cb;
+    border-left: none;
+    background: #efeff0;
+    color: #444;
+    display: block;
+    font-weight: normal;
+    font-size: 1.0em;
+    line-height: 2.5em;
+    padding: .25em .25em .25em 1em;
+    margin-bottom: 0px;
+    text-shadow: none;
+    text-transform: none;
+}
+
+.sidebar-nav .nav-header:hover{
+    text-decoration : none;
+}
+
+.navbar-menu{
+    border-bottom: 1px solid #c8c8cb;
+    color: rgb(50, 50, 50);
+    background: #efeff0;
+    font-size: 0.9em;
+    line-height: 2em;
+    font-weight: normal;
+}
+
+.sidebar-nav .navbar-menu a:hover{
+    background: #c8c8cb;
+}
+
+.down-icon{
+    position: relative;
+    float: right;
+    top:0.7em;
+    right: 1em;
+}
+
+.content{
+    position: relative;
+    min-height: 800px;
+    background: #fff;
+    margin-left: 240px;
+    border-left: 1px solid #cccccc;
+    padding: 15px 15px 0px 15px;
+    margin-top: -20px;
+}
+
+.footer-content{
+    text-align: center;
+    padding: 5px 0px;
+    margin-top: -25px;
+}
+
+.footer-content hr{
+    border:0;
+    background-color:#c8c8cb;
+    height:1px;
+}
+
+.content-header{
+    margin-bottom: 30px;
+}
