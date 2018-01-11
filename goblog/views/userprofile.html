@@ -1,16 +1,64 @@
 <div>
     <ul class="nav nav-tabs">
-        <li class="active" role="presentation" data-toggle="tab">
-            <a href="#profile">个人信息</a>
+        <li class="active" role="presentation">
+            <a href="#profile" data-toggle="tab">个人信息</a>
         </li>
-        <li role="presentation" data-toggle="tab">
-            <a href="#resetpass">修改密码</a>
+        <li role="presentation">
+            <a href="#resetpass" data-toggle="tab">修改密码</a>
         </li>
     </ul>
 
-    <div class="tab-content">
-        <div id="profile" class="tab-pane fade in active">AAA</div>
-        <div id="resetpass" class="tab-pane fade">BBB</div>
+    <div class="tab-content profile-content">
+        <div id="profile" class="tab-pane fade in active">
+            <form>
+                <div class="form-group">
+                    <label for="InputUserName">名称：</label>
+                    <input type="text" id="InputUserName" class="form-control profile-input" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="InputSex">性别：</label>
+                    <input type="text" id="InputSex" class="form-control profile-input" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="InputAge">年龄：</label>
+                    <input type="text" id="InputAge" class="form-control profile-input" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="InputAge">手机：</label>
+                    <input type="text" id="InputAge" class="form-control profile-input" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="InputAge">邮箱：</label>
+                    <input type="text" id="InputAge" class="form-control profile-input" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="InputDesc">自我介绍：</label>
+                    <textarea class="form-control profile-desc-area" rows="6"></textarea>
+                </div>
+                <div class="form-group">
+                    <button id="UpdateProfile" type="button" class="btn btn-primary">确认修改</button>
+                </div>
+            </form>
+        </div>
+        <div id="resetpass" class="tab-pane fade">
+            <form>
+                <div class="form-group">
+                    <label for="InputUserName">原密码：</label>
+                    <input type="text" id="InputOldPass" class="form-control profile-input" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="InputUserName">新密码：</label>
+                    <input type="text" id="InputNewPass" class="form-control profile-input" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="InputUserName">确认密码：</label>
+                    <input type="text" id="InputConfirmPass" class="form-control profile-input" placeholder="">
+                </div>
+                <div class="form-group">
+                    <button id="UpdateProfile" type="button" class="btn btn-primary">确认修改</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
     

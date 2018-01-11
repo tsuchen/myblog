@@ -186,3 +186,16 @@ function alterTag(tagId, tagName){
     }    
   }); 
 }
+
+
+///////////////////////////测试代码/////////////////////////////
+$(".sidebar-nav .nav-header").click(function(){
+  var icon = $(this).find(".down-icon")
+  var exist = icon.hasClass("rotate-icon")
+  console.log(exist)
+  if (exist) {
+    icon.removeClass("rotate-icon")
+  } else {
+    icon.addClass("rotate-icon")
+  }
+});
