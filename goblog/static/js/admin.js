@@ -13,7 +13,7 @@ $(function(){
 });
 
 /**
- * 添加菜单事件
+ * cd 添加菜单事件
  */
 function addMenuCallFunc(){
   var menuButtons = document.getElementsByClassName("menu-button");
@@ -190,12 +190,16 @@ function alterTag(tagId, tagName){
 
 ///////////////////////////测试代码/////////////////////////////
 $(".sidebar-nav .nav-header").click(function(){
-  var icon = $(this).find(".down-icon")
-  var exist = icon.hasClass("rotate-icon")
-  console.log(exist)
+  var icon = $(this).find(".down-icon");
+  var exist = icon.hasClass("rotate-icon");
+  var target = $(this).parent().next().find("ul");
   if (exist) {
-    icon.removeClass("rotate-icon")
+    target.slideUp(200, function(){
+      icon.removeClass("rotate-icon");
+    });
   } else {
-    icon.addClass("rotate-icon")
+    target.slideDown(200, function(){
+      icon.addClass("rotate-icon");
+    });
   }
 });
