@@ -30,7 +30,7 @@ func (c *LoginController) Post() {
 	password := c.GetString("password")
 	if username == "" && password == "" {
 		resp.RespMessage(helper.RS_params_error, helper.WARING)
-		// models.NewUser()
+		models.NewUser()
 		return
 	}
 

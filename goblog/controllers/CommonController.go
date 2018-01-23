@@ -11,12 +11,6 @@ import (
 
 var sessionName string = beego.AppConfig.String("SessionName")
 
-type CategoryInfo struct {
-	ID   int
-	Name string
-	URL  string
-}
-
 type CommonController struct {
 	beego.Controller
 }
@@ -41,12 +35,12 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 		} else {
 			c.Data["UserName"] = userInfo.UserName
 			//添加url
-			var categoryInfoList []*CategoryInfo
+			var categoryInfoList []*models.CategoryInfo
 			list := models.GetAllCategory(se)
 			for _, obj := range list {
 				id := strconv.Itoa(obj.ID)
 				url := "/admin/blogs/" + id
-				info := &CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
+				info := &models.CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
 				categoryInfoList = append(categoryInfoList, info)
 			}
 			c.Data["CategoryInfos"] = categoryInfoList

@@ -102,11 +102,3 @@ func (resp *Response) WriteRespByJson(w http.ResponseWriter) {
 		w.Write(obj)
 	}
 }
-
-func GetNavigationPathStr(list []string) (path string) {
-	for _, s := range list {
-		path += "-" + s
-	}
-
-	return
-}

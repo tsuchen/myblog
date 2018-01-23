@@ -1,4 +1,14 @@
 <div>
+    <!-- header -->
+    <div class="content-header">
+        <p style="color:#555555;font-size:1.8em;padding-left:15px;">用户信息</p>
+            <ol class="breadcrumb">
+                <li><a href="/admin">首页</a></li>
+                <li class="active">用户信息</li>
+            </ol>
+        <hr>
+    </div>
+
     <ul class="nav nav-tabs">
         <li class="active" role="presentation">
             <a href="#profile" data-toggle="tab">个人信息</a>
@@ -10,30 +20,39 @@
 
     <div class="tab-content profile-content">
         <div id="profile" class="tab-pane fade in active">
+            <div>
+                <ul id="time-ul">
+                    <li>创建时间：{{.CreateTime}}</li>
+                    <li>更新时间：{{.UpdateTime}}</li>
+                </ul>
+            </div>
             <form>
                 <div class="form-group">
-                    <label for="InputUserName">名称：</label>
-                    <input type="text" id="InputUserName" class="form-control profile-input" placeholder="">
+                    <label for="InputNickName">昵称：</label>
+                    <input type="text" id="InputNickName" class="form-control profile-input" value="{{.User.Profile.NickName}}">
                 </div>
                 <div class="form-group">
                     <label for="InputSex">性别：</label>
-                    <input type="text" id="InputSex" class="form-control profile-input" placeholder="">
+                    <select id="InputSex" class="form-control profile-input">
+                        <option value="man" {{if eq .User.Profile.Sex "man"}}selected{{end}}>男</option>
+                        <option value="woman" {{if eq .User.Profile.Sex "woman"}}selected{{end}}>女</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="InputAge">年龄：</label>
-                    <input type="text" id="InputAge" class="form-control profile-input" placeholder="">
+                    <label for="InputBirthday">生日：</label>
+                    <input id="InputBirthday" type="date" class="form-control profile-input" value="{{.Birth}}"/>
                 </div>
                 <div class="form-group">
-                    <label for="InputAge">手机：</label>
-                    <input type="text" id="InputAge" class="form-control profile-input" placeholder="">
+                    <label for="InputPhoneNumber">手机：</label>
+                    <input type="text" id="InputPhoneNumber" class="form-control profile-input" value="{{.User.Profile.PNumber}}">
                 </div>
                 <div class="form-group">
-                    <label for="InputAge">邮箱：</label>
-                    <input type="text" id="InputAge" class="form-control profile-input" placeholder="">
+                    <label for="InputEmail">邮箱：</label>
+                    <input type="text" id="InputEmail" class="form-control profile-input" value="{{.User.Profile.Email}}">
                 </div>
                 <div class="form-group">
                     <label for="InputDesc">自我介绍：</label>
-                    <textarea class="form-control profile-desc-area" rows="6"></textarea>
+                    <textarea id="InputDesc" class="form-control profile-desc-area" style="text-align:left;" rows="5">{{.User.Profile.Introduce}}</textarea>
                 </div>
                 <div class="form-group">
                     <button id="UpdateProfile" type="button" class="btn btn-primary">确认修改</button>
@@ -43,19 +62,19 @@
         <div id="resetpass" class="tab-pane fade">
             <form>
                 <div class="form-group">
-                    <label for="InputUserName">原密码：</label>
-                    <input type="text" id="InputOldPass" class="form-control profile-input" placeholder="">
+                    <label for="InputOldPass">原密码：</label>
+                    <input type="password" id="InputOldPass" class="form-control profile-input" placeholder="">
                 </div>
                 <div class="form-group">
-                    <label for="InputUserName">新密码：</label>
-                    <input type="text" id="InputNewPass" class="form-control profile-input" placeholder="">
+                    <label for="InputNewPass">新密码：</label>
+                    <input type="password" id="InputNewPass" class="form-control profile-input" placeholder="">
                 </div>
                 <div class="form-group">
-                    <label for="InputUserName">确认密码：</label>
-                    <input type="text" id="InputConfirmPass" class="form-control profile-input" placeholder="">
+                    <label for="InputConfirmPass">确认密码：</label>
+                    <input type="password" id="InputConfirmPass" class="form-control profile-input" placeholder="">
                 </div>
                 <div class="form-group">
-                    <button id="UpdateProfile" type="button" class="btn btn-primary">确认修改</button>
+                    <button id="UpdatePass" type="button" class="btn btn-primary">确认修改</button>
                 </div>
             </form>
         </div>

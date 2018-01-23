@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"time"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -11,6 +12,21 @@ import (
 )
 
 var CountOfOnePage int = 10
+
+type CategoryInfo struct {
+	ID   int
+	Name string
+	URL  string
+}
+
+type UserProfile struct {
+	NickName    string
+	Sex         string
+	PhoneNumber string
+	Email       string
+	Desc        string
+	Birth       time.Time
+}
 
 func init() {
 	//读取配置
@@ -33,22 +49,66 @@ func init() {
 
 func NewUser() {
 	o := orm.NewOrm()
-	//创建用户基本信息
 	profile := &Profile{}
-	profile.Age = 25
-	profile.PNumber = "13618076042"
-	profile.Sex = "男"
-	profile.Introduce = "这是我的博客，欢迎来访！"
-	_, err := o.Insert(profile)
-	if err != nil {
-		fmt.Println("创建用户详情失败：", err)
+	profile.NickName = "admin"
+	profile.Sex = "man"
+	if _, err := o.Insert(profile); err == nil {
+		user := User{Name: "admin", Password: "123456", Profile: profile}
+		_, err = o.Insert(&user)
+		if err != nil {
+			fmt.Println("创建用户失败：", err)
+		}
+	}
+}
+
+func GetUserByName(userName interface{}) (user User) {
+	o := orm.NewOrm()
+	err := o.QueryTable("user").Filter("name", userName).One(&user)
+	if err == nil {
+		if user.Profile != nil {
+			o.Read(user.Profile)
+		}
 	}
 
-	user := User{Name: "admin", Password: "123456", Profile: profile}
-	_, err = o.Insert(&user)
-	if err != nil {
-		fmt.Println("创建用户失败：", err)
+	return
+}
+
+func UpdateUserProfile(userName interface{}, info UserProfile) bool {
+	success := false
+	o := orm.NewOrm()
+	var profile Profile
+	err := o.QueryTable("profile").Filter("User__Name", userName).One(&profile)
+	if err == nil {
+		profile.Birth = info.Birth
+		profile.NickName = info.NickName
+		profile.Sex = info.Sex
+		profile.PNumber = info.PhoneNumber
+		profile.Introduce = info.Desc
+		profile.Email = info.Email
+		if _, error := o.Update(&profile); error == nil {
+			success = true
+		}
 	}
+
+	return success
+}
+
+func UpdatePassword(userName interface{}, oldPass string, newPass string) bool {
+	success := false
+	o := orm.NewOrm()
+	var user User
+	err := o.QueryTable("user").Filter("Name", userName).One(&user)
+	if err == nil {
+		pass := user.Password
+		if pass == oldPass && pass != newPass {
+			user.Password = newPass
+			if _, error := o.Update(&user); error == nil {
+				success = true
+			}
+		}
+	}
+
+	return success
 }
 
 func SelectUser(userName string, password string) (isFind bool, user User) {
