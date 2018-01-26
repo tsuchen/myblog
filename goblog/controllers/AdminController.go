@@ -16,8 +16,11 @@ func (c *AdminController) Get() {
 		user := models.GetUserByName(se)
 		c.Data["User"] = user
 		c.Data["Birth"] = (user.Profile.Birth).Format("2006-01-02")
-		c.Data["CreateTime"] = (user.Created).Format("2006-01-02 15:04:05")
-		c.Data["UpdateTime"] = (user.Updated).Format("2006-01-02 15:04:05")
+		local, _ := time.LoadLocation("Local")
+		created := user.Created.In(local)
+		c.Data["CreateTime"] = created.Format("2006-01-02 15:04:05")
+		updated := user.Updated.In(local)
+		c.Data["UpdateTime"] = updated.Format("2006-01-02 15:04:05")
 		c.Data["GroupMenuId"] = "user-menu"
 		c.Layout = "adminhome.html"
 		c.TplName = "userprofile.html"

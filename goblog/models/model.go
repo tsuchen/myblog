@@ -11,7 +11,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var CountOfOnePage int = 10
+var CountOfOnePage float64 = 10
 
 type CategoryInfo struct {
 	ID   int
@@ -34,8 +34,7 @@ func init() {
 	sqlUser := beego.AppConfig.String("mysqluser")
 	sqlPassword := beego.AppConfig.String("mysqlpass")
 	sqlURL := beego.AppConfig.String("mysqlurl")
-	sqlInfo := sqlUser + ":" + sqlPassword + "@" + sqlURL + "/" + sqlDB + "?charset=utf8"
-	fmt.Println(sqlInfo)
+	sqlInfo := sqlUser + ":" + sqlPassword + "@" + sqlURL + "/" + sqlDB + "?charset=utf8&loc=Local"
 
 	//设置默认数据库
 	orm.RegisterDataBase("default", "mysql", sqlInfo, 30)
@@ -43,6 +42,8 @@ func init() {
 	orm.RegisterModel(new(User), new(Profile), new(Blog), new(Tag), new(Category))
 	// 自动建表
 	orm.RunSyncdb("default", false, true)
+	// 设置为 UTC 时间
+	orm.DefaultTimeLoc = time.UTC
 	// 开启 orm 调试模式：开发过程中建议打开，release时需要关闭
 	orm.Debug = true
 }
@@ -59,6 +60,14 @@ func NewUser() {
 			fmt.Println("创建用户失败：", err)
 		}
 	}
+}
+
+func SelectUser(userName string, password string) (isFind bool, user User) {
+	o := orm.NewOrm()
+	err := o.QueryTable("user").Filter("name", userName).Filter("password", password).One(&user)
+	isFind = (err == nil)
+
+	return
 }
 
 func GetUserByName(userName interface{}) (user User) {
@@ -90,6 +99,14 @@ func UpdateUserProfile(userName interface{}, info UserProfile) bool {
 		}
 	}
 
+	var user User
+	err = o.QueryTable("user").Filter("Name", userName).One(&user)
+	if err == nil {
+		now := time.Now()
+		user.Updated = now
+		o.Update(&user)
+	}
+
 	return success
 }
 
@@ -111,54 +128,27 @@ func UpdatePassword(userName interface{}, oldPass string, newPass string) bool {
 	return success
 }
 
-func SelectUser(userName string, password string) (isFind bool, user User) {
-	o := orm.NewOrm()
-	err := o.QueryTable("user").Filter("name", userName).Filter("password", password).One(&user)
-	isFind = (err == nil)
-
-	return
-}
-
-func GetAllUser() (userList []*User) {
-	o := orm.NewOrm()
-	o.QueryTable("user").All(&userList)
-
-	for _, user := range userList {
-		if user.Profile != nil {
-			o.Read(user.Profile)
-		}
-	}
-
-	return
-}
-
-func GetUserByPageIndex(pageIndex int) (int, int, []*User) {
-	var curIndex int
-	var totalCount int
-	var userList []*User
-
+func GetUsersByPageId(pageIndex int) (cur float64, total float64, userList []*User) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("user")
-	num, err := qs.All(&userList)
-	if err == nil {
+	if num, err := qs.All(&userList); err == nil {
 		if num == 0 {
-			totalCount = 1
-		} else {
-			temp := float64(num / int64(CountOfOnePage))
-			totalCount = int(math.Ceil(temp))
+			total = 0
+			cur = 1
+			return
 		}
-
-		if totalCount < pageIndex {
-			curIndex = 1
+		total = math.Ceil(float64(num) / CountOfOnePage)
+		var start float64
+		if float64(pageIndex) > total {
+			cur = 1
+			start = 0
 		} else {
-			curIndex = pageIndex
+			start = (float64(pageIndex) - 1) * CountOfOnePage
 		}
-
-		startIndex := (curIndex - 1) * CountOfOnePage
-		qs.Limit(startIndex, CountOfOnePage).All(&userList)
+		qs.Limit(int64(start), int64(CountOfOnePage)).All(&userList)
 	}
 
-	return curIndex, totalCount, userList
+	return
 }
 
 //获取用户所有的分类

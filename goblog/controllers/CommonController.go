@@ -10,6 +10,8 @@ import (
 )
 
 var sessionName string = beego.AppConfig.String("SessionName")
+var defaultAdmin string = "xuchen"
+var defaultDomain string = "http://localhost:8080"
 
 type CommonController struct {
 	beego.Controller
@@ -21,16 +23,16 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 	if se == nil {
 		fmt.Println("session不存在, 请先登录。")
 		c.TplName = "login.html"
-		c.Data["UserName"] = "xuchen"
-		c.Data["URL"] = "http://localhost:8080"
+		c.Data["UserName"] = defaultAdmin
+		c.Data["URL"] = defaultDomain
 		hasLogin = false
 	} else {
 		userInfo := helper.GlobalUserManager.GetUserInfo(se)
 		if userInfo == nil {
 			fmt.Println("用户信息不存在, 请重新登录。")
 			c.TplName = "login.html"
-			c.Data["UserName"] = "xuchen"
-			c.Data["URL"] = "http://localhost:8080"
+			c.Data["UserName"] = defaultAdmin
+			c.Data["URL"] = defaultDomain
 			hasLogin = false
 		} else {
 			c.Data["UserName"] = userInfo.UserName

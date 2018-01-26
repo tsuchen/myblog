@@ -299,3 +299,11 @@ function updateUserPassword(){
 $("#UpdatePass").click(function(){
   updateUserPassword()
 });
+
+$("#PrePageLink").click(function(){
+
+});
+
+$("#NextPageLink").click(function(){
+
+});
