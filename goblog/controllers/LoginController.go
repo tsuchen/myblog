@@ -14,8 +14,8 @@ type LoginController struct {
 }
 
 func (c *LoginController) Get() {
-	c.Data["URL"] = "http://localhost:8080"
-	c.Data["Name"] = "xuchen"
+	c.Data["URL"] = defaultDomain
+	c.Data["Name"] = defaultAdmin
 	c.TplName = "login.html"
 
 	c.Render()

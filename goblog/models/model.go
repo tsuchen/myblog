@@ -11,7 +11,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var CountOfOnePage float64 = 10
+var CountOfOnePage float64 = 1
 
 type CategoryInfo struct {
 	ID   int
@@ -26,6 +26,11 @@ type UserProfile struct {
 	Email       string
 	Desc        string
 	Birth       time.Time
+}
+
+type PageIndexInfo struct {
+	Index  int
+	Active bool
 }
 
 func init() {
@@ -128,24 +133,63 @@ func UpdatePassword(userName interface{}, oldPass string, newPass string) bool {
 	return success
 }
 
-func GetUsersByPageId(pageIndex int) (cur float64, total float64, userList []*User) {
+func GetUsersByPageId(pageIndex int) (pageIndexList []*PageIndexInfo, userList []*User) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("user")
 	if num, err := qs.All(&userList); err == nil {
+		var totalPage float64
 		if num == 0 {
-			total = 0
-			cur = 1
-			return
-		}
-		total = math.Ceil(float64(num) / CountOfOnePage)
-		var start float64
-		if float64(pageIndex) > total {
-			cur = 1
-			start = 0
+			totalPage = 1
 		} else {
-			start = (float64(pageIndex) - 1) * CountOfOnePage
+			totalPage = math.Ceil(float64(num) / CountOfOnePage)
 		}
-		qs.Limit(int64(start), int64(CountOfOnePage)).All(&userList)
+
+		if float64(pageIndex) > totalPage {
+			pageIndex = int(totalPage)
+		} else if float64(pageIndex) < 1 {
+			pageIndex = 1
+		}
+		pageIndexList = append(pageIndexList, &PageIndexInfo{pageIndex, true})
+
+		startIndex, endIndex := pageIndex, pageIndex
+		for {
+			if startIndex <= 1 && endIndex >= int(totalPage) {
+				break
+			}
+
+			if startIndex > 1 {
+				startIndex--
+				pageIndexList = append(pageIndexList, &PageIndexInfo{startIndex, false})
+			}
+
+			if endIndex < int(totalPage) {
+				endIndex++
+				pageIndexList = append(pageIndexList, &PageIndexInfo{endIndex, false})
+			}
+
+			if len(pageIndexList) > 5 {
+				break
+			}
+		}
+
+		//按照升序排序
+		for i, _ := range pageIndexList {
+			isSwap := false
+			for j := len(pageIndexList) - 1; j > i; j-- {
+				if pageIndexList[j].Index < pageIndexList[j-1].Index {
+					temp := pageIndexList[j]
+					pageIndexList[j] = pageIndexList[j-1]
+					pageIndexList[j-1] = temp
+					isSwap = true
+				}
+			}
+			if !isSwap {
+				break
+			}
+		}
+
+		offset := (pageIndex - 1) * int(CountOfOnePage)
+		qs.Limit(int64(CountOfOnePage), int64(offset)).All(&userList)
 	}
 
 	return

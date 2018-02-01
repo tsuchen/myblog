@@ -301,9 +301,15 @@ $("#UpdatePass").click(function(){
 });
 
 $("#PrePageLink").click(function(){
-
+  //获取当前页数
+  var curPageIndex = $("ul.pagination li.active a").text()
+  var prePageIndex = parseInt(curPageIndex) - 1
+  location.assign("/admin/userlist/p/" + prePageIndex)
 });
 
 $("#NextPageLink").click(function(){
-
+  //获取当前页数
+  var curPageIndex = $("ul.pagination li.active a").text()
+  var nextPageIndex = parseInt(curPageIndex) + 1
+  location.assign("/admin/userlist/p/" + nextPageIndex)
 });

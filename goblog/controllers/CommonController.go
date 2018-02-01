@@ -29,26 +29,22 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 	} else {
 		userInfo := helper.GlobalUserManager.GetUserInfo(se)
 		if userInfo == nil {
-			fmt.Println("用户信息不存在, 请重新登录。")
-			c.TplName = "login.html"
 			c.Data["UserName"] = defaultAdmin
-			c.Data["URL"] = defaultDomain
-			hasLogin = false
 		} else {
 			c.Data["UserName"] = userInfo.UserName
-			//添加url
-			var categoryInfoList []*models.CategoryInfo
-			list := models.GetAllCategory(se)
-			for _, obj := range list {
-				id := strconv.Itoa(obj.ID)
-				url := "/admin/blogs/" + id
-				info := &models.CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
-				categoryInfoList = append(categoryInfoList, info)
-			}
-			c.Data["CategoryInfos"] = categoryInfoList
-			session = se
-			hasLogin = true
 		}
+		//添加url
+		var categoryInfoList []*models.CategoryInfo
+		list := models.GetAllCategory(se)
+		for _, obj := range list {
+			id := strconv.Itoa(obj.ID)
+			url := "/admin/blogs/" + id
+			info := &models.CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
+			categoryInfoList = append(categoryInfoList, info)
+		}
+		c.Data["CategoryInfos"] = categoryInfoList
+		session = se
+		hasLogin = true
 	}
 
 	return

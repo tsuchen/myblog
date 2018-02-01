@@ -39,17 +39,17 @@
             <nav aria-label="Page navigation" style="text-align: center;">
                 <ul class="pagination">
                     <li>
-                        <a id="PrePageLink" data-pageindex="{{.CurPageIndex}}" aria-label="Previous">
+                        <a id="PrePageLink" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     {{range $key, $val := .PageIndexList}}
-                        <li class="{{if eq $val .CurPageIndex}}active{{end}}">
-                            <a href="/admin/userlist/p/{{$val}}">{{$val}}</a>
+                        <li class="{{if $val.Active}}active{{end}}">
+                            <a href="/admin/userlist/p/{{$val.Index}}">{{$val.Index}}</a>
                         </li>
                     {{end}}
                     <li>
-                        <a id="NextPageLink" data-pageindex="{{.CurPageIndex}}" aria-label="Next">
+                        <a id="NextPageLink" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
