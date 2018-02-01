@@ -16,7 +16,5 @@ func (c *LogoutController) Get() {
 	resp.Data = "/login"
 
 	cookie, _ := c.Ctx.Request.Cookie(sessionName)
-	se := c.GetSession(cookie.Name)
-	helper.GlobalUserManager.DeleteUserInfo(se)
 	c.DelSession(cookie.Name)
 }

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"myblog/goblog/helper"
 	"myblog/goblog/models"
 	"strconv"
 
@@ -26,13 +25,9 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 		c.Data["UserName"] = defaultAdmin
 		c.Data["URL"] = defaultDomain
 		hasLogin = false
-	} else {
-		userInfo := helper.GlobalUserManager.GetUserInfo(se)
-		if userInfo == nil {
-			c.Data["UserName"] = defaultAdmin
-		} else {
-			c.Data["UserName"] = userInfo.UserName
-		}
+	} else {	
+		user := models.GetUserByName(se)
+		c.Data["UserName"] = user.Name
 		//添加url
 		var categoryInfoList []*models.CategoryInfo
 		list := models.GetAllCategory(se)
