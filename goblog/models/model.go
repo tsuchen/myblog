@@ -53,18 +53,21 @@ func init() {
 	orm.Debug = true
 }
 
-func NewUser() {
+func NewUser(name string, pass string) (success bool) {
 	o := orm.NewOrm()
 	profile := &Profile{}
-	profile.NickName = "admin"
-	profile.Sex = "man"
+	profile.NickName = name
 	if _, err := o.Insert(profile); err == nil {
-		user := User{Name: "admin", Password: "123456", Profile: profile}
+		user := User{Name: name, Password: pass, Profile: profile}
 		_, err = o.Insert(&user)
+		success = true
 		if err != nil {
-			fmt.Println("创建用户失败：", err)
+			fmt.Println("创建新用户失败：", err)
+			success = false
 		}
 	}
+
+	return
 }
 
 func SelectUser(userName string, password string) (isFind bool, user User) {
@@ -133,6 +136,49 @@ func UpdatePassword(userName interface{}, oldPass string, newPass string) bool {
 	return success
 }
 
+func getPageIndexList(curPageIndex int, totalPages float64) (pageIndexList []*PageIndexInfo) {
+	pageIndexList = append(pageIndexList, &PageIndexInfo{curPageIndex, true})
+	startIndex, endIndex := curPageIndex, curPageIndex
+	for {
+		if startIndex <= 1 && endIndex >= int(totalPages) {
+			break
+		}
+
+		if startIndex > 1 {
+			startIndex--
+			pageIndexList = append(pageIndexList, &PageIndexInfo{startIndex, false})
+		}
+
+		if endIndex < int(totalPages) {
+			endIndex++
+			pageIndexList = append(pageIndexList, &PageIndexInfo{endIndex, false})
+		}
+
+		//最多显示5个页码
+		if len(pageIndexList) > 5 {
+			break
+		}
+	}
+
+	//按照升序排序
+	for i, _ := range pageIndexList {
+		isSwap := false
+		for j := len(pageIndexList) - 1; j > i; j-- {
+			if pageIndexList[j].Index < pageIndexList[j-1].Index {
+				temp := pageIndexList[j]
+				pageIndexList[j] = pageIndexList[j-1]
+				pageIndexList[j-1] = temp
+				isSwap = true
+			}
+		}
+		if !isSwap {
+			break
+		}
+	}
+
+	return
+}
+
 func GetUsersByPageId(pageIndex int) (pageIndexList []*PageIndexInfo, userList []*User) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("user")
@@ -149,44 +195,7 @@ func GetUsersByPageId(pageIndex int) (pageIndexList []*PageIndexInfo, userList [
 		} else if float64(pageIndex) < 1 {
 			pageIndex = 1
 		}
-		pageIndexList = append(pageIndexList, &PageIndexInfo{pageIndex, true})
-
-		startIndex, endIndex := pageIndex, pageIndex
-		for {
-			if startIndex <= 1 && endIndex >= int(totalPage) {
-				break
-			}
-
-			if startIndex > 1 {
-				startIndex--
-				pageIndexList = append(pageIndexList, &PageIndexInfo{startIndex, false})
-			}
-
-			if endIndex < int(totalPage) {
-				endIndex++
-				pageIndexList = append(pageIndexList, &PageIndexInfo{endIndex, false})
-			}
-
-			if len(pageIndexList) > 5 {
-				break
-			}
-		}
-
-		//按照升序排序
-		for i, _ := range pageIndexList {
-			isSwap := false
-			for j := len(pageIndexList) - 1; j > i; j-- {
-				if pageIndexList[j].Index < pageIndexList[j-1].Index {
-					temp := pageIndexList[j]
-					pageIndexList[j] = pageIndexList[j-1]
-					pageIndexList[j-1] = temp
-					isSwap = true
-				}
-			}
-			if !isSwap {
-				break
-			}
-		}
+		pageIndexList = getPageIndexList(pageIndex, totalPage)
 
 		offset := (pageIndex - 1) * int(CountOfOnePage)
 		qs.Limit(int64(CountOfOnePage), int64(offset)).All(&userList)

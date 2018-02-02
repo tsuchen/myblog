@@ -115,15 +115,6 @@ th{
     text-align: center;
 }
 
-.tips-modal-title{
-    text-align: center;
-    color: #f08358
-}
-
-.tips-modal-body{
-    text-align: center;
-}
-
 .tips-modal-body{
     text-align: center;
 }
@@ -381,4 +372,13 @@ body, button, input, select, textarea {
     padding: 0px;
     margin-left: 0em;
     margin-right: 5em;
+}
+
+#tips-modal-title{
+    text-align: center;
+    color: #f08358
+}
+
+#tips-modal-body{
+    text-align: center;
 }

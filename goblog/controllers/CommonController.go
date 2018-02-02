@@ -10,7 +10,7 @@ import (
 
 var sessionName string = beego.AppConfig.String("SessionName")
 var defaultAdmin string = "xuchen"
-var defaultDomain string = "http://localhost:8080"
+var defaultDomain string = "http://localhost:8080/login"
 
 type CommonController struct {
 	beego.Controller
@@ -25,7 +25,7 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 		c.Data["UserName"] = defaultAdmin
 		c.Data["URL"] = defaultDomain
 		hasLogin = false
-	} else {	
+	} else {
 		user := models.GetUserByName(se)
 		c.Data["UserName"] = user.Name
 		//添加url

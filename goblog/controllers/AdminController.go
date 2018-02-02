@@ -45,10 +45,11 @@ func (c *AdminController) Post() {
 				pNumber := c.GetString("PhoneNumber")
 				email := c.GetString("Email")
 				desc := c.GetString("Desc")
-				userProfile := models.UserProfile{nickName, sex, pNumber, email, desc, birth}
+				userProfile := models.UserProfile{NickName: nickName, Sex: sex,
+					PhoneNumber: pNumber, Email: email, Desc: desc, Birth: birth}
 				success := updateProfile(se, userProfile)
 				if success {
-					resp.RespMessage(helper.RS_success, helper.WARING)
+					resp.RespMessage(helper.RS_success, helper.SUCCESS)
 					resp.Data = "/admin"
 				} else {
 					resp.RespMessage(helper.RS_failed, helper.WARING)
@@ -59,7 +60,7 @@ func (c *AdminController) Post() {
 				newPass := c.GetString("Password")
 				success := updatePassword(se, oldPass, newPass)
 				if success {
-					resp.RespMessage(helper.RS_success, helper.WARING)
+					resp.RespMessage(helper.RS_success, helper.SUCCESS)
 					resp.Data = "/admin"
 				} else {
 					resp.RespMessage(helper.RS_failed, helper.WARING)

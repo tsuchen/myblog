@@ -44,20 +44,20 @@ function checkInputInfo(userName, password){
         Legal: false,
         Message: "",
     };
-
-    var nameReg = /^[a-zA-z]\w{7,15}$/;
-    checkInfo.Legal = nameReg.test(userName);
-    if (!checkInfo.Legal) {
-        checkInfo.Message = "用户名输入格式不正确，请重新输入。";
+    
+    var legal = checkUserName(userName);
+    if(!legal){
+        checkInfo.Message = "用户名格式输入不正确。";
         return checkInfo;
     }
 
-    var passwordReg = /^\w\w{7,15}$/;
-    checkInfo.Legal = passwordReg.test(password);
-    if (!checkInfo.Legal) {
-        checkInfo.Message = "密码输入格式不正确，请重新输入。";
+    legal = checkPassword(password)
+    if(!legal){
+        checkInfo.Message = "密码格式输入不正确。";
         return checkInfo;
     }
-
+    
+    checkInfo.Legal = true;
+    
     return checkInfo;
 }

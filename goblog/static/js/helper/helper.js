@@ -27,3 +27,28 @@ function logout(){
     }    
   }); 
 }
+
+
+/**
+ * 检查用户名是否输入正确
+ */
+function checkUserName(name){
+  var reg = /^[a-zA-z]\w{7,15}$/;
+  return reg.test(name);
+}
+
+/**
+ * 检查密码是否输入正确
+ */
+function checkPassword(pass){
+  var reg = /^\w\w{7,15}$/;
+  return reg.test(pass);
+}
+
+/**
+ * 检查邮箱是否输入正确 
+ */
+function checkEmailInput(inputStr){
+  var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
+  return reg.test(inputStr)
+}

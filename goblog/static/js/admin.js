@@ -4,7 +4,6 @@
  */
 
 var success = 1;
-var tipsMessage = "";
 
 //dom init finish
 // $(function(){
@@ -134,17 +133,6 @@ function alterCategory(categoryId, categoryName){
   }); 
 }
 
-$("#TipsModal").on("show.bs.modal", function(event){
-  var modal = $(this);
-  modal.find(".tips-modal-body").text(tipsMessage);
-})
-
-//提示框
-function showTipsModal(message){
-  tipsMessage = message;
-  $("#TipsModal").modal();
-}
-
 //添加标签
 $("#AddTag").click(function(){
   var nameInput = $("#InputTagName");
@@ -220,6 +208,66 @@ $(".sidebar-nav .nav-header").click(function(){
   }
 });
 
+//关闭提示窗口的回调函数
+var closeCallbackOfTipsModal = null;
+
+$("#TipsModal").on("show.bs.modal", function(event){
+  // var modal = $(this);
+  // modal.find(".tips-modal-body").text(tipsMessage);
+})
+
+$("#TipsModal").on("hide.bs.modal", function(event){
+  if(closeCallbackOfTipsModal != null){
+    closeCallbackOfTipsModal();
+    closeCallbackOfTipsModal = null;
+  }
+});
+
+//提示框
+function showTipsModal(message, callback){
+  $("#tips-modal-body").text(message);
+  if(callback != null){
+    closeCallbackOfTipsModal = callback
+  }
+  $("#TipsModal").modal("show");
+}
+
+//创建一个新用户
+$("#CreateNewUser").click(function(){
+  var userName = $("#InputUserName").val();
+  var password = $("#InputPassword").val();
+  var comfirmPass = $("#ComfirmPassword").val();
+
+  if(comfirmPass != password){
+    showTipsModal("密码输入不一致。")
+    return;
+  }
+
+  var legal = checkUserName(userName);
+  if(!legal){
+    showTipsModal("用户名格式输入不正确。");
+    return;
+  }
+
+  legal = checkPassword(password);
+  if(!legal){
+    showTipsModal("密码格式输入不正确。");
+    return;
+  }
+
+  var curPageIndex = $("ul.pagination li.active a").text();
+  //请求创建新用户
+  request("/admin/userlist/p/" + curPageIndex, "post", {Type: "NewUser", UserName: userName, Password: password}, true, function(resp){
+      if(resp.Status === success){
+        showTipsModal("创建新用户成功。", function(){
+          location.assign(resp.Data);
+        });
+      }else{
+        showTipsModal("创建新用户失败。");
+      }    
+  }); 
+});
+
 function updateUserProfile(){
   var nickName = $("#InputNickName").val();
   var sex= $("#InputSex").val();
@@ -237,18 +285,13 @@ function updateUserProfile(){
   request("/admin", "post", {Type: 1, NickName: nickName, Sex: sex, Birth: birth, PhoneNumber: phoneNumber,
     Email: email, Desc: desc}, true, function(resp){
       if(resp.Status === success){
-        location.assign(resp.Data);
+        showTipsModal("更新用户信息成功。", function(){
+          location.assign(resp.Data);
+        });     
       }else{
         showTipsModal("更新用户信息失败。");
       }    
   }); 
-}
-
-function checkEmailInput(inputStr){
-  //正则表达式
-  var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
-  
-  return reg.test(inputStr)
 }
 
 $("#UpdateProfile").click(function(){
@@ -259,18 +302,10 @@ function updateUserPassword(){
   var oldPass = $("#InputOldPass").val();
   var newPass = $("#InputNewPass").val();
   var comfirmPass = $("#InputConfirmPass").val();
-  if(oldPass == ""){
-    showTipsModal("原密码不能为空。");
-    return ;
-  }
 
-  if(newPass == ""){
-    showTipsModal("新密码不能为空。");
+  if(oldPass === newPass){
+    showTipsModal("新密码和原密码不能相同。");
     return;
-  }
-
-  if(oldPass == newPass){
-    showTipsModal("原密码和新密码不能相同。");
   }
 
   if(comfirmPass != newPass){
@@ -278,20 +313,20 @@ function updateUserPassword(){
     return;
   }
 
-  var passwordReg = /^\w\w{7,15}$/;
-  var legal = passwordReg.test(newPass);
+  var legal = checkPassword(newPass);
   if (!legal) {
     showTipsModal("密码输入格式不正确，请重新输入。");
     return;
   }
 
-
   //请求更新用户密码(type:2)
   request("/admin", "post", {Type: 2, OldPassword: oldPass, Password: newPass}, true, function(resp){
     if(resp.Status === success){
-      location.assign(resp.Data);
+      showTipsModal("更新密码成功。", function(){
+        location.assign(resp.Data);
+      });
     }else{
-      showTipsModal("更新用户密码失败。");
+      showTipsModal("更新密码失败。");
     }    
   });
 }
