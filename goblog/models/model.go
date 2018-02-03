@@ -212,6 +212,31 @@ func GetAllCategory(userName interface{}) (categoryList []*Category) {
 	return
 }
 
+func GetCategoryByPageId(userName interface{}, pageIndex int) (indexList []*PageIndexInfo, cats []*Category) {
+	o := orm.NewOrm()
+	qs := o.QueryTable("category").Filter("Users__User__Name", userName)
+	if num, err := qs.All(&cats); err == nil {
+		var totalPage float64
+		if num == 0 {
+			totalPage = 1
+		} else {
+			totalPage = math.Ceil(float64(num) / CountOfOnePage)
+		}
+
+		if float64(pageIndex) > totalPage {
+			pageIndex = int(totalPage)
+		} else if float64(pageIndex) < 1 {
+			pageIndex = 1
+		}
+		indexList = getPageIndexList(pageIndex, totalPage)
+
+		offset := (pageIndex - 1) * int(CountOfOnePage)
+		qs.Limit(int64(CountOfOnePage), int64(offset)).All(&cats)
+	}
+
+	return
+}
+
 func GetCategoryNameById(id int) (name string) {
 	o := orm.NewOrm()
 	var category Category

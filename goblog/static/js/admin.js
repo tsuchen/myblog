@@ -43,60 +43,7 @@ function addMenuCallFunc(){
   }
 }
 
-$("#AddCategory").click(function(){
-  addCategory()
-});
 
-/**
- * 检查分类名称输入
- */
-function checkCategoryName(str){
-  var checkInfo = {
-    Legal: false,
-    Message: "",
-  };
-
-  var nameReg = /.{1,20}/;
-  checkInfo.Legal = nameReg.test(str);
-  if(!checkInfo.Legal){
-    checkInfo.Message = "输入的名称不合法";
-  }
-
-  return checkInfo;
-}
-
-/**
- * 添加博客分类
- */
-function addCategory(){
-  var nameInput = $("#InputCategoryName");
-  var inputStr = nameInput.val();
-
-  var info = checkCategoryName(inputStr);
-  if(info.Legal){
-    request("/admin/category", "post", {Type: "add", CategoryName: inputStr}, true, function(resp){
-      if (resp.Status === success){
-        location.assign(resp.Data);
-      }else{
-        showTipsModal("添加分类失败");
-      }    
-    });     
-  }else{
-    showTipsModal(info.Message);
-  }
-}
-
-//删除博客分类
-function deleteCategory(e){
-  var categoryName = e.getAttribute("data-name");
-  request("/admin/category", "post", {Type: "delete", CategoryName: categoryName}, true, function(resp){
-    if (resp.Status === success){
-      location.assign(resp.Data);
-    }else{
-      showTipsModal("删除分类失败");
-    }    
-  }); 
-}
 
 $("#AlterModal").on("show.bs.modal", function(event){
   var button = $(event.relatedTarget); 
@@ -179,7 +126,7 @@ function alterTag(tagId, tagName){
 ///////////////////////////测试代码/////////////////////////////
 $(function(){
   //加载menu
-  initTriangleIcon();
+  initLeftMenu();
 });
 
 function initTriangleIcon(){
@@ -191,6 +138,12 @@ function initTriangleIcon(){
       span.addClass("rotate-icon")
     } 
   });
+}
+
+function initLeftMenu(){
+  var activeId = $(".sidebar-nav>ul").data("li-actived");
+  $('ul[id="' + activeId + '"]').addClass("in");
+  initTriangleIcon();
 }
 
 $(".sidebar-nav .nav-header").click(function(){
@@ -339,12 +292,70 @@ $("#PrePageLink").click(function(){
   //获取当前页数
   var curPageIndex = $("ul.pagination li.active a").text()
   var prePageIndex = parseInt(curPageIndex) - 1
-  location.assign("/admin/userlist/p/" + prePageIndex)
+  var target = $(this).data("target-html")
+  location.assign(target + prePageIndex)
 });
 
 $("#NextPageLink").click(function(){
   //获取当前页数
   var curPageIndex = $("ul.pagination li.active a").text()
   var nextPageIndex = parseInt(curPageIndex) + 1
-  location.assign("/admin/userlist/p/" + nextPageIndex)
+  var target = $(this).data("target-html")
+  location.assign(target + nextPageIndex)
 });
+
+$("#NewCategory").click(function(){
+  console.log("添加分类")
+  addCategory()
+});
+
+/**
+ * 检查分类名称输入
+ */
+function checkCategoryName(str){
+  var checkInfo = {
+    Legal: false,
+    Message: "",
+  };
+
+  var nameReg = /.{1,20}/;
+  checkInfo.Legal = nameReg.test(str);
+  if(!checkInfo.Legal){
+    checkInfo.Message = "输入的名称不合法";
+  }
+
+  return checkInfo;
+}
+
+/**
+ * 添加博客分类
+ */
+function addCategory(){
+  var nameInput = $("#InputCategoryName");
+  var inputStr = nameInput.val();
+
+  var info = checkCategoryName(inputStr);
+  if(info.Legal){
+    request("/admin/category", "post", {Type: "add", CategoryName: inputStr}, true, function(resp){
+      if (resp.Status === success){
+        location.assign(resp.Data);
+      }else{
+        showTipsModal("添加分类失败");
+      }    
+    });     
+  }else{
+    showTipsModal(info.Message);
+  }
+}
+
+//删除博客分类
+function deleteCategory(e){
+  var categoryName = e.getAttribute("data-name");
+  request("/admin/category", "post", {Type: "delete", CategoryName: categoryName}, true, function(resp){
+    if (resp.Status === success){
+      location.assign(resp.Data);
+    }else{
+      showTipsModal("删除分类失败");
+    }    
+  }); 
+}

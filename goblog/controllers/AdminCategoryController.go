@@ -13,10 +13,12 @@ type AdminCategoryController struct {
 func (c *AdminCategoryController) Get() {
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
-		categoryList := models.GetAllCategory(se)
+		pageId, _ := c.GetInt(":page")
+		indexList, categoryList := models.GetCategoryByPageId(se, pageId)
+		c.Data["PageIndexList"] = indexList
 		c.Data["Categorys"] = categoryList
-		c.Data["GroupListId"] = "CategoryList"
-		c.Layout = "admin.html"
+		c.Data["GroupMenuId"] = "category-menu"
+		c.Layout = "adminhome.html"
 		c.TplName = "categorylist.html"
 	}
 

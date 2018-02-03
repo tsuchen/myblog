@@ -1,35 +1,75 @@
-<div class="top-content-block">
-    <h2>分类列表</h2>
-    <hr></hr>
-    <!-- 添加分类 -->
-    <form method="post" class="form-inline" id="addCategoryName">
-        <div class="form-group">
-            <input type="text" id="InputCategoryName" class="form-control" placeholder="输入分类名称">
-            <button id="AddCategory" type="button" class="btn btn-primary">添加分类</button>
-        </div>
-    </form>
-    <!-- 所有分类 -->
-    <div class="table-responsive user-list-block">
-        <table class="table table-striped table-hover">
-            <tr class="success">
-                <th>#</th>
-                <th>分类名称</th>
-                <th></th>
-            </tr>
-            {{range $key, $val := .Categorys}}
-                <tr class="active">
-                    <td>{{$val.ID}}</td>
-                    <td>{{$val.Name}}</td>
-                    <td>
-                        <button data-id="{{$val.ID}}" data-name="{{$val.Name}}" data-type="AlterCategory" type="button" class="btn" data-toggle="modal" data-target="#AlterModal">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </button>
-                        <button data-name="{{$val.Name}}" type="button" class="btn" onclick="deleteCategory(this)">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </td>
-                </tr>
-            {{end}}
-        </table>
+<div>
+    <!-- header -->
+    <div class="content-header">
+        <p style="color:#555555;font-size:1.8em;padding-left:15px;">分类列表</p>
+            <ol class="breadcrumb">
+                <li><a href="/admin">首页</a></li>
+                <li class="active">分类列表</li>
+            </ol>
+        <hr>
     </div>
+
+    <ul class="nav nav-tabs">
+        <li class="active" role="presentation">
+            <a href="#categorylist" data-toggle="tab">分类列表</a>
+        </li>
+        <li role="presentation">
+            <a href="#newcategory" data-toggle="tab">新分类</a>
+        </li>
+    </ul>
+
+    <div class="tab-content profile-content">
+        <div id="categorylist" class="tab-pane fade in active">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <tr class="success">
+                        <th>#</th>
+                        <th>分类名称</th>
+                        <th></th>
+                    </tr>
+                    {{range $key, $val := .Categorys}}
+                        <tr class="active">
+                            <td>{{$val.ID}}</td>
+                            <td>{{$val.Name}}</td>
+                            <td>
+                                <button data-id="{{$val.ID}}" data-name="{{$val.Name}}" data-type="AlterCategory" type="button" class="btn" data-toggle="modal" data-target="#AlterModal">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                                <button data-name="{{$val.Name}}" type="button" class="btn" onclick="deleteCategory(this)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    {{end}}
+                </table>
+            </div>
+            <nav aria-label="Page navigation" style="text-align: center;">
+                <ul class="pagination">
+                    <li>
+                        <a id="PrePageLink" aria-label="Previous" data-target-html="admin/categorylist/p/">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {{range $key, $val := .PageIndexList}}
+                        <li class="{{if $val.Active}}active{{end}}">
+                            <a href="/admin/categorylist/p/{{$val.Index}}">{{$val.Index}}</a>
+                        </li>
+                    {{end}}
+                    <li>
+                        <a id="NextPageLink" aria-label="Next" data-target-html="admin/categorylist/p/">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id="newcategory" class="tab-pane fade">
+            <form>
+                <div class="form-group">
+                    <input type="text" id="InputCategoryName" class="form-control" placeholder="输入分类名称">
+                    <button id="NewCategory" type="button" class="btn btn-primary" style="margin-top: 1em;">添加分类</button>
+                </div>    
+            </form>
+        </div>
+    <div>
 </div>
