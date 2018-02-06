@@ -1,17 +1,17 @@
-<div>
-    <!-- header -->
-    <div class="content-header">
-        <p style="color:#555555;font-size:1.8em;padding-left:15px;">用户列表</p>
-            <ol class="breadcrumb">
-                <li><a href="/admin">首页</a></li>
-                <li class="active">用户列表</li>
-            </ol>
-        <hr>
-    </div>
+<!-- header -->
+<div class="content-header">
+    <p style="color:#555555;font-size:1.8em;padding-left:15px;">用户列表</p>
+        <ol class="breadcrumb">
+            <li><a href="/admin">首页</a></li>
+            <li class="active">用户列表</li>
+        </ol>
+    <hr>
+</div>
 
+<div style="min-height: 678px;">
     <ul class="nav nav-tabs">
         <li class="active" role="presentation">
-            <a href="#userlist" data-toggle="tab">用户列表</a>
+            <a href="#content-list" data-toggle="tab">用户列表</a>
         </li>
         <li role="presentation">
             <a href="#newuser" data-toggle="tab">新用户</a>
@@ -19,7 +19,7 @@
     </ul>
 
     <div class="tab-content profile-content">
-        <div id="userlist" class="tab-pane fade in active">
+        <div id="content-list" class="tab-pane fade in active" data-total-pages={{.TotalPages}}>
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <tr class="success">
@@ -39,7 +39,7 @@
             <nav aria-label="Page navigation" style="text-align: center;">
                 <ul class="pagination">
                     <li>
-                        <a id="PrePageLink" aria-label="Previous" data-target-html="admin/userlist/p/">
+                        <a id="PrePageLink" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -56,7 +56,6 @@
                 </ul>
             </nav>
         </div>
-
         <div id="newuser" class="tab-pane fade">
             <form>
                 <div class="form-group">
@@ -76,5 +75,5 @@
                 </div>
             </form>
         </div>
-    <div>
+    </div>
 </div>

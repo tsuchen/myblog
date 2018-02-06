@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
+	"strconv"
 )
 
 type AdminCategoryController struct {
@@ -13,8 +14,9 @@ type AdminCategoryController struct {
 func (c *AdminCategoryController) Get() {
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
-		pageId, _ := c.GetInt(":page")
-		indexList, categoryList := models.GetCategoryByPageId(se, pageId)
+		pageID, _ := c.GetInt(":page")
+		totalPages, indexList, categoryList := models.GetCategoryByPageId(se, pageID)
+		c.Data["TotalPages"] = totalPages
 		c.Data["PageIndexList"] = indexList
 		c.Data["Categorys"] = categoryList
 		c.Data["GroupMenuId"] = "category-menu"
@@ -31,6 +33,7 @@ func (c *AdminCategoryController) Post() {
 
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
+		pageId, _ := c.GetInt(":page")
 		oper := c.GetString("Type")
 		categoryName := c.GetString("CategoryName")
 		categoryId := c.GetString("CategoryId")
@@ -40,8 +43,7 @@ func (c *AdminCategoryController) Post() {
 			fmt.Println(message)
 			if success {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				// categoryList := models.GetAllCategory(se)
-				resp.Data = "/admin/category"
+				resp.Data = "/admin/categorylist/p/" + strconv.Itoa(pageId)
 			} else {
 				resp.RespMessage(helper.RS_failed, helper.WARING)
 			}
@@ -51,7 +53,7 @@ func (c *AdminCategoryController) Post() {
 			fmt.Println(message)
 			if success {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				resp.Data = "/admin/category"
+				resp.Data = "/admin/categorylist/p/" + strconv.Itoa(pageId)
 			} else {
 				resp.RespMessage(helper.RS_failed, helper.WARING)
 			}
@@ -61,29 +63,28 @@ func (c *AdminCategoryController) Post() {
 			fmt.Println(message)
 			if success {
 				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				resp.Data = "/admin/category"
+				resp.Data = "/admin/categorylist/p/" + strconv.Itoa(pageId)
 			} else {
 				resp.RespMessage(helper.RS_failed, helper.WARING)
 			}
 		}
-
 	} else {
 		resp.RespMessage(helper.RS_failed, helper.WARING)
 		c.Render()
 	}
 }
 
-func addCategory(userName interface{}, categoryName string) (success bool, message string) {
-	success, message = models.AddBlogCategory(userName, categoryName)
+func addCategory(userName interface{}, name string) (success bool, message string) {
+	success, message = models.AddBlogCategory(userName, name)
 	return
 }
 
-func deleteCategory(userName interface{}, categoryName string) (success bool, message string) {
-	success, message = models.DeleteCategory(userName, categoryName)
+func deleteCategory(userName interface{}, name string) (success bool, message string) {
+	success, message = models.DeleteCategory(userName, name)
 	return
 }
 
-func alterCategory(userName interface{}, categoryId string, categoryName string) (success bool, message string) {
-	success, message = models.AlterCategory(userName, categoryId, categoryName)
+func alterCategory(userName interface{}, id string, name string) (success bool, message string) {
+	success, message = models.AlterCategory(userName, id, name)
 	return
 }

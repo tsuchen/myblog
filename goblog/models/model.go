@@ -179,11 +179,10 @@ func getPageIndexList(curPageIndex int, totalPages float64) (pageIndexList []*Pa
 	return
 }
 
-func GetUsersByPageId(pageIndex int) (pageIndexList []*PageIndexInfo, userList []*User) {
+func GetUsersByPageId(pageIndex int) (totalPage float64, pageIndexList []*PageIndexInfo, userList []*User) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("user")
 	if num, err := qs.All(&userList); err == nil {
-		var totalPage float64
 		if num == 0 {
 			totalPage = 1
 		} else {
@@ -212,11 +211,10 @@ func GetAllCategory(userName interface{}) (categoryList []*Category) {
 	return
 }
 
-func GetCategoryByPageId(userName interface{}, pageIndex int) (indexList []*PageIndexInfo, cats []*Category) {
+func GetCategoryByPageId(userName interface{}, pageIndex int) (totalPage float64, indexList []*PageIndexInfo, cats []*Category) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("category").Filter("Users__User__Name", userName)
 	if num, err := qs.All(&cats); err == nil {
-		var totalPage float64
 		if num == 0 {
 			totalPage = 1
 		} else {
@@ -228,6 +226,7 @@ func GetCategoryByPageId(userName interface{}, pageIndex int) (indexList []*Page
 		} else if float64(pageIndex) < 1 {
 			pageIndex = 1
 		}
+
 		indexList = getPageIndexList(pageIndex, totalPage)
 
 		offset := (pageIndex - 1) * int(CountOfOnePage)
@@ -330,6 +329,31 @@ func AlterCategory(userName interface{}, categoryId string, categoryName string)
 func GetAllTags(userName interface{}) (tagList []*Tag) {
 	o := orm.NewOrm()
 	o.QueryTable("tag").Filter("Users__User__Name", userName).All(&tagList)
+
+	return
+}
+
+func GetTagByPageId(userName interface{}, pageIndex int) (totalPage float64, indexList []*PageIndexInfo, tags []*Tag) {
+	o := orm.NewOrm()
+	qs := o.QueryTable("tag").Filter("Users__User__Name", userName)
+	if num, err := qs.All(&tags); err == nil {
+		if num == 0 {
+			totalPage = 1
+		} else {
+			totalPage = math.Ceil(float64(num) / CountOfOnePage)
+		}
+
+		if float64(pageIndex) > totalPage {
+			pageIndex = int(totalPage)
+		} else if float64(pageIndex) < 1 {
+			pageIndex = 1
+		}
+
+		indexList = getPageIndexList(pageIndex, totalPage)
+
+		offset := (pageIndex - 1) * int(CountOfOnePage)
+		qs.Limit(int64(CountOfOnePage), int64(offset)).All(&tags)
+	}
 
 	return
 }

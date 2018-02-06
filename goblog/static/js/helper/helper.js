@@ -52,3 +52,11 @@ function checkEmailInput(inputStr){
   var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
   return reg.test(inputStr)
 }
+
+/**
+ * 检查分类名称输入
+ */
+function checkCategoryName(str){
+  var nameReg = /.{1,20}/;
+  return nameReg.test(str)
+}

@@ -13,7 +13,8 @@ func (c *AdminUserListController) Get() {
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
 		pageId, _ := c.GetInt(":page")
-		pageIndexList, users := models.GetUsersByPageId(pageId)
+		totalPages, pageIndexList, users := models.GetUsersByPageId(pageId)
+		c.Data["TotalPages"] = totalPages
 		c.Data["Users"] = users
 		c.Data["PageIndexList"] = pageIndexList
 		c.Data["GroupMenuId"] = "user-menu"
