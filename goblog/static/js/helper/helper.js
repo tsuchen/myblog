@@ -54,9 +54,17 @@ function checkEmailInput(inputStr){
 }
 
 /**
- * 检查分类名称输入
+ * 检查分类名称是否输入正确
  */
 function checkCategoryName(str){
   var nameReg = /.{1,20}/;
-  return nameReg.test(str)
+  return nameReg.test(str);
+}
+
+/**
+ * 检查标签名称是否输入正确
+ */
+function checkTagName(str){
+  var nameReg = /.{1,20}/;
+  return nameReg.test(str);
 }

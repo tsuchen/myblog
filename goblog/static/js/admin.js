@@ -245,10 +245,12 @@ $("#AlterModal").on("show.bs.modal", function(event){
   $(comfirmBtn).click(function(){
     var alterName = input.val();
     var legal = checkCategoryName(alterName);
-    if(legal){
-      if (type == "AlterCategory") {
+    if (type == "AlterCategory") {
+      if(checkCategoryName(alterName)){
         alterCategory(id, alterName);
-      } else if (type == "AlterTag") {
+      } 
+    }else if (type == "AlterTag"){
+      if(checkTagName(alterName)){
         alterCategory(id, alterName);
       }
     }
@@ -273,7 +275,7 @@ $("#NewTag").click(function(){
   var nameInput = $("#InputTagName");
   var inputStr = nameInput.val();
 
-  var legal = checkCategoryName(inputStr);
+  var legal = checkTagName(inputStr);
   if(legal){
     var curPageIndex = $("ul.pagination li.active a").text();
     request("/admin/taglist/p/" + curPageIndex, "post", {Type: "add", TagName: inputStr}, true, function(resp){

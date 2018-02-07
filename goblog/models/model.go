@@ -11,7 +11,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var CountOfOnePage float64 = 1
+var CountOfOnePage float64 = 10
 
 type CategoryInfo struct {
 	ID   int
@@ -204,9 +204,9 @@ func GetUsersByPageId(pageIndex int) (totalPage float64, pageIndexList []*PageIn
 }
 
 //获取用户所有的分类
-func GetAllCategory(userName interface{}) (categoryList []*Category) {
+func getAllCategory() (categoryList []*Category) {
 	o := orm.NewOrm()
-	o.QueryTable("category").Filter("Users__User__Name", userName).All(&categoryList)
+	o.QueryTable("category").All(&categoryList)
 
 	return
 }
@@ -249,80 +249,103 @@ func GetCategoryNameById(id int) (name string) {
 	return
 }
 
-func existCategory(userName interface{}, categoryName string) (exist bool) {
-	list := GetAllCategory(userName)
-	for _, obj := range list {
-		if obj.Name == categoryName {
-			exist = true
-			break
-		}
-	}
-	exist = false
-
+func GetUserAllCategory(userName interface{}) (list []*Category) {
+	o := orm.NewOrm()
+	o.QueryTable("category").Filter("Users__User__Name", userName).All(&list)
 	return
 }
 
 //添加博客分类
-func AddBlogCategory(userName interface{}, categoryName string) (success bool, message string) {
-	if exist := existCategory(userName, categoryName); exist {
-		success = false
-		message = "已存在此分类，添加失败"
-		return
+func AddBlogCategory(userName interface{}, categoryName string) bool {
+	var cat Category
+	o := orm.NewOrm()
+	err := o.QueryTable("category").Filter("Name", categoryName).One(&cat)
+	//如果数据库不存在此分类，则插入该分类
+	if err != nil {
+		println(err.Error())
+		cat = Category{Name: categoryName}
+		o.Insert(&cat)
 	}
 
 	var user User
-	o := orm.NewOrm()
 	o.QueryTable("user").Filter("Name", userName).One(&user)
 	m2m := o.QueryM2M(&user, "Categorys")
-	category := Category{Name: categoryName}
-	o.Insert(&category)
-	if _, err := m2m.Add(&category); err == nil {
-		success = true
-		message = "添加分类成功。"
-	} else {
-		success = false
-		message = "添加分类失败。"
+	//是否存在m2m关系
+	if m2m.Exist(&cat) {
+		println("存在m2m关系，添加分类失败")
+		return false
+	}
+	//添加m2m关系失败
+	if _, err = m2m.Add(&cat); err != nil {
+		println(err.Error())
+		return false
 	}
 
-	return
+	return true
 }
 
-//删除博客分类
-func DeleteCategory(userName interface{}, categoryName string) (success bool, message string) {
-	var user User
+//删除分类
+func DeleteCategory(userName interface{}, categoryName string) bool {
 	o := orm.NewOrm()
-	o.QueryTable("user").Filter("Name", userName).One(&user)
-	m2m := o.QueryM2M(&user, "Categorys")
 	var category Category
-	o.QueryTable("category").Filter("Name", categoryName).One(&category)
-
-	if _, err := m2m.Remove(category); err == nil {
-		success = true
-		message = "删除分类成功。"
-	} else {
-		success = false
-		message = "删除分类失败。"
+	err := o.QueryTable("category").Filter("Name", categoryName).One(&category)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
 	}
 
-	return
+	var user User
+	o.QueryTable("user").Filter("Name", userName).One(&user)
+	m2m := o.QueryM2M(&user, "Categorys")
+
+	if _, err = m2m.Remove(category); err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	relDeleteCategoryByName(categoryName)
+
+	return true
 }
 
 //修改博客分类
-func AlterCategory(userName interface{}, categoryId string, categoryName string) (success bool, message string) {
-	id, _ := strconv.Atoi(categoryId)
-	o := orm.NewOrm()
-	var category Category
-	o.QueryTable("category").Filter("ID", id).One(&category)
-	category.Name = categoryName
-	if _, err := o.Update(&category); err != nil {
-		success = false
-		message = "修改分类失败。"
-	} else {
-		success = true
-		message = "修改分类成功"
-	}
+func AlterCategory(userName interface{}, id int, catName string) bool {
+	result := AddBlogCategory(userName, catName)
+	relDeleteCategoryByID(id)
 
-	return
+	return result
+}
+
+func relDeleteCategoryByID(categoryID int) {
+	o := orm.NewOrm()
+	var cate Category
+	err := o.QueryTable("category").Filter("ID", categoryID).One(&cate)
+	if err != nil {
+		println(err.Error())
+		return
+	}
+	//检查是否存在m2m关系
+	m2m := o.QueryM2M(&cate, "Users")
+	num, _ := m2m.Count()
+	if num == 0 {
+		o.QueryTable("category").Filter("ID", categoryID).Delete()
+	}
+}
+
+func relDeleteCategoryByName(cateName string) {
+	o := orm.NewOrm()
+	var cate Category
+	err := o.QueryTable("category").Filter("Name", cateName).One(&cate)
+	if err != nil {
+		println(err.Error())
+		return
+	}
+	//检查是否存在m2m关系
+	m2m := o.QueryM2M(&cate, "Users")
+	num, _ := m2m.Count()
+	if num == 0 {
+		o.QueryTable("category").Filter("Name", cateName).Delete()
+	}
 }
 
 //获取所有标签

@@ -30,7 +30,7 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 		c.Data["UserName"] = user.Name
 		//添加url
 		var categoryInfoList []*models.CategoryInfo
-		list := models.GetAllCategory(se)
+		list := models.GetUserAllCategory(se)
 		for _, obj := range list {
 			id := strconv.Itoa(obj.ID)
 			url := "/admin/blogs/" + id

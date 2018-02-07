@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
 	"strconv"
@@ -33,40 +32,26 @@ func (c *AdminCategoryController) Post() {
 
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
-		pageId, _ := c.GetInt(":page")
+		pageID, _ := c.GetInt(":page")
 		oper := c.GetString("Type")
 		categoryName := c.GetString("CategoryName")
-		categoryId := c.GetString("CategoryId")
+		categoryID, _ := strconv.Atoi(c.GetString("CategoryId"))
+		success := false
 		if oper == "add" {
 			//添加分类
-			success, message := addCategory(se, categoryName)
-			fmt.Println(message)
-			if success {
-				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				resp.Data = "/admin/categorylist/p/" + strconv.Itoa(pageId)
-			} else {
-				resp.RespMessage(helper.RS_failed, helper.WARING)
-			}
+			success = addCategory(se, categoryName)
 		} else if oper == "delete" {
 			//删除分类
-			success, message := deleteCategory(se, categoryName)
-			fmt.Println(message)
-			if success {
-				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				resp.Data = "/admin/categorylist/p/" + strconv.Itoa(pageId)
-			} else {
-				resp.RespMessage(helper.RS_failed, helper.WARING)
-			}
+			success = deleteCategory(se, categoryName)
 		} else {
 			//修改分类
-			success, message := alterCategory(se, categoryId, categoryName)
-			fmt.Println(message)
-			if success {
-				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				resp.Data = "/admin/categorylist/p/" + strconv.Itoa(pageId)
-			} else {
-				resp.RespMessage(helper.RS_failed, helper.WARING)
-			}
+			success = alterCategory(se, categoryID, categoryName)
+		}
+		if success {
+			resp.RespMessage(helper.RS_success, helper.SUCCESS)
+			resp.Data = "/admin/categorylist/p/" + strconv.Itoa(pageID)
+		} else {
+			resp.RespMessage(helper.RS_failed, helper.WARING)
 		}
 	} else {
 		resp.RespMessage(helper.RS_failed, helper.WARING)
@@ -74,17 +59,17 @@ func (c *AdminCategoryController) Post() {
 	}
 }
 
-func addCategory(userName interface{}, name string) (success bool, message string) {
-	success, message = models.AddBlogCategory(userName, name)
+func addCategory(userName interface{}, name string) (success bool) {
+	success = models.AddBlogCategory(userName, name)
 	return
 }
 
-func deleteCategory(userName interface{}, name string) (success bool, message string) {
-	success, message = models.DeleteCategory(userName, name)
+func deleteCategory(userName interface{}, name string) (success bool) {
+	success = models.DeleteCategory(userName, name)
 	return
 }
 
-func alterCategory(userName interface{}, id string, name string) (success bool, message string) {
-	success, message = models.AlterCategory(userName, id, name)
+func alterCategory(userName interface{}, id int, name string) (success bool) {
+	success = models.AlterCategory(userName, id, name)
 	return
 }
