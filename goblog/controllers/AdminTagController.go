@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
 	"strconv"
@@ -35,32 +34,21 @@ func (c *AdminTagController) Post() {
 	if isLogin && se != nil {
 		pageID, _ := c.GetInt(":page")
 		oper := c.GetString("Type")
-		tagID := c.GetString("TagId")
+		tagID, _ := strconv.Atoi(c.GetString("TagId"))
 		tagName := c.GetString("TagName")
+		success := false
 		if oper == "add" {
-			if success, tips := addTag(se, tagName); success {
-				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				resp.Data = "/admin/taglist/p/" + strconv.Itoa(pageID)
-			} else {
-				fmt.Println(tips)
-				resp.RespMessage(helper.RS_failed, helper.WARING)
-			}
+			success = addTag(se, tagName)
 		} else if oper == "delete" {
-			if success, tips := deleteTag(se, tagName); success {
-				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				resp.Data = "/admin/taglist/p/" + strconv.Itoa(pageID)
-			} else {
-				fmt.Println(tips)
-				resp.RespMessage(helper.RS_failed, helper.WARING)
-			}
+			success = deleteTag(se, tagName)
 		} else if oper == "alter" {
-			if success, tips := alterTag(se, tagID, tagName); success {
-				resp.RespMessage(helper.RS_success, helper.SUCCESS)
-				resp.Data = "/admin/taglist/p/" + strconv.Itoa(pageID)
-			} else {
-				fmt.Println(tips)
-				resp.RespMessage(helper.RS_failed, helper.WARING)
-			}
+			success = alterTag(se, tagID, tagName)
+		}
+		if success {
+			resp.RespMessage(helper.RS_success, helper.SUCCESS)
+			resp.Data = "/admin/taglist/p/" + strconv.Itoa(pageID)
+		} else {
+			resp.RespMessage(helper.RS_failed, helper.WARING)
 		}
 	} else {
 		resp.RespMessage(helper.RS_failed, helper.WARING)
@@ -68,18 +56,17 @@ func (c *AdminTagController) Post() {
 	}
 }
 
-func addTag(userName interface{}, name string) (success bool, message string) {
-	success, message = models.AddTag(userName, name)
-
+func addTag(userName interface{}, name string) (success bool) {
+	success = models.AddTag(userName, name)
 	return
 }
 
-func deleteTag(userName interface{}, name string) (success bool, message string) {
-	success, message = models.DeleteTag(userName, name)
+func deleteTag(userName interface{}, name string) (success bool) {
+	success = models.DeleteTag(userName, name)
 	return
 }
 
-func alterTag(userName interface{}, id string, name string) (success bool, message string) {
-	success, message = models.AlterTag(userName, id, name)
+func alterTag(userName interface{}, id int, name string) (success bool) {
+	success = models.AlterTag(userName, id, name)
 	return
 }

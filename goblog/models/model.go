@@ -3,7 +3,6 @@ package models
 import (
 	"fmt"
 	"math"
-	"strconv"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -311,12 +310,12 @@ func DeleteCategory(userName interface{}, categoryName string) bool {
 //修改博客分类
 func AlterCategory(userName interface{}, id int, catName string) bool {
 	result := AddBlogCategory(userName, catName)
-	relDeleteCategoryByID(id)
+	relDeleteCategoryByID(userName, id)
 
 	return result
 }
 
-func relDeleteCategoryByID(categoryID int) {
+func relDeleteCategoryByID(userName interface{}, categoryID int) {
 	o := orm.NewOrm()
 	var cate Category
 	err := o.QueryTable("category").Filter("ID", categoryID).One(&cate)
@@ -324,11 +323,22 @@ func relDeleteCategoryByID(categoryID int) {
 		println(err.Error())
 		return
 	}
+
+	var user User
+	o.QueryTable("user").Filter("Name", userName).One(&user)
+	m2m := o.QueryM2M(&user, "Categorys")
+	if _, err = m2m.Remove(cate); err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
 	//检查是否存在m2m关系
-	m2m := o.QueryM2M(&cate, "Users")
-	num, _ := m2m.Count()
-	if num == 0 {
-		o.QueryTable("category").Filter("ID", categoryID).Delete()
+	m2m = o.QueryM2M(&cate, "Users")
+	if num, error := m2m.Count(); error == nil {
+		fmt.Println("Total nums:", num)
+		if num == 0 {
+			o.QueryTable("category").Filter("ID", categoryID).Delete()
+		}
 	}
 }
 
@@ -381,79 +391,105 @@ func GetTagByPageId(userName interface{}, pageIndex int) (totalPage float64, ind
 	return
 }
 
-func existTag(userName interface{}, tagName string) (exist bool) {
-	list := GetAllTags(userName)
-	for _, obj := range list {
-		if obj.Name == tagName {
-			exist = true
-			break
-		}
+//添加标签
+func AddTag(userName interface{}, tagName string) bool {
+	var tag Tag
+	o := orm.NewOrm()
+	err := o.QueryTable("tag").Filter("Name", tagName).One(&tag)
+	//如果数据库不存在此分类，则插入该分类
+	if err != nil {
+		println(err.Error())
+		tag = Tag{Name: tagName}
+		o.Insert(&tag)
 	}
-	exist = false
 
-	return
+	var user User
+	o.QueryTable("user").Filter("Name", userName).One(&user)
+	m2m := o.QueryM2M(&user, "Tags")
+	//是否存在m2m关系
+	if m2m.Exist(&tag) {
+		println("存在m2m关系，添加标签失败")
+		return false
+	}
+	//添加m2m关系失败
+	if _, err = m2m.Add(&tag); err != nil {
+		println(err.Error())
+		return false
+	}
+
+	return true
 }
 
-//添加标签
-func AddTag(userName interface{}, tagName string) (success bool, message string) {
-	if exist := existTag(userName, tagName); exist {
-		success = false
-		message = "已存在此标签，添加失败"
+func DeleteTag(userName interface{}, tagName string) bool {
+	o := orm.NewOrm()
+	var tag Tag
+	err := o.QueryTable("tag").Filter("Name", tagName).One(&tag)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	var user User
+	o.QueryTable("user").Filter("Name", userName).One(&user)
+	m2m := o.QueryM2M(&user, "Tags")
+	if _, err = m2m.Remove(tag); err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	relDeleteTagByName(tagName)
+
+	return true
+}
+
+func AlterTag(userName interface{}, tagID int, tagName string) bool {
+	result := AddTag(userName, tagName)
+	relDeleteTagByID(userName, tagID)
+
+	return result
+}
+
+func relDeleteTagByName(tagName string) {
+	o := orm.NewOrm()
+	var tag Tag
+	err := o.QueryTable("tag").Filter("Name", tagName).One(&tag)
+	if err != nil {
+		println(err.Error())
+		return
+	}
+	//检查是否存在m2m关系
+	m2m := o.QueryM2M(&tag, "Users")
+	num, _ := m2m.Count()
+	if num == 0 {
+		o.QueryTable("tag").Filter("Name", tagName).Delete()
+	}
+}
+
+func relDeleteTagByID(userName interface{}, tagID int) {
+	o := orm.NewOrm()
+	var tag Tag
+	err := o.QueryTable("tag").Filter("ID", tagID).One(&tag)
+	if err != nil {
+		println(err.Error())
 		return
 	}
 
 	var user User
-	o := orm.NewOrm()
 	o.QueryTable("user").Filter("Name", userName).One(&user)
 	m2m := o.QueryM2M(&user, "Tags")
-	tag := Tag{Name: tagName}
-	o.Insert(&tag)
-	if _, err := m2m.Add(&tag); err == nil {
-		success = true
-		message = "添加标签成功。"
-	} else {
-		success = false
-		message = "添加分类失败。"
+	if _, err = m2m.Remove(tag); err != nil {
+		fmt.Println(err.Error())
+		return
 	}
 
-	return
-}
-
-func DeleteTag(userName interface{}, tagName string) (success bool, message string) {
-	var user User
-	o := orm.NewOrm()
-	o.QueryTable("user").Filter("Name", userName).One(&user)
-	m2m := o.QueryM2M(&user, "Tags")
-	var tag Tag
-	o.QueryTable("tag").Filter("Name", tagName).One(&tag)
-
-	if _, err := m2m.Remove(tag); err == nil {
-		success = true
-		message = "删除标签成功。"
-	} else {
-		success = false
-		message = "删除标签失败。"
+	//检查是否存在m2m关系
+	m2m = o.QueryM2M(&tag, "Users")
+	if num, error := m2m.Count(); error == nil {
+		fmt.Println("Total nums:", num)
+		if num == 0 {
+			o.QueryTable("tag").Filter("ID", tagID).Delete()
+		}
 	}
-
-	return
-}
-
-func AlterTag(userName interface{}, tagId string, tagName string) (success bool, message string) {
-	id, _ := strconv.Atoi(tagId)
-
-	o := orm.NewOrm()
-	var tag Tag
-	o.QueryTable("tag").Filter("ID", id).One(&tag)
-	tag.Name = tagName
-	if _, err := o.Update(&tag); err != nil {
-		success = false
-		message = "修改标签失败。"
-	} else {
-		success = true
-		message = "修改标签成功"
-	}
-
-	return
 }
 
 func getAllBlogs(userName interface{}) (blogs []*Blog) {

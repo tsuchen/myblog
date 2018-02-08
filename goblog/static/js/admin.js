@@ -251,7 +251,7 @@ $("#AlterModal").on("show.bs.modal", function(event){
       } 
     }else if (type == "AlterTag"){
       if(checkTagName(alterName)){
-        alterCategory(id, alterName);
+        alterTag(id, alterName);
       }
     }
   });
@@ -302,14 +302,15 @@ function deleteTag(e) {
         location.assign(resp.Data);
       });
     }else{
-      showTipsModal("删除分类失败");
+      showTipsModal("删除标签失败");
     }    
   }); 
 }
 
 //修改博客标签
 function alterTag(tagId, tagName){
-  request("/admin/tag", "post", {Type: "alter", TagId: tagId, TagName: tagName}, true, function(resp){
+  var curPageIndex = $("ul.pagination li.active a").text();
+  request("/admin/taglist/p/" + curPageIndex, "post", {Type: "alter", TagId: tagId, TagName: tagName}, true, function(resp){
     if (resp.Status === success){
       showTipsModal("修改标签成功", function(){
         location.assign(resp.Data)
