@@ -10,13 +10,17 @@ type AdminBlogController struct {
 
 func (c *AdminBlogController) Get() {
 	if isLogin, se := c.checkUserStatus(); isLogin {
-		categoryID, _ := c.GetInt(":cateid")
-		categoryName := models.GetCategoryNameById(categoryID)
-		c.Data["CategoryName"] = categoryName
-		blogs := models.GetBlogsByCategoryId(se, categoryID)
+		cateID, _ := c.GetInt(":cateid")
+		pageID, _ := c.GetInt(":page")
+		cateName := models.GetCategoryNameById(cateID)
+		c.Data["CategoryName"] = cateName
+		c.Data["CateID"] = cateID
+		totalPages, indexList, blogs := models.GetBlogs(se, cateID, pageID)
+		c.Data["TotalPages"] = totalPages
+		c.Data["PageIndexList"] = indexList
 		c.Data["Blogs"] = blogs
-		c.Data["GroupListId"] = "BlogList"
-		c.Layout = "admin.html"
+		c.Data["GroupMenuId"] = "article-menu"
+		c.Layout = "adminhome.html"
 		c.TplName = "bloglist.html"
 	}
 

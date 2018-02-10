@@ -4,11 +4,36 @@
  */
 
 var success = 1;
+var mdEditor;
 
 //dom init finish
 $(function(){
-  initLeftMenu();
+  initUI();
 });
+
+function initUI(){
+  var ul = $(".sidebar-nav>ul")
+  var activeId = ul.data("li-actived");
+  if(activeId === "editblog-menu"){
+    $(ul).parent().hide();
+    var content = $("div.content")
+    content.removeClass("content")
+    content.addClass("editblog-content")
+    createMdEditor();
+  }
+  initLeftMenu(activeId);
+  initTriangleIcon();
+}
+
+//创建MdEditor
+function createMdEditor(){
+  mdEditor = editormd({
+      id      : "BlogEditor",
+      width   : "100%",
+      height  : 800,
+      path    : "/static/js/lib/"
+  });
+}
 
 function initTriangleIcon(){
   var li = $(".sidebar-nav>ul>li");
@@ -21,10 +46,8 @@ function initTriangleIcon(){
   });
 }
 
-function initLeftMenu(){
-  var activeId = $(".sidebar-nav>ul").data("li-actived");
+function initLeftMenu(activeId){
   $('ul[id="' + activeId + '"]').addClass("in");
-  initTriangleIcon();
 }
 
 $(".sidebar-nav .nav-header").click(function(){

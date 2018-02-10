@@ -315,6 +315,16 @@ body, button, input, select, textarea {
     }
 }
 
+.editblog-content{
+    position: relative;
+    min-height: 800px;
+    background: #fff;
+    margin-left: 0px;
+    border: 1px solid #cccccc;
+    padding: 15px 15px 0px 15px;
+    margin-top: -20px;
+}
+
 .footer-content{
     text-align: center;
     padding: 5px 0px;

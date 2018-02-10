@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"math"
+	"strconv"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -29,6 +30,7 @@ type UserProfile struct {
 
 type PageIndexInfo struct {
 	Index  int
+	URL    string
 	Active bool
 }
 
@@ -135,8 +137,8 @@ func UpdatePassword(userName interface{}, oldPass string, newPass string) bool {
 	return success
 }
 
-func getPageIndexList(curPageIndex int, totalPages float64) (pageIndexList []*PageIndexInfo) {
-	pageIndexList = append(pageIndexList, &PageIndexInfo{curPageIndex, true})
+func getPageIndexList(curPageIndex int, totalPages float64, url string) (pageIndexList []*PageIndexInfo) {
+	pageIndexList = append(pageIndexList, &PageIndexInfo{curPageIndex, "", true})
 	startIndex, endIndex := curPageIndex, curPageIndex
 	for {
 		if startIndex <= 1 && endIndex >= int(totalPages) {
@@ -145,12 +147,14 @@ func getPageIndexList(curPageIndex int, totalPages float64) (pageIndexList []*Pa
 
 		if startIndex > 1 {
 			startIndex--
-			pageIndexList = append(pageIndexList, &PageIndexInfo{startIndex, false})
+			urlStr := fmt.Sprintf(url, startIndex)
+			pageIndexList = append(pageIndexList, &PageIndexInfo{startIndex, urlStr, false})
 		}
 
 		if endIndex < int(totalPages) {
 			endIndex++
-			pageIndexList = append(pageIndexList, &PageIndexInfo{endIndex, false})
+			urlStr := fmt.Sprintf(url, startIndex)
+			pageIndexList = append(pageIndexList, &PageIndexInfo{endIndex, urlStr, false})
 		}
 
 		//最多显示5个页码
@@ -181,7 +185,7 @@ func getPageIndexList(curPageIndex int, totalPages float64) (pageIndexList []*Pa
 func GetUsersByPageId(pageIndex int) (totalPage float64, pageIndexList []*PageIndexInfo, userList []*User) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("user")
-	if num, err := qs.All(&userList); err == nil {
+	if num, err := qs.Count(); err == nil {
 		if num == 0 {
 			totalPage = 1
 		} else {
@@ -193,7 +197,9 @@ func GetUsersByPageId(pageIndex int) (totalPage float64, pageIndexList []*PageIn
 		} else if float64(pageIndex) < 1 {
 			pageIndex = 1
 		}
-		pageIndexList = getPageIndexList(pageIndex, totalPage)
+
+		url := "admin/userlist/p/%d"
+		pageIndexList = getPageIndexList(pageIndex, totalPage, url)
 
 		offset := (pageIndex - 1) * int(CountOfOnePage)
 		qs.Limit(int64(CountOfOnePage), int64(offset)).All(&userList)
@@ -213,7 +219,7 @@ func getAllCategory() (categoryList []*Category) {
 func GetCategoryByPageId(userName interface{}, pageIndex int) (totalPage float64, indexList []*PageIndexInfo, cats []*Category) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("category").Filter("Users__User__Name", userName)
-	if num, err := qs.All(&cats); err == nil {
+	if num, err := qs.Count(); err == nil {
 		if num == 0 {
 			totalPage = 1
 		} else {
@@ -226,7 +232,8 @@ func GetCategoryByPageId(userName interface{}, pageIndex int) (totalPage float64
 			pageIndex = 1
 		}
 
-		indexList = getPageIndexList(pageIndex, totalPage)
+		url := "admin/categorylist/p/%d"
+		indexList = getPageIndexList(pageIndex, totalPage, url)
 
 		offset := (pageIndex - 1) * int(CountOfOnePage)
 		qs.Limit(int64(CountOfOnePage), int64(offset)).All(&cats)
@@ -235,14 +242,14 @@ func GetCategoryByPageId(userName interface{}, pageIndex int) (totalPage float64
 	return
 }
 
-func GetCategoryNameById(id int) (name string) {
+func GetCategoryNameById(cateID int) (cateName string) {
 	o := orm.NewOrm()
-	var category Category
-	err := o.QueryTable("category").Filter("ID", id).One(&category)
+	var cate Category
+	err := o.QueryTable("category").Filter("ID", cateID).One(&cate)
 	if err == nil {
-		name = category.Name
+		cateName = cate.Name
 	} else {
-		name = "所有博客"
+		cateName = "所有博客"
 	}
 
 	return
@@ -382,7 +389,8 @@ func GetTagByPageId(userName interface{}, pageIndex int) (totalPage float64, ind
 			pageIndex = 1
 		}
 
-		indexList = getPageIndexList(pageIndex, totalPage)
+		url := "admin/taglist/p/%d"
+		indexList = getPageIndexList(pageIndex, totalPage, url)
 
 		offset := (pageIndex - 1) * int(CountOfOnePage)
 		qs.Limit(int64(CountOfOnePage), int64(offset)).All(&tags)
@@ -492,28 +500,52 @@ func relDeleteTagByID(userName interface{}, tagID int) {
 	}
 }
 
-func getAllBlogs(userName interface{}) (blogs []*Blog) {
-	o := orm.NewOrm()
+func GetBlogs(userName interface{}, cateID int, pageID int) (totalPages float64, indexList []*PageIndexInfo, blogs []*Blog) {
+	totalPages = 1
 
+	o := orm.NewOrm()
 	var user User
 	err := o.QueryTable("user").Filter("Name", userName).One(&user)
-	if err == nil {
-
+	if err != nil {
+		println(err.Error())
+		return
 	}
 
-	return
-}
+	var num int64 //文章数量
+	if cateID == 0 {
+		//所有文章
+		num, err = o.QueryTable("blog").Filter("User", user.ID).Count()
+	} else {
+		num, err = o.QueryTable("blog").Filter("User", user.ID).Filter("Category", cateID).Count()
+	}
 
-func GetBlogsByCategoryId(userName interface{}, categoryId int) (blogs []*Blog) {
-	o := orm.NewOrm()
-	var user User
-	err := o.QueryTable("user").Filter("Name", userName).One(&user)
-	if err == nil {
-		if categoryId == 0 {
-			o.QueryTable("blog").Filter("User", user.ID).RelatedSel().All(&blogs)
-		} else {
-			o.QueryTable("blog").Filter("User", user.ID).Filter("Category", categoryId).All(&blogs)
-		}
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+	if num != 0 {
+		totalPages = math.Ceil(float64(num) / CountOfOnePage)
+	}
+
+	if float64(pageID) > totalPages {
+		pageID = int(totalPages)
+	} else if float64(pageID) < 1 {
+		pageID = 1
+	}
+
+	url := "admin/bloglist/cate/" + strconv.Itoa(cateID) + "/p/%d"
+	indexList = getPageIndexList(pageID, totalPages, url)
+
+	offset := (pageID - 1) * int(CountOfOnePage)
+
+	if cateID == 0 {
+		//所有文章
+		qs := o.QueryTable("blog").Filter("User", user.ID)
+		qs.All(&blogs)
+	} else {
+		qs := o.QueryTable("blog").Filter("User", user.ID).Filter("Category", cateID)
+		qs.Limit(int64(CountOfOnePage), int64(offset)).All(&blogs)
 	}
 
 	return

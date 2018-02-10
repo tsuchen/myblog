@@ -33,7 +33,7 @@ func (c *CommonController) checkUserStatus() (hasLogin bool, session interface{}
 		list := models.GetUserAllCategory(se)
 		for _, obj := range list {
 			id := strconv.Itoa(obj.ID)
-			url := "/admin/blogs/" + id
+			url := "/admin/bloglist/cate/" + id + "/p/1"
 			info := &models.CategoryInfo{ID: obj.ID, Name: obj.Name, URL: url}
 			categoryInfoList = append(categoryInfoList, info)
 		}
