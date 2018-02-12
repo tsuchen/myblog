@@ -550,3 +550,15 @@ func GetBlogs(userName interface{}, cateID int, pageID int) (totalPages float64,
 
 	return
 }
+
+func GetArticleByID(id int) (blog Blog, err error) {
+	o := orm.NewOrm()
+	err = o.QueryTable("blog").Filter("ID", id).One(&blog)
+	if err != nil {
+		println(err.Error())
+		return 
+	}
+
+	
+	return
+}

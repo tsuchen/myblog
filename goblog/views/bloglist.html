@@ -41,9 +41,9 @@
                             <td>{{$val.ID}}</td>
                             <td>{{$val.Title}}</td>
                             <td>
-                                <button id="alter-article" data-cateid="{{$val.ID}}" type="button" class="btn">
+                                <a id="alter-article" class="btn" href="/admin/editblog/blog/{{$val.ID}}">
                                     <span class="glyphicon glyphicon-pencil"></span>
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     {{end}}
