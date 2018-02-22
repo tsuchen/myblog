@@ -28,10 +28,16 @@ function initUI(){
 //创建MdEditor
 function createMdEditor(){
   mdEditor = editormd({
-      id      : "BlogEditor",
+      id      : "my-editormd",
       width   : "100%",
       height  : 800,
-      path    : "/static/js/lib/"
+      path    : "/static/js/lib/",
+      saveHTMLToTextarea : true,//注意3：这个配置，方便post提交表单
+
+      /**上传图片相关配置如下*/
+      imageUpload : true,
+      imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+      imageUploadURL : "/static/img/upload/",//注意你后端的上传图片服务地址
   });
 }
 
@@ -342,4 +348,43 @@ function alterTag(tagId, tagName){
       showTipsModal("修改标签失败");
     }    
   }); 
+}
+
+//暂存博客文章
+function saveArticle(){
+  var title = $("title-input").val();
+  var cate = $("cate-select").val();
+  var tag = $("tag-select").val();
+  var content = $("my-editormd-markdown-doc").val();
+  var blogID = $("editblog-form").data("article-id");
+  request("/admin/editblog/blog/" + blogID, "post", {Type: "save", Title: title, Cate: cate, Tags: tag, Content: content}, 
+    true, function(resp){
+      if (resp.Status === success){
+        showTipsModal("暂存文章成功");
+      }else{
+        showTipsModal("暂存文章失败");
+    }    
+  }); 
+}
+
+//删除博客文章
+function deleteArticle(){
+  
+}
+
+//发表博客
+function sendArticle(){
+  var title = $("title-input").val();
+  var cate = $("cate-select").val();
+  var tag = $("tag-select").val();
+  var content = $("my-editormd-markdown-doc").val();
+  var blogID = $("editblog-form").data("article-id");
+  request("/admin/editblog/blog/" + blogID, "post", {Type: "save", Title: title, Cate: cate, Tags: tag, Content: content}, 
+    true, function(resp){
+      if (resp.Status === success){
+        showTipsModal("发表文章成功");
+      }else{
+        showTipsModal("发表文章失败");
+    }    
+  });
 }

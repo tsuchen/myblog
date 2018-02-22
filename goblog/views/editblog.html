@@ -7,24 +7,24 @@
                 {{if .IsNew}}
                     新文章
                 {{else}}
-                    {{.Article.Title}}
+                    {{.Title}}
                 {{end}}
             </li>
         </ol>
     <hr>
 </div>
     
-<div style="padding: 0px 20px;">
+<div id="editblog-form" style="padding: 0px 20px;" data-acticle-id="{{.BlogID}}">
     <!-- content row -->
     <div class="row">
-        <form style="background-color: #f5f5f5;">
+        <form style="padding: 15px 0px 5px 0px;">
             <div class="form-group">
                 <label for="article-title-input">文章标题：</label>
-                <input type="input" class="blog-input article-title-input" placeholder="输入标题">
+                <input type="input" id="title-input" class="blog-input article-title-input" placeholder="输入标题" value="{{.Title}}">
             </div>
             <div class="form-group">
                 <label for="cate-select">选择分类：</label>
-                <input type="text" id="cate-select" class="blog-input select-input" value="{{.Article.Category.Name}}" list="cate-list" placeholder="输入分类">
+                <input type="text" id="cate-select" class="blog-input select-input" value="{{.SelectCate}}" list="cate-list" placeholder="输入分类">
                 <datalist id="cate-list">
                     {{range .CategoryInfos}}
                         <option value="{{.Name}}"/>
@@ -33,27 +33,29 @@
             </div>
             <div class="form-group">
                 <label for="tag-select">选择标签：</label>
-                <input type="text" id="tag-select" class="blog-input select-input" value="{{.SelectTag}}" list="tag-list" placeholder="输入标签">
+                <input type="text" id="tag-select" class="blog-input select-input" value="{{.SelectTags}}" list="tag-list" placeholder="输入标签">
                 <datalist id="tag-list">
-                    {{range .Tag}}
-                        <option value="{{.Name}}"/>
+                    {{range .Tags}}
+                        <option value="{{.Name}};"/>
                     {{end}}
                 </datalist>         
             </div>
-        </form>
 
-        <!-- MdEditor -->
-        <div id="BlogEditor" style="margin-top:2em">
-            <textarea class="edit-blog-area"></textarea>
-        </div>
+            <div class="form-group">
+                <!-- MdEditor -->
+                <div id="my-editormd" style="margin-top:2em">
+                    <textarea id="my-editormd-markdown-doc" name="my-editormd-markdown-doc" style="display:none;">{{.Content}}</textarea>
+                </div>
+            </div>
+        </form>
     </div>
 
     <!-- bottom row -->
     <div class="row">
         <div class="edit-blog-bottom">
-            <button id="delete-article-button" class="btn btn-danger">删除博客</button>
-            <button id="send-article-button" class="btn btn-success">发表博客</button>
-            <button id="save-article-button" class="btn btn-warning">暂存博客</button>
+            <button type="button" id="delete-article-button" class="btn btn-danger" onclick="deleteArticle()">删除博客</button>
+            <button type="button" id="send-article-button" class="btn btn-success" onclick="sendArticle()">发表博客</button>
+            <button type="button" id="save-article-button" class="btn btn-warning" onclick="saveArticle()">暂存博客</button>
         </div>
     </div>
 </div>

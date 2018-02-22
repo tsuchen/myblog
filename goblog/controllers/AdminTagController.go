@@ -13,8 +13,8 @@ type AdminTagController struct {
 func (c *AdminTagController) Get() {
 	isLogin, se := c.checkUserStatus()
 	if isLogin && se != nil {
-		pageId, _ := c.GetInt(":page")
-		totalPages, indexList, categoryList := models.GetTagByPageId(se, pageId)
+		pageID, _ := c.GetInt(":page")
+		totalPages, indexList, categoryList := models.GetTagByPageId(se, pageID)
 		c.Data["TotalPages"] = totalPages
 		c.Data["PageIndexList"] = indexList
 		c.Data["Tags"] = categoryList

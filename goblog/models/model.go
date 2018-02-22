@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -216,6 +217,17 @@ func getAllCategory() (categoryList []*Category) {
 	return
 }
 
+func getCategoryByName(userName interface{}, cateName string) interface{} {
+	o := orm.NewOrm()
+	var cate Category
+	err := o.QueryTable("category").Filter("Users__User__Name", userName).Filter("Name", cateName).One(&cate)
+	if err != nil {
+		return nil
+	}
+
+	return cate
+}
+
 func GetCategoryByPageId(userName interface{}, pageIndex int) (totalPage float64, indexList []*PageIndexInfo, cats []*Category) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("category").Filter("Users__User__Name", userName)
@@ -371,6 +383,17 @@ func GetAllTags(userName interface{}) (tagList []*Tag) {
 	o.QueryTable("tag").Filter("Users__User__Name", userName).All(&tagList)
 
 	return
+}
+
+func getTagByName(userName interface{}, tagName string) interface{} {
+	o := orm.NewOrm()
+	var tag Tag
+	err := o.QueryTable("tag").Filter("Users__User__Name", userName).Filter("Name", tagName).One(&tag)
+	if err != nil {
+		return nil
+	}
+
+	return tag
 }
 
 func GetTagByPageId(userName interface{}, pageIndex int) (totalPage float64, indexList []*PageIndexInfo, tags []*Tag) {
@@ -554,11 +577,47 @@ func GetBlogs(userName interface{}, cateID int, pageID int) (totalPages float64,
 func GetArticleByID(id int) (blog Blog, err error) {
 	o := orm.NewOrm()
 	err = o.QueryTable("blog").Filter("ID", id).One(&blog)
-	if err != nil {
-		println(err.Error())
-		return 
+	if err == nil {
+		if blog.Category != nil {
+			o.Read(blog.Category)
+		}
+
+		o.QueryTable("tag").Filter("Blogs__Blog__ID", id).All(&blog.Tags)
 	}
 
-	
+	return
+}
+
+//发表博客
+func SendArticleByID(userName interface{}, args map[string]string) (success bool) {
+	o := orm.NewOrm()
+	var user User
+	err := o.QueryTable("user").Filter("Name", userName).One(&user)
+	if err != nil {
+		println(err.Error())
+		return false
+	}
+
+	blogID, _ := strconv.Atoi(args["blogid"])
+	title := args["title"]
+	cateName := args["category"]
+	AddBlogCategory(userName, cateName)
+	var tagStrs []string
+	tagStrs = strings.Split(args["args"], ";")
+	for _, tagName := range tagStrs {
+		AddTag(userName, tagName)
+	}
+
+	var blog Blog
+	if blogID == 0 {
+		//新文章
+		blog.Title = title
+		category := getCategoryByName(userName, cateName)
+		if category != nil {
+
+		}
+	} else {
+
+	}
 	return
 }
