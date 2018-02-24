@@ -3,6 +3,7 @@ package controllers
 import (
 	"myblog/goblog/helper"
 	"myblog/goblog/models"
+	"strconv"
 )
 
 type AdminEditBlogController struct {
@@ -14,22 +15,23 @@ func (c *AdminEditBlogController) Get() {
 		blogID, _ := c.GetInt(":blogid")
 		tags := models.GetAllTags(se)
 		c.Data["Tags"] = tags
-		article, err := models.GetArticleByID(blogID)
-		if err == nil {
+		blog := models.GetArticleByID(blogID)
+		if blog != nil {
+			article := blog.(models.Blog)
 			c.Data["IsNew"] = false
 			c.Data["SelectCate"] = article.Category.Name
 			c.Data["Title"] = article.Title
+			c.Data["Content"] = article.Content
 			var tagStr string
 			selectTags := article.Tags
 			for _, tag := range selectTags {
 				tagStr += tag.Name + ";"
 			}
 			c.Data["SelectTags"] = tagStr
-			c.Data["Content"] = article.Content
-			c.Data["BlogID"] = blogID
 		} else {
 			c.Data["IsNew"] = true
 		}
+		c.Data["BlogID"] = blogID
 		c.Data["GroupMenuId"] = "editblog-menu"
 		c.Layout = "adminhome.html"
 		c.TplName = "editblog.html"
@@ -41,23 +43,37 @@ func (c *AdminEditBlogController) Get() {
 func (c *AdminEditBlogController) Post() {
 	resp := helper.NewResponse()
 	defer resp.WriteRespByJson(c.Ctx.ResponseWriter)
-	if isLogin, _ := c.checkUserStatus(); isLogin {
-		blogID, _ := c.GetInt("blogid")
+	if isLogin, se := c.checkUserStatus(); isLogin {
+		blogID, _ := c.GetInt(":blogid")
+		id := strconv.Itoa(blogID)
 		model := c.GetString("Type")
+		var success bool
 		if model == "save" {
 
 		} else if model == "delete" {
 
 		} else if model == "send" {
+			title := c.GetString("Title")
+			cate := c.GetString("Cate")
+			tags := c.GetString("Tags")
+			content := c.GetString("Content")
+			success = sendArticle(se, id, title, cate, tags, content)
+		}
 
+		if success {
+			resp.RespMessage(helper.RS_success, helper.SUCCESS)
+			resp.Data = "/admin/bloglist/p/1"
+		} else {
+			resp.RespMessage(helper.RS_failed, helper.WARING)
 		}
 	} else {
+		resp.RespMessage(helper.RS_failed, helper.WARING)
 		c.Render()
 	}
 }
 
 // 发表博客
-func sendAtricle(userName interface{}, id string, title string, cate string, tags string, content string) (success bool) {
+func sendArticle(userName interface{}, id string, title string, cate string, tags string, content string) (success bool) {
 	args := make(map[string]string)
 	args["title"] = title
 	args["blogid"] = id

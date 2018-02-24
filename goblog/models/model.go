@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"math"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -225,7 +226,7 @@ func getCategoryByName(userName interface{}, cateName string) interface{} {
 		return nil
 	}
 
-	return cate
+	return &cate
 }
 
 func GetCategoryByPageId(userName interface{}, pageIndex int) (totalPage float64, indexList []*PageIndexInfo, cats []*Category) {
@@ -393,7 +394,7 @@ func getTagByName(userName interface{}, tagName string) interface{} {
 		return nil
 	}
 
-	return tag
+	return &tag
 }
 
 func GetTagByPageId(userName interface{}, pageIndex int) (totalPage float64, indexList []*PageIndexInfo, tags []*Tag) {
@@ -574,18 +575,23 @@ func GetBlogs(userName interface{}, cateID int, pageID int) (totalPages float64,
 	return
 }
 
-func GetArticleByID(id int) (blog Blog, err error) {
+func GetArticleByID(id int) interface{} {
 	o := orm.NewOrm()
-	err = o.QueryTable("blog").Filter("ID", id).One(&blog)
-	if err == nil {
-		if blog.Category != nil {
-			o.Read(blog.Category)
-		}
-
-		o.QueryTable("tag").Filter("Blogs__Blog__ID", id).All(&blog.Tags)
+	var blog Blog
+	err := o.QueryTable("blog").Filter("ID", id).One(&blog)
+	if err != nil {
+		return nil
 	}
 
-	return
+	if blog.Category != nil {
+		o.Read(blog.Category)
+	}
+	_, err = o.QueryTable("tag").Filter("Blogs__Blog__ID", id).All(&blog.Tags)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	return blog
 }
 
 //发表博客
@@ -594,30 +600,82 @@ func SendArticleByID(userName interface{}, args map[string]string) (success bool
 	var user User
 	err := o.QueryTable("user").Filter("Name", userName).One(&user)
 	if err != nil {
-		println(err.Error())
+		fmt.Println(err.Error())
 		return false
 	}
 
 	blogID, _ := strconv.Atoi(args["blogid"])
 	title := args["title"]
+	content := args["content"]
 	cateName := args["category"]
 	AddBlogCategory(userName, cateName)
 	var tagStrs []string
-	tagStrs = strings.Split(args["args"], ";")
+	tagStrs = strings.Split(args["tags"], ";")
 	for _, tagName := range tagStrs {
 		AddTag(userName, tagName)
 	}
+	//tag
+	var tags []*Tag
+	for _, tagStr := range tagStrs {
+		tag := getTagByName(userName, tagStr)
+		if reflect.TypeOf(tag) != nil {
+			tags = append(tags, tag.(*Tag))
+		}
+	}
 
 	var blog Blog
+
 	if blogID == 0 {
 		//新文章
 		blog.Title = title
-		category := getCategoryByName(userName, cateName)
-		if category != nil {
-
+		blog.Content = content
+		//category
+		cate := getCategoryByName(userName, cateName)
+		if reflect.TypeOf(cate) != nil {
+			blog.Category = cate.(*Category)
+		}
+		if _, err = o.Insert(&blog); err != nil {
+			//插入新文章失败
+			fmt.Println(err.Error())
+			return false
+		}
+		//tag
+		m2m := o.QueryM2M(&blog, "Tags")
+		// m2m.Clear()
+		for _, tag := range tags {
+			//添加m2m关系失败
+			if _, err = m2m.Add(tag); err != nil {
+				//添加标签失败
+				fmt.Println(err.Error())
+			}
 		}
 	} else {
-
+		b := GetArticleByID(blogID)
+		if reflect.TypeOf(b) == nil {
+			return false
+		}
+		blog = b.(Blog)
+		blog.Title = title
+		blog.Content = content
+		//category
+		cate := getCategoryByName(userName, cateName)
+		if reflect.TypeOf(cate) != nil {
+			blog.Category = cate.(*Category)
+		}
+		if _, err = o.Update(&blog); err != nil {
+			fmt.Println(err.Error())
+			return false
+		}
+		m2m := o.QueryM2M(&blog, "Tags")
+		m2m.Clear()
+		for _, tag := range tags {
+			//添加m2m关系失败
+			if _, err = m2m.Add(tag); err != nil {
+				//添加标签失败
+				fmt.Println(err.Error())
+			}
+		}
 	}
-	return
+
+	return true
 }

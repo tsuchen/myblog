@@ -68,3 +68,19 @@ function checkTagName(str){
   var nameReg = /.{1,20}/;
   return nameReg.test(str);
 }
+
+/**
+ * 检查文章题目是否输入正确
+ */
+function checkActicleTitle(title){
+  var reg = /.{1, 30}/;
+  return reg.test(title);
+}
+
+/**
+ * 检查文章内容是否输入正确
+ */
+function checkActicleContent(title){
+  var reg = /.{1, 20000}/;
+  return reg.test(title);
+}

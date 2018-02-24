@@ -26,7 +26,3 @@ func (c *AdminBlogController) Get() {
 
 	c.Render()
 }
-
-func (c *AdminBlogController) Post() {
-
-}

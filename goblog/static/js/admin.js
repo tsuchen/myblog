@@ -317,7 +317,7 @@ $("#NewTag").click(function(){
       }    
     });     
   }else{
-    showTipsModal(info.Message);
+    showTipsModal("标签名称输入不合法。");
   }
 });
 
@@ -374,17 +374,48 @@ function deleteArticle(){
 
 //发表博客
 function sendArticle(){
-  var title = $("title-input").val();
-  var cate = $("cate-select").val();
-  var tag = $("tag-select").val();
-  var content = $("my-editormd-markdown-doc").val();
-  var blogID = $("editblog-form").data("article-id");
-  request("/admin/editblog/blog/" + blogID, "post", {Type: "save", Title: title, Cate: cate, Tags: tag, Content: content}, 
+  var title = $("#title-input").val();
+  var cate = $("#cate-select").val();
+  var tags = $("#tag-select").val();
+  var content = $("#my-editormd-markdown-doc").val();
+  var blogID = $("#editblog-form").data("article-id");
+
+  var legal = checkActicleTitle(title)
+  if (!legal) {
+    showTipsModal("文章题目输入不合法。");
+    return 
+  } 
+
+  legal = checkActicleContent(content)
+  if (!legal) {
+    showTipsModal("文章内容输入不合法。");
+    return 
+  } 
+
+  legal = checkCategoryName(cate);
+  if (!legal) {
+    showTipsModal("分类名称输入不合法。");
+    return 
+  }
+
+  var tagArr = tags.split(";")
+  for (let i = 0; i < tagArr.length; i ++){
+    legal = checkTagName(tagArr[i])
+    if (!legal){
+      break
+    }
+  }
+  if (!legal) {
+    showTipsModal("标签名称输入不合法。");
+    return 
+  } 
+
+  request("/admin/editblog/blog/" + blogID, "post", {Type: "send", Title: title, Cate: cate, Tags: tag, Content: content}, 
     true, function(resp){
       if (resp.Status === success){
-        showTipsModal("发表文章成功");
+        showTipsModal("发表博客成功");
       }else{
-        showTipsModal("发表文章失败");
+        showTipsModal("发表博客失败");
     }    
   });
 }
