@@ -45,26 +45,32 @@ func (c *AdminEditBlogController) Post() {
 	defer resp.WriteRespByJson(c.Ctx.ResponseWriter)
 	if isLogin, se := c.checkUserStatus(); isLogin {
 		blogID, _ := c.GetInt(":blogid")
-		id := strconv.Itoa(blogID)
 		model := c.GetString("Type")
 		var success bool
 		if model == "save" {
 
 		} else if model == "delete" {
-
+			success := deleteArticle(se, blogID)
+			if success {
+				resp.RespMessage(helper.RS_success, helper.SUCCESS)
+				resp.Data = "/admin/bloglist/cate/1/p/1"
+			} else {
+				resp.RespMessage(helper.RS_failed, helper.WARING)
+			}
 		} else if model == "send" {
+			//发表文章
+			id := strconv.Itoa(blogID)
 			title := c.GetString("Title")
 			cate := c.GetString("Cate")
 			tags := c.GetString("Tags")
 			content := c.GetString("Content")
 			success = sendArticle(se, id, title, cate, tags, content)
-		}
-
-		if success {
-			resp.RespMessage(helper.RS_success, helper.SUCCESS)
-			resp.Data = "/admin/bloglist/p/1"
-		} else {
-			resp.RespMessage(helper.RS_failed, helper.WARING)
+			if success {
+				resp.RespMessage(helper.RS_success, helper.SUCCESS)
+				resp.Data = "/admin/bloglist/cate/1/p/1"
+			} else {
+				resp.RespMessage(helper.RS_failed, helper.WARING)
+			}
 		}
 	} else {
 		resp.RespMessage(helper.RS_failed, helper.WARING)
@@ -72,7 +78,7 @@ func (c *AdminEditBlogController) Post() {
 	}
 }
 
-// 发表博客
+// 发表文章
 func sendArticle(userName interface{}, id string, title string, cate string, tags string, content string) (success bool) {
 	args := make(map[string]string)
 	args["title"] = title
@@ -82,5 +88,11 @@ func sendArticle(userName interface{}, id string, title string, cate string, tag
 	args["content"] = content
 	success = models.SendArticleByID(userName, args)
 
+	return
+}
+
+//删除文章
+func deleteArticle(userName interface{}, id int) (success bool) {
+	success = models.DeleteArticle(userName, id)
 	return
 }

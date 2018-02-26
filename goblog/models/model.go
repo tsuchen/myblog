@@ -517,6 +517,7 @@ func relDeleteTagByID(userName interface{}, tagID int) {
 	//检查是否存在m2m关系
 	m2m = o.QueryM2M(&tag, "Users")
 	if num, error := m2m.Count(); error == nil {
+
 		fmt.Println("Total nums:", num)
 		if num == 0 {
 			o.QueryTable("tag").Filter("ID", tagID).Delete()
@@ -536,7 +537,7 @@ func GetBlogs(userName interface{}, cateID int, pageID int) (totalPages float64,
 	}
 
 	var num int64 //文章数量
-	if cateID == 0 {
+	if cateID == 1 {
 		//所有文章
 		num, err = o.QueryTable("blog").Filter("User", user.ID).Count()
 	} else {
@@ -563,7 +564,7 @@ func GetBlogs(userName interface{}, cateID int, pageID int) (totalPages float64,
 
 	offset := (pageID - 1) * int(CountOfOnePage)
 
-	if cateID == 0 {
+	if cateID == 1 {
 		//所有文章
 		qs := o.QueryTable("blog").Filter("User", user.ID)
 		qs.All(&blogs)
@@ -627,6 +628,7 @@ func SendArticleByID(userName interface{}, args map[string]string) (success bool
 
 	if blogID == 0 {
 		//新文章
+		blog.User = &user
 		blog.Title = title
 		blog.Content = content
 		//category
@@ -676,6 +678,31 @@ func SendArticleByID(userName interface{}, args map[string]string) (success bool
 			}
 		}
 	}
+
+	return true
+}
+
+func DeleteArticle(userName interface{}, blogID int) bool {
+	o := orm.NewOrm()
+	var user User
+	err := o.QueryTable("user").Filter("Name", userName).One(&user)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	userID := user.ID
+	var blog Blog
+	qs := o.QueryTable("blog").Filter("ID", blogID).Filter("User", userID).RelatedSel()
+	err = qs.One(&blog)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	m2m := o.QueryM2M(&blog, "Tags")
+	m2m.Clear()
+
+	qs.Delete()
 
 	return true
 }

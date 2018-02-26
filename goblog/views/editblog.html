@@ -24,12 +24,11 @@
             </div>
             <div class="form-group">
                 <label for="cate-select">选择分类：</label>
-                <input type="text" id="cate-select" class="blog-input select-input" value="{{.SelectCate}}" list="cate-list" placeholder="输入分类">
-                <datalist id="cate-list">   
+                <select type="text" id="cate-select" class="blog-input select-input" value="{{.SelectCate}}">
                     {{range .CategoryInfos}}
-                        <option value="{{.Name}}"></option>
+                        <option value="{{.Name}}">{{.Name}}</option>
                     {{end}}
-                </datalist>
+                </select>
             </div>
             <div class="form-group">
                 <label for="tag-select">添加标签：</label>
@@ -39,7 +38,7 @@
                         <option value="{{.Name}}"></option>
                     {{end}}
                 </datalist>
-                <span style="color:red">(标签之间使用分号隔开)</span>         
+                <span style="color:red">(多个标签使用分号隔开)</span>         
             </div>
 
             <div class="form-group">
@@ -54,9 +53,15 @@
     <!-- bottom row -->
     <div class="row">
         <div class="edit-blog-bottom">
-            <button type="button" id="delete-article-button" class="btn btn-danger" onclick="deleteArticle()">删除博客</button>
-            <button type="button" id="send-article-button" class="btn btn-success" onclick="sendArticle()">发表博客</button>
-            <button type="button" id="save-article-button" class="btn btn-warning" onclick="saveArticle()">暂存博客</button>
+            <button id="delete-article-button" class="btn btn-danger" data-articleid="{{.BlogID}}" data-name="{{.Title}}" data-type="deleteblog" {{if .IsNew}}disabled="disabled"{{end}} data-toggle="modal" data-target="#ConfirmModal">
+                删除文章
+            </button>
+            <button id="save-article-button" data-articleid="{{.BlogID}}" class="btn btn-warning" onclick="saveArticle()">
+                暂存文章
+            </button>
+            <button id="send-article-button" data-articleid="{{.BlogID}}" class="btn btn-success" onclick="sendArticle()">
+                发表文章
+            </button>
         </div>
     </div>
 </div>

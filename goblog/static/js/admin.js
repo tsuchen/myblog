@@ -367,9 +367,37 @@ function saveArticle(){
   }); 
 }
 
+$("#ConfimModal").on("show.bs.modal", function(event){
+  var modal = $(this);
+  var modalTitle = modal.find(".modal-title");
+  var comfirmBtn = modal.find("#ComfirmAlter");
+  var button = $(event.relatedTarget); 
+  var type = button.data("type");
+  console.log(type)
+  if (type === "deleteblog"){
+    var articleid = button.data("id");
+    var articletitle = button.data("name");
+    modalTitle.text("是否删除文章《" + articletitle + "》?");
+    var comfirmBtn = modal.find("#ComfirmDelete");
+    $(comfirmBtn).click(function(){
+      deleteArticle(articleid);
+    });
+  }
+});
+
+
 //删除博客文章
-function deleteArticle(){
-  
+function deleteArticle(id){
+  request("/admin/editblog/blog/" + id, "post", {Type: "delete"}, 
+    true, function(resp){
+      if (resp.Status === success){
+        showTipsModal("删除博客成功", function(){
+          location.assign(resp.Data);
+        });
+      }else{
+        showTipsModal("删除博客失败");
+    }    
+  });
 }
 
 //发表博客
@@ -378,7 +406,7 @@ function sendArticle(){
   var cate = $("#cate-select").val();
   var tags = $("#tag-select").val();
   var content = $("#my-editormd-markdown-doc").val();
-  var blogID = $("#editblog-form").data("article-id");
+  var blogID = $("#send-article-button").data("articleid");
 
   var legal = checkActicleTitle(title)
   if (!legal) {
@@ -410,10 +438,12 @@ function sendArticle(){
     return 
   } 
 
-  request("/admin/editblog/blog/" + blogID, "post", {Type: "send", Title: title, Cate: cate, Tags: tag, Content: content}, 
+  request("/admin/editblog/blog/" + blogID, "post", {Type: "send", Title: title, Cate: cate, Tags: tags, Content: content}, 
     true, function(resp){
       if (resp.Status === success){
-        showTipsModal("发表博客成功");
+        showTipsModal("发表博客成功", function(){
+          location.assign(resp.Data);
+        });
       }else{
         showTipsModal("发表博客失败");
     }    

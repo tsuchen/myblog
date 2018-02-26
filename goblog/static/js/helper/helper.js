@@ -73,14 +73,14 @@ function checkTagName(str){
  * 检查文章题目是否输入正确
  */
 function checkActicleTitle(title){
-  var reg = /.{1, 30}/;
+  var reg = /.{1,30}/;
   return reg.test(title);
 }
 
 /**
  * 检查文章内容是否输入正确
  */
-function checkActicleContent(title){
-  var reg = /.{1, 20000}/;
-  return reg.test(title);
+function checkActicleContent(content){
+  var reg = /.{1,20000}/;
+  return reg.test(content);
 }

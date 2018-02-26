@@ -13,6 +13,7 @@
         <li class="active" role="presentation">
             <a href="#content-list" data-toggle="tab">文章列表</a>
         </li>
+        <li><a href="/admin/editblog/blog/0">写新文章</a></li>
     </ul>
     <div class="dropdown" style="margin-top: 2em;">
         <label for="select-category">选择分类：</label>
@@ -21,7 +22,6 @@
             <span class="caret"></span>
         </Button>   
         <ul class="dropdown-menu" aria-labelledby="dLabel">
-            <li><a href="/admin/bloglist/cate/0/p/1">所有博客</a></li> 
             {{range $key, $val := .CategoryInfos}}
                 <li><a href="{{$val.URL}}">{{$val.Name}}</a></li> 
             {{end}}
@@ -34,7 +34,7 @@
                     <tr class="success">
                         <th>ID</th>
                         <th>文章标题</th>
-                        <th>操作</th>
+                        <th>编辑</th>
                     </tr>
                     {{range $key, $val := .Blogs}}
                         <tr class="active">
