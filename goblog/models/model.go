@@ -313,13 +313,34 @@ func DeleteCategory(userName interface{}, categoryName string) bool {
 		return false
 	}
 
-	var user User
-	o.QueryTable("user").Filter("Name", userName).One(&user)
-	m2m := o.QueryM2M(&user, "Categorys")
+	if category.ID == 1 {
+		fmt.Println("不能删除此分类")
+		return false
+	}
 
+	var user User
+	err = o.QueryTable("user").Filter("Name", userName).One(&user)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	m2m := o.QueryM2M(&user, "Categorys")
 	if _, err = m2m.Remove(category); err != nil {
 		fmt.Println(err.Error())
 		return false
+	}
+
+	var bloglist []*Blog
+	_, err = o.QueryTable("blog").Filter("Category", category.ID).RelatedSel().All(&bloglist)
+	if err == nil {
+		for _, blog := range bloglist {
+			if blog.Category != nil {
+				//默认分类
+				blog.Category.ID = 1
+				o.Update(blog)
+			}
+		}
 	}
 
 	relDeleteCategoryByName(categoryName)
@@ -467,6 +488,18 @@ func DeleteTag(userName interface{}, tagName string) bool {
 	if _, err = m2m.Remove(tag); err != nil {
 		fmt.Println(err.Error())
 		return false
+	}
+
+	var blogs []*Blog
+	_, err = o.QueryTable("blog").Filter("Tags__Tag__Name", tagName).All(&blogs)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	for _, blog := range blogs {
+		m2m = o.QueryM2M(blog, "Tags")
+		m2m.Remove(&tag)
 	}
 
 	relDeleteTagByName(tagName)
@@ -700,7 +733,10 @@ func DeleteArticle(userName interface{}, blogID int) bool {
 	}
 
 	m2m := o.QueryM2M(&blog, "Tags")
-	m2m.Clear()
+	_, err = m2m.Remove(blog)
+	if err != nil {
+		return false
+	}
 
 	qs.Delete()
 

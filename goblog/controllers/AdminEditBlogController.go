@@ -19,7 +19,7 @@ func (c *AdminEditBlogController) Get() {
 		if blog != nil {
 			article := blog.(models.Blog)
 			c.Data["IsNew"] = false
-			c.Data["SelectCate"] = article.Category.Name
+			c.Data["SelectedCate"] = article.Category.Name
 			c.Data["Title"] = article.Title
 			c.Data["Content"] = article.Content
 			var tagStr string

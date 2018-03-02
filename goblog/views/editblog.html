@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label for="cate-select">选择分类：</label>
-                <select type="text" id="cate-select" class="blog-input select-input" value="{{.SelectCate}}">
+                <select type="text" id="cate-select" class="blog-input select-input" data-selected-value="{{.SelectedCate}}">
                     {{range .CategoryInfos}}
                         <option value="{{.Name}}">{{.Name}}</option>
                     {{end}}

@@ -12,17 +12,29 @@ $(function(){
 });
 
 function initUI(){
-  var ul = $(".sidebar-nav>ul")
+  var ul = $(".sidebar-nav>ul");
   var activeId = ul.data("li-actived");
   if(activeId === "editblog-menu"){
     $(ul).parent().hide();
-    var content = $("div.content")
-    content.removeClass("content")
-    content.addClass("editblog-content")
+    var content = $("div.content");
+    content.removeClass("content");
+    content.addClass("editblog-content");
+    initSelectedCate();
     createMdEditor();
   }
   initLeftMenu(activeId);
   initTriangleIcon();
+}
+
+function initSelectedCate(){
+  //分类的默认值
+  $("#cate-select>option").map(function(){
+    var name = $(this).val();
+    var selectValue = $("#cate-select").data("selected-value");
+    if (name === selectValue) {
+        $(this).attr("selected", "selected");
+    }
+  });
 }
 
 //创建MdEditor
@@ -367,24 +379,24 @@ function saveArticle(){
   }); 
 }
 
-$("#ConfimModal").on("show.bs.modal", function(event){
+$("#ConfirmModal").on("show.bs.modal", function(event){
   var modal = $(this);
   var modalTitle = modal.find(".modal-title");
+  var modalBody = modal.find("#tips-modal-body")
   var comfirmBtn = modal.find("#ComfirmAlter");
   var button = $(event.relatedTarget); 
   var type = button.data("type");
-  console.log(type)
   if (type === "deleteblog"){
-    var articleid = button.data("id");
+    var articleid = button.data("articleid");
     var articletitle = button.data("name");
-    modalTitle.text("是否删除文章《" + articletitle + "》?");
+    modalTitle.text("删除文章");
+    modalBody.text("是否删除文章《" + articletitle + "》");
     var comfirmBtn = modal.find("#ComfirmDelete");
     $(comfirmBtn).click(function(){
       deleteArticle(articleid);
     });
   }
 });
-
 
 //删除博客文章
 function deleteArticle(id){
