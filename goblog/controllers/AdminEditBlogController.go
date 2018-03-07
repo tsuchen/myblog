@@ -15,21 +15,31 @@ func (c *AdminEditBlogController) Get() {
 		blogID, _ := c.GetInt(":blogid")
 		tags := models.GetAllTags(se)
 		c.Data["Tags"] = tags
-		blog := models.GetArticleByID(blogID)
-		if blog != nil {
-			article := blog.(models.Blog)
+		tempBlog := models.GetTempArticleByID(blogID)
+		if tempBlog != nil {
 			c.Data["IsNew"] = false
-			c.Data["SelectedCate"] = article.Category.Name
-			c.Data["Title"] = article.Title
-			c.Data["Content"] = article.Content
-			var tagStr string
-			selectTags := article.Tags
-			for _, tag := range selectTags {
-				tagStr += tag.Name + ";"
-			}
-			c.Data["SelectTags"] = tagStr
+			tempArticle := tempBlog.(models.TempBlog)
+			c.Data["SelectTags"] = tempArticle.Tags
+			c.Data["SelectedCate"] = tempArticle.Category
+			c.Data["Title"] = tempArticle.Title
+			c.Data["Content"] = tempArticle.Content
 		} else {
-			c.Data["IsNew"] = true
+			blog := models.GetArticleByID(blogID)
+			if blog != nil {
+				c.Data["IsNew"] = false
+				article := blog.(models.Blog)
+				c.Data["SelectedCate"] = article.Category.Name
+				c.Data["Title"] = article.Title
+				c.Data["Content"] = article.Content
+				var tagStr string
+				selectTags := article.Tags
+				for _, tag := range selectTags {
+					tagStr += tag.Name + ";"
+				}
+				c.Data["SelectTags"] = tagStr
+			} else {
+				c.Data["IsNew"] = true
+			}
 		}
 		c.Data["BlogID"] = blogID
 		c.Data["GroupMenuId"] = "editblog-menu"

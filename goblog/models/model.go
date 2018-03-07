@@ -609,7 +609,7 @@ func GetBlogs(userName interface{}, cateID int, pageID int) (totalPages float64,
 	return
 }
 
-func GetArticleByID(id int) interface{} {
+func GetTempArticleByID(id int) interface{} {
 	o := orm.NewOrm()
 	var tempBlog TempBlog
 	err := o.QueryTable("temp_blog").Filter("Blog__ID", id).One(&tempBlog)
@@ -617,8 +617,13 @@ func GetArticleByID(id int) interface{} {
 		return tempBlog
 	}
 
+	return nil
+}
+
+func GetArticleByID(id int) interface{} {
+	o := orm.NewOrm()
 	var blog Blog
-	err = o.QueryTable("blog").Filter("ID", id).One(&blog)
+	err := o.QueryTable("blog").Filter("ID", id).One(&blog)
 	if err != nil {
 		return nil
 	}
@@ -766,6 +771,8 @@ func SendArticleByID(userName interface{}, args map[string]string) bool {
 				fmt.Println(err.Error())
 			}
 		}
+
+		o.QueryTable("temp_blog").Filter("Blog__ID", blogID).Delete()
 	}
 
 	return true
@@ -794,7 +801,9 @@ func DeleteArticle(userName interface{}, blogID int) bool {
 		return false
 	}
 
-	qs.Delete()
+	if _, err = qs.Delete(); err == nil {
+		o.QueryTable("temp_blog").Filter("Blog__ID", blogID).Delete()
+	}
 
 	return true
 }
