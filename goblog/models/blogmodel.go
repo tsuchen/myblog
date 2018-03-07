@@ -10,6 +10,7 @@ type User struct {
 	Updated   time.Time   `orm:"auto_now;type(datetime)"`
 	Profile   *Profile    `orm:"rel(one)"`      //设置一对一关系
 	Blogs     []*Blog     `orm:"reverse(many)"` // 设置一对多的反向关系
+	TempBlogs []*TempBlog `orm:"reverse(many)"` // 设置一对多的反向关系
 	Categorys []*Category `orm:"rel(m2m)"`
 	Tags      []*Tag      `orm:"rel(m2m)"`
 }
@@ -32,6 +33,17 @@ type Blog struct {
 	User     *User     `orm:"rel(fk)"` //设置一对多关系
 	Tags     []*Tag    `orm:"rel(m2m)"`
 	Category *Category `orm:"rel(fk)"`
+	TempBlog *TempBlog `orm:"reverse(one)"` // 设置一对一反向关系(可选)
+}
+
+type TempBlog struct {
+	ID       int `orm:"auto"`
+	Title    string
+	Content  string
+	Tags     string
+	Category string
+	Blog     *Blog `orm:"rel(one)"` //设置一对一关系
+	User     *User `orm:"rel(fk)"`  //设置一对多关系
 }
 
 type Tag struct {

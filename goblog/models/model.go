@@ -47,7 +47,7 @@ func init() {
 	//设置默认数据库
 	orm.RegisterDataBase("default", "mysql", sqlInfo, 30)
 	//注册自定义model
-	orm.RegisterModel(new(User), new(Profile), new(Blog), new(Tag), new(Category))
+	orm.RegisterModel(new(User), new(Profile), new(Blog), new(Tag), new(Category), new(TempBlog))
 	// 自动建表
 	orm.RunSyncdb("default", false, true)
 	// 设置为 UTC 时间
@@ -611,8 +611,14 @@ func GetBlogs(userName interface{}, cateID int, pageID int) (totalPages float64,
 
 func GetArticleByID(id int) interface{} {
 	o := orm.NewOrm()
+	var tempBlog TempBlog
+	err := o.QueryTable("temp_blog").Filter("Blog__ID", id).One(&tempBlog)
+	if err == nil {
+		return tempBlog
+	}
+
 	var blog Blog
-	err := o.QueryTable("blog").Filter("ID", id).One(&blog)
+	err = o.QueryTable("blog").Filter("ID", id).One(&blog)
 	if err != nil {
 		return nil
 	}
@@ -628,8 +634,58 @@ func GetArticleByID(id int) interface{} {
 	return blog
 }
 
+//暂存博客
+func SaveArticle(userName interface{}, args map[string]string) bool {
+	o := orm.NewOrm()
+	var user User
+	err := o.QueryTable("user").Filter("Name", userName).One(&user)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+
+	blogID, _ := strconv.Atoi(args["blogid"])
+	title := args["title"]
+	content := args["content"]
+	cateName := args["category"]
+	tags := args["tags"]
+
+	var tempBlog TempBlog
+	if blogID != 0 {
+		if err = o.QueryTable("temp_blog").Filter("Blog__ID", blogID).One(&tempBlog); err == nil {
+			tempBlog.Title = title
+			tempBlog.Content = content
+			tempBlog.Category = cateName
+			tempBlog.Tags = tags
+			if _, err = o.Update(&tempBlog); err != nil {
+				fmt.Println(err.Error())
+				return false
+			}
+		} else {
+			var blog Blog
+			err = o.QueryTable("blog").Filter("ID", blogID).One(&blog)
+			if err != nil {
+				fmt.Println(err.Error())
+				return false
+			}
+			tempBlog.Blog = &blog
+			tempBlog.User = &user
+			tempBlog.Title = title
+			tempBlog.Content = content
+			tempBlog.Category = cateName
+			tempBlog.Tags = tags
+			if _, err = o.Insert(&tempBlog); err != nil {
+				fmt.Println(err.Error())
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
 //发表博客
-func SendArticleByID(userName interface{}, args map[string]string) (success bool) {
+func SendArticleByID(userName interface{}, args map[string]string) bool {
 	o := orm.NewOrm()
 	var user User
 	err := o.QueryTable("user").Filter("Name", userName).One(&user)

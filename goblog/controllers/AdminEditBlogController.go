@@ -48,7 +48,18 @@ func (c *AdminEditBlogController) Post() {
 		model := c.GetString("Type")
 		var success bool
 		if model == "save" {
-
+			//发表文章
+			id := strconv.Itoa(blogID)
+			title := c.GetString("Title")
+			cate := c.GetString("Cate")
+			tags := c.GetString("Tags")
+			content := c.GetString("Content")
+			success = saveArticle(se, id, title, cate, tags, content)
+			if success {
+				resp.RespMessage(helper.RS_success, helper.SUCCESS)
+			} else {
+				resp.RespMessage(helper.RS_failed, helper.WARING)
+			}
 		} else if model == "delete" {
 			success := deleteArticle(se, blogID)
 			if success {
@@ -94,5 +105,17 @@ func sendArticle(userName interface{}, id string, title string, cate string, tag
 //删除文章
 func deleteArticle(userName interface{}, id int) (success bool) {
 	success = models.DeleteArticle(userName, id)
+	return
+}
+
+//暂存文章
+func saveArticle(userName interface{}, id string, title string, cate string, tags string, content string) (success bool) {
+	args := make(map[string]string)
+	args["title"] = title
+	args["blogid"] = id
+	args["category"] = cate
+	args["tags"] = tags
+	args["content"] = content
+	success = models.SaveArticle(userName, args)
 	return
 }
