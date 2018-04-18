@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 const (
@@ -97,8 +98,47 @@ func (resp *Response) RespMessage(status int, level string) {
 func (resp *Response) WriteRespByJson(w http.ResponseWriter) {
 	obj, err := json.Marshal(resp)
 	if err != nil {
-		w.Write([]byte(`{status:-1,Tip:Tips{level:"alter",Msg:"code:-1|序列化失败"}`))
+		w.Write([]byte(`{status:-1,Tip:Tips{level:"alter",Msg:"code:-1|序列化失败"}}`))
 	} else {
 		w.Write(obj)
 	}
+}
+
+type UploadResponse struct {
+	Success int    `json:"success"`
+	Message string `json:"message"`
+	Url     string `json:"url"`
+}
+
+func NewUploadResponse() (resp *UploadResponse) {
+	return &UploadResponse{}
+}
+
+func (resp *UploadResponse) RespUploadMessage(success int, message string, url string) {
+	resp.Success = success
+	resp.Message = message
+	resp.Url = url
+}
+
+func (resp *UploadResponse) WriteUploadRespByJson(w http.ResponseWriter) {
+	obj, err := json.Marshal(resp)
+	fmt.Println("22222222222222222")
+	fmt.Println(string(obj))
+	if err != nil {
+		w.Write([]byte(`{success:0,message:"序列化失败",url:""}`))
+	} else {
+		w.Write(obj)
+	}
+}
+
+// 判断文件夹是否存在
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }

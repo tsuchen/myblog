@@ -44,12 +44,13 @@ function createMdEditor(){
       width   : "100%",
       height  : 800,
       path    : "/static/js/lib/",
+      syncScrolling : "single",
       saveHTMLToTextarea : true,//注意3：这个配置，方便post提交表单
 
       /**上传图片相关配置如下*/
       imageUpload : true,
       imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-      imageUploadURL : "/static/img/upload/",//注意你后端的上传图片服务地址
+      imageUploadURL : "/admin/upload/img",//注意你后端的上传图片服务地址
   });
 }
 

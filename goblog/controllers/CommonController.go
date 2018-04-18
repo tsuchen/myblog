@@ -11,6 +11,7 @@ import (
 var sessionName string = beego.AppConfig.String("SessionName")
 var defaultAdmin string = "xuchen"
 var defaultDomain string = "http://localhost:8080/login"
+var defaultUploadPath string = "./static/upload/"
 
 type CommonController struct {
 	beego.Controller

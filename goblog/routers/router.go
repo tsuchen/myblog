@@ -16,5 +16,5 @@ func init() {
 	beego.Router("/admin/taglist/p/:page([0-9]+)", &controllers.AdminTagController{})
 	beego.Router("/admin/bloglist/cate/:cateid([0-9]+)/p/:page([0-9]+)", &controllers.AdminBlogController{})
 	beego.Router("/admin/editblog/blog/:blogid([0-9])", &controllers.AdminEditBlogController{})
-	// beego.Router("/admin/upload/img")
+	beego.Router("/admin/upload/img", &controllers.AdminUploadController{})
 }
